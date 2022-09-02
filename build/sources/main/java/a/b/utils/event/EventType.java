@@ -1,0 +1,1 @@
+package a.b.utils.event; public enum EventType { PRE, POST;	}

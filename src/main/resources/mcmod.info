@@ -1,0 +1,15 @@
+[
+ {
+  "modid": "a",
+  "name": "Otaku",
+  "description": "\n------------------------------------------\n\n A Modification of Raven B+ (A KeyStroke Mod) Made by SleepyFish.\n\n Authors from Raven B+ : \n  Kopamed, JMDRaichDev, RaidLocked, liluub\n\n Credits :\n  L4J & WMS (Utils), Kv (Sumo codes)",
+  "version": "b1.3",
+  "url": "https://discord.gg/KzBu6USXAc",
+  "updateUrl": "https://www.youtube.com/ofpmedia",
+  "authorList": ["SleepyFish"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+ }
+]
