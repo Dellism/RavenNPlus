@@ -127,6 +127,7 @@ public class ClickGui extends GuiScreen {
       if(GuiModule.blur.isToggled()) {
          BlurUtil.blur(true);
       } else {
+         //test
          BlurUtil.blur(false);
       }
    }
