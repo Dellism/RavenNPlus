@@ -180,8 +180,8 @@ public class RenderUtils {
         if(mode.equals("round with text")) {
             RoundedUtils.drawSmoothRoundedRect(entityX - y1, entityY - y2, backgroundX - x2, backgroundY - x1, 3, Integer.MIN_VALUE);
 
-            Utils.HUD.fontRender.drawStringWithShadow("Target: "+target.getName(), entityX-y1+2, entityY-y2+2, -1);
-            Utils.HUD.fontRender.drawStringWithShadow("Health: "+(int)target.getHealth(), entityX-y1+2, entityY-y2+5, -1);
+            Utils.HUD.fontRender.drawStringWithShadow("Target: "+target.getName(), entityX+2, entityY+2, Integer.MIN_VALUE);
+            Utils.HUD.fontRender.drawStringWithShadow("Health: "+(int)target.getHealth(), entityX+2, entityY+5, Integer.MIN_VALUE);
         }
 
         if(bg)

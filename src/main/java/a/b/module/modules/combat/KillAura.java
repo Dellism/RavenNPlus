@@ -33,7 +33,6 @@ public class KillAura extends Module {
     static TickSetting drawEntity, drawHUD;
     static boolean b_j354 = false;
 
-    //TODO: add killAura action, add CPS settings
     public KillAura() {
         super("KillAura", ModuleCategory.combat);
         this.registerSetting(mode = new SliderSetting("Mode", 1D, 1D, 3D, 1D));
