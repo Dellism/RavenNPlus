@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class BestSword extends Module {
 
     public static TickSetting AutoSet;
-    private DelayTimer timer = new DelayTimer();
+    private final DelayTimer timer = new DelayTimer();
 
     public BestSword() {
         super("BestSword", ModuleCategory.combat);

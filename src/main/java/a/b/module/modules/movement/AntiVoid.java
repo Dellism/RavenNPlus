@@ -21,7 +21,7 @@ public class AntiVoid extends Module {
    public AntiVoid() {
       super("AntiVoid", ModuleCategory.movement);
       this.registerSetting(distance = new SliderSetting("Distance", 4.0D, 2.0D, 10.0D, 1.0D));
-      this.registerSetting(mode = new SliderSetting("Mode", 1D, 1D, 3D, 1D));
+      this.registerSetting(mode = new SliderSetting("Mode", 4D, 1D, 6D, 1D));
       this.registerSetting(modeMode = new DescriptionSetting(Utils.md + ""));
       this.registerSetting(noCreative = new TickSetting("Cancel if in Creative", true));
       this.registerSetting(x = new TickSetting("Motion X", true));
@@ -46,6 +46,7 @@ public class AntiVoid extends Module {
       } else {
          lastRecY = 0.0;
       }
+
       tried = false;
       flagged = false;
 
@@ -55,7 +56,6 @@ public class AntiVoid extends Module {
          }
       }
    }
-
 
    @SubscribeEvent
    public void p(PlayerTickEvent e) {
@@ -67,14 +67,16 @@ public class AntiVoid extends Module {
                mc.thePlayer.motionY += xS.getInput();
                mc.thePlayer.fallDistance = 0.0F;
                tried = true;
-            }
+            } else
+               tried = false;
          }
 
          if (mode.getInput() == 2) {
             if (mc.thePlayer.fallDistance > distance.getInput() && !tried) {
                mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + 1, mc.thePlayer.posY + 1, mc.thePlayer.posZ + 1, false));
                tried = true;
-            }
+            } else
+               tried = false;
          }
 
          if (mode.getInput() == 3) {
@@ -90,7 +92,8 @@ public class AntiVoid extends Module {
                mc.thePlayer.motionY = 0.0;
                mc.thePlayer.motionZ = 0.0;
                tried = true;
-            }
+            } else
+               tried = false;
          }
 
          boolean canSpoof = false;
@@ -101,6 +104,7 @@ public class AntiVoid extends Module {
                mc.thePlayer.motionX *= 0.838;
                canSpoof = true;
             }
+
             lastRecY = mc.thePlayer.posY;
          }
 
@@ -115,7 +119,9 @@ public class AntiVoid extends Module {
                   tried = true;
                   mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, (32000.0), mc.thePlayer.posZ, false));
                }
-            }
+            } else
+               tried = false;
+
             lastRecY = mc.thePlayer.posY;
          }
 
@@ -137,6 +143,12 @@ public class AntiVoid extends Module {
             }
          }
       }
+   }
+
+   @Override
+   public void onDisable() {
+      tried = false;
+      flagged = false;
    }
 
    public void guiUpdate() {

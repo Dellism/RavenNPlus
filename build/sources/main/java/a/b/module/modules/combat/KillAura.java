@@ -2,41 +2,35 @@ package a.b.module.modules.combat;
 
 import a.b.module.Module;
 import a.b.module.setting.impl.DescriptionSetting;
-import a.b.module.setting.impl.DoubleSliderSetting;
 import a.b.module.setting.impl.SliderSetting;
 import a.b.module.setting.impl.TickSetting;
 import a.b.utils.InvUtils;
 import a.b.utils.RenderUtils;
-import a.b.utils.RoundedUtils;
 import a.b.utils.Utils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.play.client.C02PacketUseEntity;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class KillAura extends Module {
 
-    static SliderSetting mode;
-    static DescriptionSetting modeMode;
-    static SliderSetting range;
-    static SliderSetting entityX;
-    static SliderSetting entityY;
-    static TickSetting mouse;
-    static TickSetting background;
-    static SliderSetting entitySize;
-    static TickSetting onlySprint;
-    static TickSetting onlySword;
-    static TickSetting swing;
-    static TickSetting drawEntity;
-    static TickSetting drawHUD;
+    public static SliderSetting mode;
+    public static DescriptionSetting modeMode;
+    public static SliderSetting range;
+    public static SliderSetting entityX;
+    public static SliderSetting entityY;
+    public static TickSetting mouse;
+    public static TickSetting background;
+    public static SliderSetting entitySize;
+    public static TickSetting onlySprint;
+    public static TickSetting onlySword;
+    public static TickSetting swing;
+    public static TickSetting drawEntity;
+    public static TickSetting drawHUD;
 
     public KillAura() {
         super("KillAura", ModuleCategory.combat);
@@ -66,11 +60,11 @@ public class KillAura extends Module {
         if(targets.isEmpty()) return;
         EntityLivingBase target = (EntityLivingBase) targets.get(0);
 
-        if (onlySword.isToggled())
-            if (!InvUtils.isPlayerHoldingWeapon()) return;
+        if(onlySword.isToggled())
+            if(!InvUtils.isPlayerHoldingWeapon()) return;
 
-        if (onlySprint.isToggled())
-            if (!mc.thePlayer.isSprinting()) return;
+        if(onlySprint.isToggled())
+            if(!mc.thePlayer.isSprinting()) return;
 
         if(mode.getInput() == 1D) {
             //this is just targetHUD
@@ -107,7 +101,7 @@ public class KillAura extends Module {
             if(!mc.thePlayer.isSprinting()) return;
 
         if(drawHUD.isToggled())
-            RenderUtils.drawStringHUD(target, x, y, rang, background.isToggled());
+            RenderUtils.drawStringHUD(x, y, rang, background.isToggled());
 
         if(drawEntity.isToggled())
             RenderUtils.drawEntityHUD(target, x, y, x + 50, y + 50, size, rang, true, background.isToggled(), mouse.isToggled());

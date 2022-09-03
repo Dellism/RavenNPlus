@@ -174,13 +174,13 @@ public class RenderUtils {
             targetLookY = 20;
         }
 
-        GuiInventory.drawEntityOnScreen(entityX, entityY, enSize, targetLookX, targetLookY, (EntityLivingBase) en);
-
         if(bg)
             RoundedUtils.drawSmoothRoundedRect(entityX - y1, entityY - y2, backgroundX - x2, backgroundY - x1, 3, Integer.MIN_VALUE);
+
+        GuiInventory.drawEntityOnScreen(entityX, entityY, enSize, targetLookX, targetLookY, (EntityLivingBase) en);
     }
 
-    public static void drawStringHUD(Entity en, int x, int y, int range, boolean background) {
+    public static void drawStringHUD(int x, int y, int range, boolean background) {
         if(!Utils.Player.isPlayerInGame()) return;
 
         List<Entity> targets = (List<Entity>) mc.theWorld.loadedEntityList.stream().filter(EntityLivingBase.class::isInstance).collect(Collectors.toList());
@@ -202,7 +202,7 @@ public class RenderUtils {
         } else if (target.getHealth() < 20) {
             heartColor = Color.GREEN.getRGB();
         } else {
-            heartColor = Color.white.getRGB();
+            heartColor = Color.GREEN.getRGB();
         }
 
         FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
@@ -210,8 +210,6 @@ public class RenderUtils {
 
         if(background)
             RoundedUtils.drawSmoothRoundedRect(x - 3, y - 3, x + 60 + fr.getStringWidth(target.getName())-16, y + 20, 3, Integer.MIN_VALUE);
-
-        if (!Utils.Player.isPlayerInGame()) return;
 
         fr.drawString("Target: ", x, y, c);
         fr.drawString(target.getName(), x + fr.getStringWidth("Target: ") + 2, y, Color.red.getRGB());

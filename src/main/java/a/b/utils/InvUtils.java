@@ -39,6 +39,12 @@ public class InvUtils {
         mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, slot, hotbarNum, 2, mc.thePlayer);
     }
 
+    public static void swapItem(int fromSlot, int toSlot, long delay) {
+        if(Timer.hasTimeElapsed(delay, true)) {
+            mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, fromSlot, toSlot, 2, mc.thePlayer);
+        }
+    }
+
     public static boolean isFull() {
         return !Arrays.asList(mc.thePlayer.inventory.mainInventory).contains(null);
     }
@@ -437,7 +443,7 @@ public class InvUtils {
             return -1;
         }
 
-        return 0;
+        return -1;
     }
 
     public static void hotkeyToSlot(int slot) {

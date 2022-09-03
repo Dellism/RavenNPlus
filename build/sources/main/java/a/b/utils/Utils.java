@@ -174,6 +174,14 @@ public class Utils {
          return mc.theWorld.isBlockFullCube(p) || mc.theWorld.isBlockNormalCube(p, false);
       }
 
+      public static boolean playerOnBlock() {
+         double x = mc.thePlayer.posX;
+         double y = mc.thePlayer.posY - 1.0D;
+         double z = mc.thePlayer.posZ;
+         BlockPos p = new BlockPos(MathHelper.floor_double(x), MathHelper.floor_double(y), MathHelper.floor_double(z));
+         return mc.theWorld.isBlockFullCube(p) || mc.theWorld.isBlockNormalCube(p, false);
+      }
+
       public static boolean tryingToCombo() {
          return Mouse.isButtonDown(0) && Mouse.isButtonDown(1);
       }

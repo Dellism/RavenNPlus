@@ -4,7 +4,7 @@ clickgui-pos~ combat~700~0~true/movement~600~0~true/player~100~0~true/render~200
 loaded-cfg~ default
 HUDX~ 5
 HUDY~ 70
-terminal-pos~ 5,165
-terminal-size~ 138,103
-terminal-opened~ false
+terminal-pos~ 365,350
+terminal-size~ 213,128
+terminal-opened~ true
 terminal-hidden~ false

@@ -7,7 +7,6 @@ public enum EnumFacingUtil {
         SOUTH,
         WEST,
         EAST;
-
         private EnumFacingUtil() {
         }
 }

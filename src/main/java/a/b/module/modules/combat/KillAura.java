@@ -104,7 +104,7 @@ public class KillAura extends Module {
             RenderUtils.drawStringHUD(x, y, rang, background.isToggled());
 
         if(drawEntity.isToggled())
-            RenderUtils.drawEntityHUD(target, x, y, size, rang, true, background.isToggled(), mouse.isToggled());
+            RenderUtils.drawEntityHUD(target, x, y, x + 50, y + 50, size, rang, true, background.isToggled(), mouse.isToggled());
     }
 
     public void guiUpdate() {
