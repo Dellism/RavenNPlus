@@ -180,7 +180,7 @@ public class RenderUtils {
             RoundedUtils.drawSmoothRoundedRect(entityX - y1, entityY - y2, backgroundX - x2, backgroundY - x1, 3, Integer.MIN_VALUE);
     }
 
-    public static void drawStringHUD(Entity en, int x, int y, int range, boolean background) {
+    public static void drawStringHUD(int x, int y, int range, boolean background) {
         if(!Utils.Player.isPlayerInGame()) return;
 
         List<Entity> targets = (List<Entity>) mc.theWorld.loadedEntityList.stream().filter(EntityLivingBase.class::isInstance).collect(Collectors.toList());

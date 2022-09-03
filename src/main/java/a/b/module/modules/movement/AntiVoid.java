@@ -4,28 +4,23 @@ import a.b.module.Module;
 import a.b.module.setting.impl.DescriptionSetting;
 import a.b.module.setting.impl.SliderSetting;
 import a.b.module.setting.impl.TickSetting;
-import a.b.utils.BlockPosUtil;
 import a.b.utils.Utils;
-import net.minecraft.block.BlockAir;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
-
-import java.util.ArrayList;
 
 public class AntiVoid extends Module {
 
    public static TickSetting x, y, z, noCreative;
    public static DescriptionSetting desc;
    static DescriptionSetting modeMode;
-   public static SliderSetting xS, yS, zS, a, mode;
+   public static SliderSetting xS, yS, zS, distance, mode;
    static boolean no = !mc.isSingleplayer();
 
    public AntiVoid() {
       super("AntiVoid", ModuleCategory.movement);
-      this.registerSetting(a = new SliderSetting("Distance", 4.0D, 2.0D, 10.0D, 1.0D));
+      this.registerSetting(distance = new SliderSetting("Distance", 4.0D, 2.0D, 10.0D, 1.0D));
       this.registerSetting(mode = new SliderSetting("Mode", 1D, 1D, 3D, 1D));
       this.registerSetting(modeMode = new DescriptionSetting(Utils.md + ""));
       this.registerSetting(noCreative = new TickSetting("Cancel if in Creative", true));
@@ -64,12 +59,11 @@ public class AntiVoid extends Module {
 
    @SubscribeEvent
    public void p(PlayerTickEvent e) {
+      if (Utils.Player.isPlayerInGame() && mc.inGameHasFocus) {
       no = noCreative.isToggled();
 
-      if (Utils.Player.isPlayerInGame() && mc.inGameHasFocus) {
-
          if (mode.getInput() == 1) {
-            if (mc.thePlayer.fallDistance > a.getInput() && !tried) {
+            if (mc.thePlayer.fallDistance > distance.getInput() && !tried) {
                mc.thePlayer.motionY += xS.getInput();
                mc.thePlayer.fallDistance = 0.0F;
                tried = true;
@@ -77,7 +71,7 @@ public class AntiVoid extends Module {
          }
 
          if (mode.getInput() == 2) {
-            if (mc.thePlayer.fallDistance > a.getInput() && !tried) {
+            if (mc.thePlayer.fallDistance > distance.getInput() && !tried) {
                mc.getNetHandler().addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX + 1, mc.thePlayer.posY + 1, mc.thePlayer.posZ + 1, false));
                tried = true;
             }
@@ -89,7 +83,7 @@ public class AntiVoid extends Module {
                posY = mc.thePlayer.prevPosY;
                posZ = mc.thePlayer.prevPosZ;
             }
-            if (mc.thePlayer.fallDistance > a.getInput() && !tried) {
+            if (mc.thePlayer.fallDistance > distance.getInput() && !tried) {
                mc.thePlayer.setPositionAndUpdate(posX, posY, posZ);
                mc.thePlayer.fallDistance = 0F;
                mc.thePlayer.motionX = 0.0;
@@ -101,7 +95,7 @@ public class AntiVoid extends Module {
 
          boolean canSpoof = false;
          if (mode.getInput() == 4) {
-            if (mc.thePlayer.fallDistance > a.getInput() && mc.thePlayer.posY < lastRecY + 0.01 && mc.thePlayer.motionY <= 0 && !mc.thePlayer.onGround && !flagged) {
+            if (mc.thePlayer.fallDistance > distance.getInput() && mc.thePlayer.posY < lastRecY + 0.01 && mc.thePlayer.motionY <= 0 && !mc.thePlayer.onGround && !flagged) {
                mc.thePlayer.motionY = 0.0;
                mc.thePlayer.motionZ *= 0.838;
                mc.thePlayer.motionX *= 0.838;
@@ -111,7 +105,7 @@ public class AntiVoid extends Module {
          }
 
          if (mode.getInput() == 5) {
-            if (mc.thePlayer.fallDistance > a.getInput() && mc.thePlayer.posY < lastRecY + 0.01 && mc.thePlayer.motionY <= 0 && !mc.thePlayer.onGround && !flagged) {
+            if (mc.thePlayer.fallDistance > distance.getInput() && mc.thePlayer.posY < lastRecY + 0.01 && mc.thePlayer.motionY <= 0 && !mc.thePlayer.onGround && !flagged) {
                mc.thePlayer.motionY = 0.0;
                mc.thePlayer.motionZ = 0.0;
                mc.thePlayer.motionX = 0.0;
@@ -126,26 +120,26 @@ public class AntiVoid extends Module {
          }
 
          if (mode.getInput() == 6) {
-            if (!mc.thePlayer.onGround && mc.thePlayer.fallDistance > a.getInput() && mc.thePlayer.isEntityAlive() && mc.thePlayer.getHealth() > 0) {
+            if (!mc.thePlayer.onGround && mc.thePlayer.fallDistance > distance.getInput() && mc.thePlayer.isEntityAlive() && mc.thePlayer.getHealth() > 0) {
                EntityPlayerSP p = mc.thePlayer;
 
                if (noCreative.isToggled() && no)
                   return;
 
-               if (x.isToggled())
+               if(x.isToggled())
                   mc.thePlayer.motionX = xS.getInput();
 
-               if (y.isToggled())
+               if(y.isToggled())
                   mc.thePlayer.motionY = yS.getInput();
 
-               if (z.isToggled())
+               if(z.isToggled())
                   mc.thePlayer.motionZ = zS.getInput();
             }
          }
       }
    }
 
-   public void guiUpdate() { //test can i see this in github ?
+   public void guiUpdate() {
       switch((int) mode.getInput()) {
          case 1:
             modeMode.setDesc(Utils.md + "Motion Flag");
@@ -162,7 +156,8 @@ public class AntiVoid extends Module {
          case 5:
             modeMode.setDesc(Utils.md + "Old Cubecraft");
             break;
-         case 6: modeMode.setDesc(Utils.md + "Adv Motion");
+         case 6:
+            modeMode.setDesc(Utils.md + "Adv Motion");
             break;
       }
    }

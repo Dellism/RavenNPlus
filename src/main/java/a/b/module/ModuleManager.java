@@ -145,7 +145,7 @@ public class ModuleManager {
 //    | [+] Added BlurUtils and RoundedUtils to draw Rounded Rectangles and blur background
 //    | [+] Added getServerIP and isServerIP and DelayTimer and InvUtils and SoundUtils
          addModule(new Shutdown());   // (1  setting)
-         addModule(new AntiVoid());   // (8 settings)
+         addModule(new AntiVoid());    // (8 settings)
          addModule(new Scaffold());   // (5 settings)
          addModule(new EasyChat());   // (4 settings)
          addModule(new FOV());        // (1 settings)
@@ -162,7 +162,7 @@ public class ModuleManager {
          addModule(new BestSword());  // (1 settings)
          addModule(new Flip());       // (3 settings)
          addModule(new Criticals());  // (1 settings)
-//       addModule(new TargetHUD());  // (1 settings)
+         addModule(new TargetHUD());  // (1 settings)
          addModule(new UserHud());    // (6 settings)
          addModule(new FastLadder()); // (2 settings)
          addModule(new KillAura());   // (10 settings)
