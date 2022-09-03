@@ -1,9 +1,8 @@
 package a.b.utils;
 
-import a.b.module.modules.combat.KillAura;
+import a.b.module.modules.player.SafeWalk;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -20,6 +19,7 @@ import java.lang.reflect.Method;
 import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RenderUtils {
@@ -142,8 +142,8 @@ public class RenderUtils {
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
     }
 
-    public static void drawEntityHUD(Entity en, int entityX, int entityY, int backgroundX, int backgroundY, int enSize, int range, boolean cl, boolean bg, String mode, boolean mouse) {
-        if (!Utils.Player.isPlayerInGame()) return;
+    public static void drawEntityHUD(Entity en, int entityX, int entityY, int backgroundX, int backgroundY, int enSize, int range, boolean cl, boolean bg, boolean mouse) {
+        if(!Utils.Player.isPlayerInGame()) return;
 
         java.util.List<Entity> targets = (List<Entity>) mc.theWorld.loadedEntityList.stream().filter(EntityLivingBase.class::isInstance).collect(Collectors.toList());
         targets = targets.stream().filter(entity -> entity.getDistanceToEntity(mc.thePlayer) < range && entity != mc.thePlayer && !entity.isDead && ((EntityLivingBase) entity).getHealth() > 0).collect(Collectors.toList());
@@ -174,18 +174,52 @@ public class RenderUtils {
             targetLookY = 20;
         }
 
-        if(mode.equals("entity and round"))
-            GuiInventory.drawEntityOnScreen(entityX, entityY, enSize, targetLookX, targetLookY, (EntityLivingBase) en);
-
-        if(mode.equals("round with text")) {
-            RoundedUtils.drawSmoothRoundedRect(entityX - y1, entityY - y2, backgroundX - x2, backgroundY - x1, 3, Integer.MIN_VALUE);
-
-            Utils.HUD.fontRender.drawStringWithShadow("Target: "+target.getName(), entityX-y1+2, entityY-y2+2, -1);
-            Utils.HUD.fontRender.drawStringWithShadow("Health: "+(int)target.getHealth(), entityX-y1+2, entityY-y2+5, -1);
-        }
+        GuiInventory.drawEntityOnScreen(entityX, entityY, enSize, targetLookX, targetLookY, (EntityLivingBase) en);
 
         if(bg)
             RoundedUtils.drawSmoothRoundedRect(entityX - y1, entityY - y2, backgroundX - x2, backgroundY - x1, 3, Integer.MIN_VALUE);
     }
+
+    public static void drawStringHUD(Entity en, int x, int y, int range, boolean background) {
+        if(!Utils.Player.isPlayerInGame()) return;
+
+        List<Entity> targets = (List<Entity>) mc.theWorld.loadedEntityList.stream().filter(EntityLivingBase.class::isInstance).collect(Collectors.toList());
+        targets = targets.stream().filter(entity -> entity.getDistanceToEntity(mc.thePlayer) < range && entity != mc.thePlayer && !entity.isDead && ((EntityLivingBase) entity).getHealth() > 0).collect(Collectors.toList());
+        targets.sort(Comparator.comparingDouble(entity -> ((EntityLivingBase) entity).getDistanceToEntity(mc.thePlayer)));
+        if (targets.isEmpty()) return;
+
+        EntityLivingBase target = (EntityLivingBase) targets.get(0);
+        String targetDotHealth = "" + (int) target.getHealth();
+
+        int c = 0xFFFFFFFF;
+        int heartColor;
+        if (target.getHealth() < 5) {
+            heartColor = Color.red.getRGB();
+        } else if (target.getHealth() < 10) {
+            heartColor = Color.orange.getRGB();
+        } else if (target.getHealth() < 15) {
+            heartColor = Color.yellow.getRGB();
+        } else if (target.getHealth() < 20) {
+            heartColor = Color.GREEN.getRGB();
+        } else {
+            heartColor = Color.white.getRGB();
+        }
+
+        FontRenderer fr = Minecraft.getMinecraft().fontRendererObj;
+        Utils.HUD.fontRender.drawString("", 0, 0, c);
+
+        if(background)
+            RoundedUtils.drawSmoothRoundedRect(x - 3, y - 3, x + 60 + fr.getStringWidth(target.getName())-16, y + 20, 3, Integer.MIN_VALUE);
+
+        if (!Utils.Player.isPlayerInGame()) return;
+
+        fr.drawString("Target: ", x, y, c);
+        fr.drawString(target.getName(), x + fr.getStringWidth("Target: ") + 2, y, Color.red.getRGB());
+
+        fr.drawString("Health: ", x, y + 10, c);
+        fr.drawString(targetDotHealth,    x + fr.getStringWidth("Health: ") + 2, y + 10, heartColor);
+
+    }
+
 
 }

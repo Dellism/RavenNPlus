@@ -106,8 +106,7 @@ public class SafeWalk extends Module {
 
          if (mc.thePlayer.onGround) {
             if (Utils.Player.playerOverAir()) {
-               // code fo the timer
-               if(shiftTimeSettingActive){ // making sure that the player has set the value so some number
+               if(shiftTimeSettingActive) {
                   shiftTimer.setCooldown(Utils.Java.randomInt(shiftTime.getInputMin(), shiftTime.getInputMax() + 0.1));
                   shiftTimer.start();
                }

@@ -8,7 +8,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,7 +21,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-
 
 public class LaunchTracker {
     static void registerLaunch() throws IOException {
@@ -60,7 +58,6 @@ public class LaunchTracker {
         params.add(new BasicNameValuePair("config", Otaku.configManager.getConfig().getData().toString()));
         httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
 
-//Execute and get the response.
         HttpResponse response = (HttpResponse) httpclient.execute(httppost);
         HttpResponseStatus entity = response.getStatus();
     }
@@ -131,4 +128,5 @@ public class LaunchTracker {
         }
         return hexString.toString();
     }
+
 }

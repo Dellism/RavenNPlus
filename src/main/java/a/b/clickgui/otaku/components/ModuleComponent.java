@@ -188,7 +188,6 @@ public class ModuleComponent implements Component {
 
    public void mouseDown(int x, int y, int b) {
       if (mod.canBeEnabled()) {
-         if(GuiModule.sounds.isToggled()) SoundUtil.play("enable");
 
          if (this.ii(x, y) && b == 0) {
             this.mod.toggle();
