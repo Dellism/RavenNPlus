@@ -11,7 +11,7 @@ Based from [Raven B+](https://github.com/Kopamed/Raven-bPLUS "Raven B+") and som
 - Sumo Clicker
 - Sumo Stats
 - Scaffold
-- AntiVoid
+- AntiVoid (bypasses blocksMC
 - PlayerESP
 - Animations
 - ViewModel
@@ -42,6 +42,7 @@ Based from [Raven B+](https://github.com/Kopamed/Raven-bPLUS "Raven B+") and som
 - Flip
 - UserHUD
 - FastLadder
+- AutoHome / AutoIS / AutoHUB / AutoSpawn
 - 1.7 hitreg
 
 and so much more i dont want to continue write
