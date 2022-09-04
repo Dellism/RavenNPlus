@@ -7,11 +7,11 @@ Based from [Raven B+](https://github.com/Kopamed/Raven-bPLUS "Raven B+") and som
 ## Features
 - RoundedCorners
 - BlurUtils
+- Beautyfull UI (not like raven b++)
 - Sumo Bot
 - Sumo Clicker
 - Sumo Stats
-- Scaffold
-- AntiVoid (bypasses blocksMC
+- AntiVoid (bypasses blocksMC)
 - PlayerESP
 - Animations
 - ViewModel
@@ -38,7 +38,7 @@ Based from [Raven B+](https://github.com/Kopamed/Raven-bPLUS "Raven B+") and som
 - Chams
 - FastPlace
 - Legit Safewalk
-- Safewalk (sending to much packets)
+- Scaffold (sending to much packets)
 - Flip
 - UserHUD
 - FastLadder
