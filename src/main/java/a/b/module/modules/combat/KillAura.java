@@ -2,6 +2,7 @@ package a.b.module.modules.combat;
 
 import a.b.module.Module;
 import a.b.module.setting.impl.DescriptionSetting;
+import a.b.module.setting.impl.DoubleSliderSetting;
 import a.b.module.setting.impl.SliderSetting;
 import a.b.module.setting.impl.TickSetting;
 import a.b.utils.InvUtils;
@@ -31,6 +32,7 @@ public class KillAura extends Module {
     public static TickSetting swing;
     public static TickSetting drawEntity;
     public static TickSetting drawHUD;
+    public static DoubleSliderSetting delayyy;
 
     public KillAura() {
         super("KillAura", ModuleCategory.combat);
@@ -38,7 +40,7 @@ public class KillAura extends Module {
         this.registerSetting(modeMode = new DescriptionSetting(Utils.md +""));
         this.registerSetting(range = new SliderSetting("Range", 3.7D, 2D, 8D, 0.1D));
         this.registerSetting(swing = new TickSetting("Swing", true));
-        //    this.registerSetting(cps = new DoubleSliderSetting("CPS", 7D, 20D, 1D, 40D, 0.1D));
+        this.registerSetting(delayyy = new DoubleSliderSetting("CPS", 7D, 20D, 1D, 40D, 0.1D));
         this.registerSetting(drawEntity = new TickSetting("Draw Entity", false));
         this.registerSetting(drawHUD = new TickSetting("Draw HUD", true));
         this.registerSetting(entityX = new SliderSetting("Entity X", 80D, 20D, mc.displayWidth+50, 1D));

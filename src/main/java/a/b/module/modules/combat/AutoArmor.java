@@ -16,15 +16,15 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class AutoArmor extends Module {
 
-    private DoubleSliderSetting firstDelay, delay;
-    private List<Slot> sortedSlots = new ArrayList<Slot>();
+    private final DoubleSliderSetting firstDelay;
+    private final DoubleSliderSetting delay;
+    private List<Slot> sortedSlots = new ArrayList<>();
     private boolean inInv;
-    private CoolDown delayTimer = new CoolDown(0);
+    private final CoolDown delayTimer = new CoolDown(0);
     public static DescriptionSetting desc;
 
     public AutoArmor() {
         super("AutoArmor", ModuleCategory.combat);
-        this.registerSetting(desc = new DescriptionSetting("Code by Kv"));
         this.registerSetting(firstDelay = new DoubleSliderSetting("Open delay", 250, 450, 0, 1000, 1));
         this.registerSetting(delay = new DoubleSliderSetting("Delay", 150, 250, 0, 1000, 1));
     }
@@ -34,7 +34,8 @@ public class AutoArmor extends Module {
         if(!Utils.Player.isPlayerInGame())
             return;
         if(mc.currentScreen != null && mc.thePlayer != null) {
-            if(mc.thePlayer.openContainer != null && mc.thePlayer.openContainer instanceof ContainerPlayer) {
+          //if(mc.thePlayer.openContainer != null && mc.thePlayer.openContainer instanceof ContainerPlayer) {
+            if(mc.thePlayer.openContainer instanceof ContainerPlayer) {
                 if(!inInv) {
                     delayTimer.setCooldown((long) ThreadLocalRandom.current().nextDouble(firstDelay.getInputMin(), firstDelay.getInputMax()+0.01));
                     delayTimer.start();
@@ -57,7 +58,7 @@ public class AutoArmor extends Module {
 
     public void generatePath(ContainerPlayer inv) {
         ArrayList<Slot> slots = new ArrayList<Slot>();
-        Slot bestArmour[] = {new Slot(-1), new Slot(-1), new Slot(-1), new Slot(-1)};
+        Slot[] bestArmour = {new Slot(-1), new Slot(-1), new Slot(-1), new Slot(-1)};
         for(int i = 0;i < inv.getInventory().size(); i++) {
             if(inv.getInventory().get(i) != null && inv.getInventory().get(i).getItem() instanceof ItemArmor && !(i > 4 && i < 9)) {
                 Slot ia = new Slot(i);
@@ -82,7 +83,7 @@ public class AutoArmor extends Module {
         this.sortedSlots = slots;
     }
 
-    public class Slot {
+    public static class Slot {
         final int x;
         final int y;
         final int s;
