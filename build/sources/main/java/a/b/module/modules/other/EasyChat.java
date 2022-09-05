@@ -1,19 +1,24 @@
 package a.b.module.modules.other;
 
-public class EasyChat extends a.b.module.Module {
+import a.b.module.Module;
+import a.b.module.setting.impl.DescriptionSetting;
+import a.b.module.setting.impl.SliderSetting;
+import a.b.module.setting.impl.TickSetting;
 
-    public static a.b.module.setting.impl.DescriptionSetting desc;
-    public static a.b.module.setting.impl.SliderSetting mode;
-    public static a.b.module.setting.impl.DescriptionSetting modDe;
-    public static a.b.module.setting.impl.TickSetting autoDis;
+public class EasyChat extends Module {
+
+    public static DescriptionSetting desc;
+    public static SliderSetting mode;
+    public static DescriptionSetting modDe;
+    public static TickSetting autoDis;
 
     public EasyChat() {
         super("EasyChat", ModuleCategory.other);
     //  this.registerSetting(desc  = new a.b.module.setting.impl.DescriptionSetting("Message when you kill Someone"));
-        this.registerSetting(desc  = new a.b.module.setting.impl.DescriptionSetting("Message on Hotkey"));
-        this.registerSetting(mode  = new a.b.module.setting.impl.SliderSetting("Mode", 60, 0, 60, 1));
-        this.registerSetting(modDe = new a.b.module.setting.impl.DescriptionSetting("Mode: "+mode.getName()));
-        this.registerSetting(autoDis = new a.b.module.setting.impl.TickSetting("AutoDisable", false));
+        this.registerSetting(desc  = new DescriptionSetting("Message on Hotkey"));
+        this.registerSetting(mode  = new SliderSetting("Mode", 60, 0, 60, 1));
+        this.registerSetting(modDe = new DescriptionSetting("Mode: "+mode.getName()));
+        this.registerSetting(autoDis = new TickSetting("AutoDisable", false));
     }
 
     @net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -152,22 +157,4 @@ public class EasyChat extends a.b.module.Module {
             this.disable();
     }
 
-
-    public net.minecraft.entity.Entity getEnemy() {
-        java.util.Iterator var2 = mc.theWorld.playerEntities.iterator();
-
-        net.minecraft.entity.player.EntityPlayer en;
-        do {
-            do {
-                do {
-                    if (!var2.hasNext()) {
-                        return null;
-                    }
-                    en = (net.minecraft.entity.player.EntityPlayer) var2.next();
-                } while(en == mc.thePlayer);
-            } while(en.isDead);
-        } while(a.b.module.modules.combat.AntiBot.bot(en));
-
-        return en;
-    }
 }

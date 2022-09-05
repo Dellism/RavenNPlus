@@ -61,7 +61,6 @@ public class Otaku {
       MinecraftForge.EVENT_BUS.register(new MouseManager());
       MinecraftForge.EVENT_BUS.register(new ChatHelper());
       Runtime.getRuntime().addShutdownHook(new Thread(ex::shutdown));
-      SoundUtil.start();
 
       InputStream ravenLogoInputStream = HUD.class.getResourceAsStream("/assets/a/otaku.png");
       BufferedImage bf;

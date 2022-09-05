@@ -32,7 +32,7 @@ public class StringEncrypt extends Module {
       }
    }
 
-   public void guiUpdate() {
+      public void guiUpdate() {
       switch((int) value.getInput()) {
       case 1:
          this.m3t = false;
@@ -104,4 +104,5 @@ public class StringEncrypt extends Module {
          }
       }
    }
+
 }

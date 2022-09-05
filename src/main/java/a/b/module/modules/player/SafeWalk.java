@@ -17,7 +17,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import org.lwjgl.input.Keyboard;
-
 import java.awt.*;
 
 public class SafeWalk extends Module {
@@ -31,11 +30,9 @@ public class SafeWalk extends Module {
    public static SliderSetting blockShowMode;
    public static DescriptionSetting blockShowModeDesc;
    public static DoubleSliderSetting shiftTime;
-
    private static boolean shouldBridge = false;
    private static boolean isShifting = false;
-   private boolean allowedShift;
-   private CoolDown shiftTimer = new CoolDown(0);
+   private final CoolDown shiftTimer = new CoolDown(0);
 
    public SafeWalk() {
       super("SafeWalk",ModuleCategory.player);
@@ -52,7 +49,7 @@ public class SafeWalk extends Module {
    }
 
    public void onDisable() {
-      if (doShift.isToggled() && Utils.Player.playerOverAir()) {
+      if(doShift.isToggled() && Utils.Player.playerOverAir()) {
          this.setShift(false);
       }
 
@@ -69,7 +66,7 @@ public class SafeWalk extends Module {
       if(!Utils.Client.currentScreenMinecraft())
          return;
 
-      if (!Utils.Player.isPlayerInGame()) {
+      if(!Utils.Player.isPlayerInGame()) {
          return;
       }
 
@@ -85,17 +82,17 @@ public class SafeWalk extends Module {
                return;
             }
          }
-         if (onHold.isToggled()) {
+         if(onHold.isToggled()) {
             if  (!Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode())) {
                shouldBridge = false;
                return;
             }
          }
 
-         if (blocksOnly.isToggled()) {
+         if(blocksOnly.isToggled()) {
             ItemStack i = mc.thePlayer.getHeldItem();
-            if (i == null || !(i.getItem() instanceof ItemBlock)) {
-               if (isShifting) {
+            if(i == null || !(i.getItem() instanceof ItemBlock)) {
+               if(isShifting) {
                   isShifting = false;
                   this.setShift(false);
                }
@@ -104,8 +101,8 @@ public class SafeWalk extends Module {
             }
          }
 
-         if (mc.thePlayer.onGround) {
-            if (Utils.Player.playerOverAir()) {
+         if(mc.thePlayer.onGround) {
+            if(Utils.Player.playerOverAir()) {
                if(shiftTimeSettingActive) {
                   shiftTimer.setCooldown(Utils.Java.randomInt(shiftTime.getInputMin(), shiftTime.getInputMax() + 0.1));
                   shiftTimer.start();
@@ -115,7 +112,7 @@ public class SafeWalk extends Module {
                this.setShift(true);
                shouldBridge = true;
             }
-            else if (mc.thePlayer.isSneaking() && !Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && onHold.isToggled()) { // if player is smeaking and shiftDown and holdSetting turned on
+            else if(mc.thePlayer.isSneaking() && !Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && onHold.isToggled()) { // if player is smeaking and shiftDown and holdSetting turned on
                isShifting = false;
                shouldBridge = false;
                this.setShift(false);
@@ -137,12 +134,12 @@ public class SafeWalk extends Module {
             }
          }
 
-         else if (shouldBridge && mc.thePlayer.capabilities.isFlying) {
+         else if(shouldBridge && mc.thePlayer.capabilities.isFlying) {
             this.setShift(false);
             shouldBridge = false;
          }
 
-         else if (shouldBridge && Utils.Player.playerOverAir() && shiftOnJump.isToggled()) {
+         else if(shouldBridge && Utils.Player.playerOverAir() && shiftOnJump.isToggled()) {
             isShifting = true;
             this.setShift(true);
          } else {
@@ -156,45 +153,53 @@ public class SafeWalk extends Module {
    @SubscribeEvent
    public void r(TickEvent.RenderTickEvent e) {
       if(!showBlockAmount.isToggled() || !Utils.Player.isPlayerInGame()) return;
-      if (e.phase == TickEvent.Phase.END) {
-         if (mc.currentScreen == null) {
+      if(e.phase == TickEvent.Phase.END) {
+         if(mc.currentScreen == null) {
             if(shouldBridge) {
                ScaledResolution res = new ScaledResolution(mc);
 
                int totalBlocks = 0;
-               if(BlockAmountInfo.values()[(int)blockShowMode.getInput() - 1] == BlockAmountInfo.BLOCKS_IN_CURRENT_STACK) {
+               if(BlockAmountInfo.values()[(int)blockShowMode.getInput() - 1] == BlockAmountInfo.BlocksInTotalStack) {
                   totalBlocks = InvUtils.getBlockAmountInCurrentStack(mc.thePlayer.inventory.currentItem);
                } else {
-                  for (int slot = 0; slot < 36; slot++){
+                  for (int slot = 0; slot < 36; slot++) {
                      totalBlocks += InvUtils.getBlockAmountInCurrentStack(slot);
                   }
                }
 
-               if(totalBlocks <= 0){
+               if(totalBlocks <= 0) {
                   return;
                }
 
                int rgb;
-               if (totalBlocks < 16.0D) {
+               if(totalBlocks < 8.0D) {
                   rgb = Color.red.getRGB();
-               } else if (totalBlocks < 32.0D) {
+               } else if(totalBlocks < 16.0D) {
                   rgb = Color.orange.getRGB();
-               } else if (totalBlocks < 128.0D) {
+               } else if(totalBlocks < 32.0D) {
                   rgb = Color.yellow.getRGB();
-               } else if (totalBlocks > 128.0D) {
+               } else if(totalBlocks > 64.0D) {
                   rgb = Color.green.getRGB();
                } else {
                   rgb = Color.black.getRGB();
                }
 
-               String t = totalBlocks + " blocks";
+               String t;
+               if(totalBlocks == 1) {
+                  t = totalBlocks + " block";
+               } else {
+                  t = totalBlocks + " blocks";
+               }
+
                int x = res.getScaledWidth() / 2 - mc.fontRendererObj.getStringWidth(t) / 2;
                int y;
+
                if(Otaku.debugger) {
                   y = res.getScaledHeight() / 2 + 17 + mc.fontRendererObj.FONT_HEIGHT;
                } else {
                   y = res.getScaledHeight() / 2 + 15;
                }
+
                mc.fontRendererObj.drawString(t, (float)x, (float)y, rgb, false);
             }
          }
@@ -203,7 +208,8 @@ public class SafeWalk extends Module {
 
    private void setShift(boolean sh) { KeyBinding.setKeyBindState(mc.gameSettings.keyBindSneak.getKeyCode(), sh); }
 
-   public static enum BlockAmountInfo {
-      BLOCKS_IN_TOTAL, BLOCKS_IN_CURRENT_STACK;
+   public enum BlockAmountInfo {
+      BlocksInTotal, BlocksInTotalStack;
    }
+
 }

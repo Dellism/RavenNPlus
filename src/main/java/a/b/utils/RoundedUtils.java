@@ -23,7 +23,6 @@ import static org.lwjgl.opengl.GL11.*;
 public class RoundedUtils {
 
     final static Minecraft mc = Minecraft.getMinecraft();
-    final static FontRenderer fr = mc.fontRendererObj;
 
     public static void enableGL2D() {
         glDisable(GL_DEPTH_TEST);
@@ -633,10 +632,10 @@ public class RoundedUtils {
     }
 
     public static void drawCircle2(double x, double y, double radius, int c) {
-        float f2 = (float)(c >> 24 & 255) / 255.0F;
-        float f3 = (float)(c >> 16 & 255) / 255.0F;
-        float f4 = (float)(c >> 8 & 255) / 255.0F;
-        float f5 = (float)(c & 255) / 255.0F;
+        float f2 = (float) (c >> 24 & 255) / 255.0F;
+        float f3 = (float) (c >> 16 & 255) / 255.0F;
+        float f4 = (float) (c >> 8 & 255) / 255.0F;
+        float f5 = (float) (c & 255) / 255.0F;
         GlStateManager.alphaFunc(516, 0.001F);
         GlStateManager.clearColor(f3, f4, f5, f2);
         GlStateManager.enableAlpha();
@@ -645,10 +644,10 @@ public class RoundedUtils {
         GlStateManager.color(770, 771, 1, 0);
         Tessellator tes = Tessellator.getInstance();
 
-        for(double i = 0.0; i < 360.0; ++i) {
+        for (double i = 0.0; i < 360.0; ++i) {
             double f6 = Math.sin(i * Math.PI / 180.0) * radius;
             double f7 = Math.cos(i * Math.PI / 180.0) * radius;
-            GL11.glVertex2d((double)f4 + x, (double)f5 + y);
+            GL11.glVertex2d((double) f4 + x, (double) f5 + y);
         }
 
         GlStateManager.disableBlend();

@@ -48,6 +48,6 @@ public class ChatLogger extends Module {
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw)) {
             out.println(c.message.getUnformattedText());
-        } catch (IOException e) { /*-:-*/ }
+        } catch (IOException e) {  /*-:-*/ }
     }
 }

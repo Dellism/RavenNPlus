@@ -2,7 +2,6 @@ package a.b.utils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
-
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.Raster;
@@ -21,7 +20,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
-import javax.jws.WebParam;
 import javax.swing.Box;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -33,9 +31,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class BlurUtil extends JFrame {
-    private BlurTestPanel blurTestPanel;
-    private JSlider radiusSlider;
-    private JCheckBox fasterBlurCheck;
+    private final BlurTestPanel blurTestPanel;
+    private final JSlider radiusSlider;
+    private final JCheckBox fasterBlurCheck;
 
     public static void blur(boolean mode) {
         if(mode) {

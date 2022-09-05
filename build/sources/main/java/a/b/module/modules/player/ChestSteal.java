@@ -28,7 +28,6 @@ public class ChestSteal extends Module {
 
     public ChestSteal() {
         super("ChestSteal", ModuleCategory.player);
-        this.registerSetting(desc = new DescriptionSetting("Code by Kv"));
         this.registerSetting(firstDelay = new DoubleSliderSetting("Open delay", 250, 450, 0, 1000, 1));
         this.registerSetting(delay = new DoubleSliderSetting("Delay", 150, 250, 0, 1000, 1));
         this.registerSetting(autoClose = new TickSetting("Auto Close", false));

@@ -160,17 +160,18 @@ public class ModuleManager {
          addModule(new Animations()); // (13 settings)
          addModule(new ViewModel());  // (12 settings)
          addModule(new BestSword());  // (1 settings)
-         addModule(new Flip());           // (2 settings)
-         addModule(new Criticals());     // (1 settings)
-         addModule(new TargetHUD());  // (4 settings)
-         addModule(new UserHud());    // (8 settings)
-         addModule(new FastLadder()); // (4 settings)
-         addModule(new KillAura());     // (12 settings)
-         addModule(new AutoHome());  // (4 settings)
+         addModule(new Flip());            // (2 settings)
+         addModule(new Criticals());      // (1 settings)
+         addModule(new TargetHUD());   // (4 settings)
+         addModule(new UserHud());      // (8 settings)
+         addModule(new FastLadder());   // (4 settings)
+         addModule(new KillAura());       // (12 settings)
+         addModule(new AutoHome());    // (4 settings)
+//       addModule(new ItemESP());        // (1 settings)
+         addModule(new LegoGraphics()); // (1 settings)
 //       addModule(new HypixelFly()); // (2 settings)
 
          initialized = true;
-
         NotificationManager.show(new Notification(NotificationType.INFO, "Otaku", "All Modules loaded\nDiscord RPC loaded", 10));
    }
 

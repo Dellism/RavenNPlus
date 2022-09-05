@@ -14,7 +14,7 @@ public class AutoBlock extends Module {
     public static DoubleSliderSetting duration, distance;
     public static SliderSetting chance;
     private boolean engaged;
-    private CoolDown engagedTime = new CoolDown(0);
+    private final CoolDown engagedTime = new CoolDown(0);
 
     public AutoBlock(){
         super("AutoBlock", ModuleCategory.combat);

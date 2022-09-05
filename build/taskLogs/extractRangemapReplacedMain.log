@@ -1,5 +1,5 @@
 Symbol range map extraction starting
-Processing 227 files
+Processing 230 files
 processing a\b\clickgui\otaku\ClickGui.java
 processing a\b\clickgui\otaku\CommandPrompt.java
 processing a\b\clickgui\otaku\Component.java
@@ -114,10 +114,12 @@ processing a\b\module\modules\movement\Step.java
 processing a\b\module\modules\movement\StopMotion.java
 processing a\b\module\modules\movement\Timer.java
 processing a\b\module\modules\movement\VClip.java
+processing a\b\module\modules\other\AutoHome.java
 processing a\b\module\modules\other\ChatLogger.java
 processing a\b\module\modules\other\EasyChat.java
 processing a\b\module\modules\other\FPSSpoofer.java
 processing a\b\module\modules\other\FakeChat.java
+processing a\b\module\modules\other\LegoGraphics.java
 processing a\b\module\modules\other\MiddleClick.java
 processing a\b\module\modules\other\MouseSpoofer.java
 processing a\b\module\modules\other\NameHider.java
@@ -140,6 +142,7 @@ processing a\b\module\modules\render\Animations.java
 processing a\b\module\modules\render\AntiShuffle.java
 processing a\b\module\modules\render\Chams.java
 processing a\b\module\modules\render\ChestESP.java
+processing a\b\module\modules\render\CrossCircle.java
 processing a\b\module\modules\render\FOV.java
 processing a\b\module\modules\render\Fullbright.java
 processing a\b\module\modules\render\Hurtcam.java

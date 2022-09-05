@@ -14,9 +14,9 @@ public class AntiVoid extends Module {
 
    public static TickSetting x, y, z, noCreative;
    public static DescriptionSetting desc;
-   static DescriptionSetting modeMode;
+   public static DescriptionSetting modeMode;
    public static SliderSetting xS, yS, zS, distance, mode;
-   static boolean no = !mc.isSingleplayer();
+   boolean no = !mc.isSingleplayer();
 
    public AntiVoid() {
       super("AntiVoid", ModuleCategory.movement);

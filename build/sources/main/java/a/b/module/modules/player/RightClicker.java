@@ -50,7 +50,6 @@ public class RightClicker extends Module {
 
    public RightClicker() {
       super("Right Clicker", ModuleCategory.player);
-
       this.registerSetting(rightCPS = new DoubleSliderSetting("RightCPS", 12, 16, 1,60, 0.5));
       this.registerSetting(jitterRight = new SliderSetting("Jitter right", 0.0D, 0.0D, 3.0D, 0.1D));
       this.registerSetting(rightClickDelay = new SliderSetting("Rightclick delay (ms)", 85D, 0D, 500D, 1.0D));
@@ -60,7 +59,6 @@ public class RightClicker extends Module {
       this.registerSetting(preferFastPlace = new TickSetting("Prefer fast place", false));
       this.registerSetting(allowEat = new TickSetting("Allow eat & drink", true));
       this.registerSetting(allowBow = new TickSetting("Allow bow", true));
-
       this.registerSetting(clickTimings = new ComboSetting("Click event", ClickEvent.Render));
       this.registerSetting(clickStyle = new ComboSetting("Click Style", ClickStyle.Raven));
 

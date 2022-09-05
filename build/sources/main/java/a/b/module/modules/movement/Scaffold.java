@@ -151,7 +151,7 @@ public class Scaffold extends Module {
                 ScaledResolution res = new ScaledResolution(mc);
 
                 int totalBlocks = 0;
-                if (SafeWalk.BlockAmountInfo.values()[(int) blockShowMode.getInput() - 1] == SafeWalk.BlockAmountInfo.BLOCKS_IN_CURRENT_STACK) {
+                if (SafeWalk.BlockAmountInfo.values()[(int) blockShowMode.getInput() - 1] == SafeWalk.BlockAmountInfo.BlocksInTotalStack) {
                     totalBlocks = InvUtils.getBlockAmountInCurrentStack(mc.thePlayer.inventory.currentItem);
                 } else { for (int slot = 0; slot < 36; slot++) { totalBlocks += InvUtils.getBlockAmountInCurrentStack(slot); } }
 
