@@ -23,6 +23,8 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C03PacketPlayer.C05PacketPlayerLook;
 import net.minecraft.potion.Potion;
 import net.minecraft.scoreboard.Score;
@@ -323,6 +325,18 @@ public class Utils {
          mc.thePlayer.jump();
       }
 
+      public static int getBlockAmountInCurrentStack(int currentItem) {
+         if (mc.thePlayer.inventory.getStackInSlot(currentItem) == null) {
+            return 0;
+         } else {
+            ItemStack itemStack = mc.thePlayer.inventory.getStackInSlot(currentItem);
+            if(itemStack.getItem() instanceof ItemBlock) {
+               return itemStack.stackSize;
+            } else {
+               return 0;
+            }
+         }
+      }
    }
 
    public static class Client {

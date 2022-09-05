@@ -167,7 +167,7 @@ public class ModuleManager {
          addModule(new FastLadder());   // (4 settings)
          addModule(new KillAura());       // (12 settings)
          addModule(new AutoHome());    // (4 settings)
-         addModule(new CrossCircle());   // (2 settings)
+//       addModule(new ItemESP());        // (1 settings)
          addModule(new LegoGraphics()); // (1 settings)
 //       addModule(new HypixelFly()); // (2 settings)
 
@@ -175,7 +175,7 @@ public class ModuleManager {
         NotificationManager.show(new Notification(NotificationType.INFO, "Otaku", "All Modules loaded\nDiscord RPC loaded", 10));
    }
 
-    //TODO: Fix ItemCount, scaffold sending to much Packets, add autoPlay
+    //TODO: Fix ItemCount, scaffold sending to much Packets, add autoPlay, itemESP
 
    private void addModule(Module m) { modules.add(m); }
 

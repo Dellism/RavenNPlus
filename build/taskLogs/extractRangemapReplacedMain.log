@@ -142,11 +142,11 @@ processing a\b\module\modules\render\Animations.java
 processing a\b\module\modules\render\AntiShuffle.java
 processing a\b\module\modules\render\Chams.java
 processing a\b\module\modules\render\ChestESP.java
-processing a\b\module\modules\render\CrossCircle.java
 processing a\b\module\modules\render\FOV.java
 processing a\b\module\modules\render\Fullbright.java
 processing a\b\module\modules\render\Hurtcam.java
 processing a\b\module\modules\render\ItemCount.java
+processing a\b\module\modules\render\ItemESP.java
 processing a\b\module\modules\render\NameTags.java
 processing a\b\module\modules\render\NameTagsV2.java
 processing a\b\module\modules\render\PlayerESP.java

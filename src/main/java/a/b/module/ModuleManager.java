@@ -175,7 +175,7 @@ public class ModuleManager {
         NotificationManager.show(new Notification(NotificationType.INFO, "Otaku", "All Modules loaded\nDiscord RPC loaded", 10));
    }
 
-    //TODO: Fix ItemCount, scaffold sending to much Packets, add autoPlay
+    //TODO: Fix ItemCount, scaffold sending to much Packets, add autoPlay, itemESP
 
    private void addModule(Module m) { modules.add(m); }
 

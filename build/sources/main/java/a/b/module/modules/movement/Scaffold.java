@@ -151,7 +151,7 @@ public class Scaffold extends Module {
                 ScaledResolution res = new ScaledResolution(mc);
 
                 int totalBlocks = 0;
-                if (SafeWalk.BlockAmountInfo.values()[(int) blockShowMode.getInput() - 1] == SafeWalk.BlockAmountInfo.BlocksInTotalStack) {
+                if (SafeWalk.BlockAmountInfo.values()[(int) blockShowMode.getInput() - 1] == SafeWalk.BlockAmountInfo.BLOCKS_IN_TOTAL) {
                     totalBlocks = InvUtils.getBlockAmountInCurrentStack(mc.thePlayer.inventory.currentItem);
                 } else { for (int slot = 0; slot < 36; slot++) { totalBlocks += InvUtils.getBlockAmountInCurrentStack(slot); } }
 
@@ -162,7 +162,14 @@ public class Scaffold extends Module {
                 } else if (totalBlocks < 128.0D) { rgb = Color.yellow.getRGB();
                 } else if (totalBlocks > 128.0D) { rgb = Color.green.getRGB();
                 } else { rgb = Color.black.getRGB(); }
-                String t = totalBlocks + " blocks";
+
+                String t;
+                if(totalBlocks == 1) {
+                    t = totalBlocks + " block";
+                } else {
+                    t = totalBlocks + " blocks";
+                }
+
                 int x = res.getScaledWidth() / 2 - mc.fontRendererObj.getStringWidth(t) / 2, y;
                 if (Otaku.debugger) { y = res.getScaledHeight() / 2 + 17 + mc.fontRendererObj.FONT_HEIGHT;
                 } else { y = res.getScaledHeight() / 2 + 15; }
