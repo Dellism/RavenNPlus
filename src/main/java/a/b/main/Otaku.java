@@ -1,6 +1,8 @@
 package a.b.main;
 
 import a.b.module.modules.client.GuiModule;
+import a.b.utils.notifications.Type;
+import a.b.utils.notifications.Render;
 import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRPC;
 import net.arikia.dev.drpc.DiscordRichPresence;
@@ -54,14 +56,12 @@ public class Otaku {
 
    public static void init() {
 
-      pres.state = "Status: " + status;
-
       MinecraftForge.EVENT_BUS.register(new Otaku());
       MinecraftForge.EVENT_BUS.register(new DebugInfoRenderer());
       MinecraftForge.EVENT_BUS.register(new MouseManager());
       MinecraftForge.EVENT_BUS.register(new ChatHelper());
+      MinecraftForge.EVENT_BUS.register(Render.notificationRenderer);
       Runtime.getRuntime().addShutdownHook(new Thread(ex::shutdown));
-
       InputStream ravenLogoInputStream = HUD.class.getResourceAsStream("/assets/a/otaku.png");
       BufferedImage bf;
       try {
@@ -90,21 +90,21 @@ public class Otaku {
       String applicationId = "1010880713551269988";
       String steamId = "";
       DiscordEventHandlers handlers = new DiscordEventHandlers();
-      pres.state = "Status: " + status;
+      updateRPC(1);
       handlers.ready = (user) -> System.out.println("Ready!");
 
       if(GuiModule.monkeee.isToggled()) {
          pres.largeImageKey = "monkeeee_-_kopie";
-         DiscordRPC.discordUpdatePresence(pres);
+         updateRPC(2);
       } else {
-         pres.largeImageKey = "nicepng_gurren-lagann-png_1684110";
-         DiscordRPC.discordUpdatePresence(pres);
+         pres.largeImageKey = "icon";
+         updateRPC(2);
       }
 
       pres.largeImageText = "discord.gg/KpgaCsZxSN";
 
       DiscordRPC.discordInitialize(applicationId, handlers, true, steamId);
-      DiscordRPC.discordUpdatePresence(pres);
+      updateRPC(2);
       pres.startTimestamp = System.currentTimeMillis() / 1000;
       new Thread(() -> {
          while (!Thread.currentThread().isInterrupted()) {
@@ -114,6 +114,8 @@ public class Otaku {
             } catch (InterruptedException ignored) {}
          }
       }, "RPC-Callback-Handler").start();
+
+      RenderUtils.Notify(Type.OTHER, "Otaku", "Initialized", 5);
    }
 
    @SubscribeEvent
@@ -131,30 +133,38 @@ public class Otaku {
                if (module.isEnabled()) module.update();
             }
          }
-      }
 
-      if(mc.theWorld == null) {
-         status = "Menu";
-         DiscordRPC.discordUpdatePresence(pres);
-      }
-
-      if(mc.isSingleplayer()) {
-         status = "Singleplayer";
-         DiscordRPC.discordUpdatePresence(pres);
-      }
-
-      if(!mc.isSingleplayer() && Utils.Player.isPlayerInGame() && mc.theWorld != null) {
-         status = mc.getCurrentServerData().serverIP.toLowerCase();
-         DiscordRPC.discordUpdatePresence(pres);
+         if(mc.isSingleplayer()) {
+            status = "Singleplayer";
+            updateRPC(1);
+         } else if(!mc.isSingleplayer()) {
+            if(mc.getCurrentServerData() == null) {
+               status = "Menu";
+               updateRPC(1);
+            } else {
+               status = mc.getCurrentServerData().serverIP.toLowerCase();
+               updateRPC(1);
+            }
+         }
       }
 
       if(GuiModule.monkeee.isToggled()) {
          pres.largeImageKey = "monkeeee_-_kopie";
          DiscordRPC.discordUpdatePresence(pres);
       } else {
-         pres.largeImageKey = "nicepng_gurren-lagann-png_1684110";
+         pres.largeImageKey = "icon";
          DiscordRPC.discordUpdatePresence(pres);
       }
+   }
+
+   public static void updateRPC(int type) {
+       if(type == 1) {
+          pres.state = "Status: " + status;
+          DiscordRPC.discordUpdatePresence(pres);
+       }
+       if(type == 2) {
+          DiscordRPC.discordUpdatePresence(pres);
+       }
    }
 
    @SuppressWarnings("unused")

@@ -65,6 +65,10 @@ public class AntiBot extends Module {
                   return true;
                }
 
+               if(en.getName().contains(" ")) return true;
+               if(en.getName().contains("Empty")) return true;
+               if(en.getName().startsWith("CIT-")) return true;
+
                if (n.length() == 10) {
                   int num = 0;
                   int let = 0;

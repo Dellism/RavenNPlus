@@ -1,5 +1,6 @@
 package a.b.module;
 
+import a.b.utils.notifications.Render;
 import com.google.gson.JsonObject;
 import a.b.module.setting.Setting;
 import a.b.module.setting.impl.TickSetting;
@@ -97,6 +98,7 @@ public class Module {
       this.enabled = true;
       this.onEnable();
       MinecraftForge.EVENT_BUS.register(this);
+      Render.moduleStateChanged(this);
    }
 
    public void disable() {
@@ -104,6 +106,7 @@ public class Module {
       this.enabled = false;
       this.onDisable();
       MinecraftForge.EVENT_BUS.unregister(this);
+      Render.moduleStateChanged(this);
    }
 
    public void setToggled(boolean enabled) {

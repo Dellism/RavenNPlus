@@ -12,8 +12,8 @@ public class GuiModule extends Module {
    public static final int bind = 54;
    public static SliderSetting guiTheme, backgroundOpacity, roundedPerc;
    public static DescriptionSetting guiThemeDesc;
-   public static TickSetting categoryBackground, cleanUp, rounded, sounds;
-   public static TickSetting showPlayer, blur, monkeee, backGround, time;
+   public static TickSetting categoryBackground, cleanUp, rounded;
+   public static TickSetting showPlayer, blur, monkeee, backGround, time, notifications;
 
    public GuiModule() {
       super("ClickGUI", ModuleCategory.client);
@@ -29,6 +29,7 @@ public class GuiModule extends Module {
       this.registerSetting(monkeee = new TickSetting("Discord Monke icon", false));
       this.registerSetting(backGround = new TickSetting("Background", true));
       this.registerSetting(time = new TickSetting("Clock", true));
+      this.registerSetting(notifications = new TickSetting("Notifications", true));
       this.registerSetting(backgroundOpacity = new SliderSetting("Background Opacity %", 43.0D, 0.0D, 100.0D, 1.0D));
       this.registerSetting(rounded = new TickSetting("Rounded Corners", true));
       this.registerSetting(roundedPerc = new SliderSetting("Rounded Corners %", 5, 1, 100, 1));

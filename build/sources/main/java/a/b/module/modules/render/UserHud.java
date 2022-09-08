@@ -5,8 +5,8 @@ import a.b.module.Module;
 import a.b.module.setting.impl.SliderSetting;
 import a.b.module.setting.impl.TickSetting;
 import a.b.utils.notifications.Notification;
-import a.b.utils.notifications.NotificationManager;
-import a.b.utils.notifications.NotificationType;
+import a.b.utils.notifications.Manager;
+import a.b.utils.notifications.Type;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
@@ -53,8 +53,8 @@ public class UserHud extends Module {
         if(coordinates.isToggled()) {
             if(dontShowCoordOnline.isToggled() && !mc.isSingleplayer()) return;
             if(Utils.Client.isServerIP("2b2t.org")) {
-                Notification msg = new Notification(NotificationType.WARNING, "Disabled coords", "cause your in 2b2t", 10);
-                NotificationManager.show(msg);
+                Notification msg = new Notification(Type.WARNING, "Disabled coords", "cause your in 2b2t", 10);
+                Manager.show(msg);
                 return;
             }
 

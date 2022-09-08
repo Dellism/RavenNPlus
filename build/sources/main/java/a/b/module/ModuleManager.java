@@ -13,9 +13,6 @@ import a.b.module.modules.player.*;
 import a.b.module.modules.render.*;
 import a.b.module.modules.movement.*;
 import a.b.module.modules.minigames.*;
-import a.b.utils.notifications.Notification;
-import a.b.utils.notifications.NotificationManager;
-import a.b.utils.notifications.NotificationType;
 import net.minecraft.client.gui.FontRenderer;
 import java.util.Comparator;
 import java.util.ArrayList;
@@ -167,12 +164,12 @@ public class ModuleManager {
          addModule(new FastLadder());   // (4 settings)
          addModule(new KillAura());       // (12 settings)
          addModule(new AutoHome());    // (4 settings)
-//       addModule(new ItemESP());        // (1 settings)
+         addModule(new ItemESP());        // (1 settings)
          addModule(new LegoGraphics()); // (1 settings)
+         addModule(new NickName());     // (0 settings)
 //       addModule(new HypixelFly()); // (2 settings)
 
          initialized = true;
-        NotificationManager.show(new Notification(NotificationType.INFO, "Otaku", "All Modules loaded\nDiscord RPC loaded", 10));
    }
 
     //TODO: Fix ItemCount, scaffold sending to much Packets, add autoPlay, itemESP

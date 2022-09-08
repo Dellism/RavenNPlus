@@ -1039,8 +1039,9 @@ public class Utils {
                   net.minecraft.client.gui.Gui.drawRect(i + 1, b, i + 4, 74, Color.darkGray.getRGB());
                   net.minecraft.client.gui.Gui.drawRect(i + 1, 0, i + 4, b, hc);
                   GlStateManager.enableDepth();
+
                } else if (type == 6) {
-                  d3p(x, y, z, 0.699999988079071D, 45, 1.5F, color, color == 0);
+                  d3p(x, y+0.000, z, 0.699999988079071D, 45, 1.5F, color, color == 0);
                } else {
                   if (color == 0) {
                      color = Client.rainbowDraw(2L, 0L);

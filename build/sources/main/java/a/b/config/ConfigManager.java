@@ -6,7 +6,6 @@ import com.google.gson.JsonSyntaxException;
 import a.b.main.Otaku;
 import a.b.module.*;
 import net.minecraft.client.Minecraft;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -144,7 +143,7 @@ public class ConfigManager {
         config.file.delete();
         if(config.getName().equals(this.config.getName())){
             discoverConfigs();
-            if(this.configs.size() < 2){
+            if(this.configs.size() < 2) {
                 this.resetConfig();
                 File defaultFile = new File(configDirectory, "default.bplus");
                 this.config = new Config(defaultFile);
@@ -156,4 +155,5 @@ public class ConfigManager {
             this.save();
         }
     }
+
 }

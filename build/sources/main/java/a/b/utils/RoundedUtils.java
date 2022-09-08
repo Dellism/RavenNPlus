@@ -1,9 +1,8 @@
 package a.b.utils;
 
-//thanks to WMS :3
+//thanks to WMS :3 and L4J
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.*;

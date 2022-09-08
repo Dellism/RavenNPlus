@@ -5,8 +5,8 @@ import a.b.module.setting.impl.DescriptionSetting;
 import a.b.module.setting.impl.SliderSetting;
 import a.b.utils.Timer;
 import a.b.utils.notifications.Notification;
-import a.b.utils.notifications.NotificationManager;
-import a.b.utils.notifications.NotificationType;
+import a.b.utils.notifications.Manager;
+import a.b.utils.notifications.Type;
 
 public class Shutdown extends Module {
 
@@ -23,8 +23,8 @@ public class Shutdown extends Module {
     @Override
     public void onEnable() {
         double s = status.getInput();
-        Notification not = new Notification(NotificationType.WARNING, "Shutdown", "Minecraft Shutwons soon...", 10);
-        NotificationManager.show(not);
+        Notification not = new Notification(Type.WARNING, "Shutdown", "Minecraft Shutwons soon...", 10);
+        Manager.show(not);
         if(Timer.hasTimeElapsed((long)delay.getInput() * 1000L, true))
             System.exit((int) s);
     }

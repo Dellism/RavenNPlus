@@ -1,5 +1,5 @@
 Symbol range map extraction starting
-Processing 230 files
+Processing 232 files
 processing a\b\clickgui\otaku\ClickGui.java
 processing a\b\clickgui\otaku\CommandPrompt.java
 processing a\b\clickgui\otaku\Component.java
@@ -123,6 +123,7 @@ processing a\b\module\modules\other\LegoGraphics.java
 processing a\b\module\modules\other\MiddleClick.java
 processing a\b\module\modules\other\MouseSpoofer.java
 processing a\b\module\modules\other\NameHider.java
+processing a\b\module\modules\other\NickName.java
 processing a\b\module\modules\other\StringEncrypt.java
 processing a\b\module\modules\other\WaterBucket.java
 processing a\b\module\modules\player\AutoJump.java
@@ -209,9 +210,10 @@ processing a\b\utils\event\EventType.java
 processing a\b\utils\font\CustomFont.java
 processing a\b\utils\font\CustomFontrenderer.java
 processing a\b\utils\font\FontUtil.java
+processing a\b\utils\notifications\Manager.java
 processing a\b\utils\notifications\Notification.java
-processing a\b\utils\notifications\NotificationManager.java
-processing a\b\utils\notifications\NotificationType.java
+processing a\b\utils\notifications\Render.java
+processing a\b\utils\notifications\Type.java
 processing a\b\utils\packet\Packet.java
 processing a\b\utils\packet\server\PacketChat.java
 processing a\b\utils\packet\server\PacketCloseWindow.java

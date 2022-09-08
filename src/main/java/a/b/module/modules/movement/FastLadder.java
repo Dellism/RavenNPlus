@@ -47,13 +47,11 @@ public class FastLadder extends Module {
         if(!mc.thePlayer.isOnLadder()) return;
 
         if(e.phase != TickEvent.Phase.END) {
-
             if(!mc.thePlayer.isRiding() && !mc.thePlayer.isDead && mc.thePlayer.isOnLadder()) {
                 mc.thePlayer.motionY = 0.169 + speed.getInput();
             }
 
         }
     }
-
 
 }
