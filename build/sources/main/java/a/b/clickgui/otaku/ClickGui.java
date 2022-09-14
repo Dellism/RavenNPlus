@@ -3,13 +3,17 @@ package a.b.clickgui.otaku;
 import a.b.clickgui.otaku.components.CategoryComponent;
 import a.b.main.Otaku;
 import a.b.module.Module;
-import a.b.module.modules.client.GuiModule;
+import a.b.module.modules.client.GuiClick;
 import a.b.utils.BlurUtil;
+import a.b.utils.ImageButton;
 import a.b.utils.Timer;
 import a.b.utils.Utils;
 import a.b.utils.version.Version;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.util.ResourceLocation;
+
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,6 +25,7 @@ public class ClickGui extends GuiScreen {
 
    private ScheduledFuture<?> sf;
    private Timer aT, aL, aE,  aR;
+   protected ArrayList<ImageButton> imageButtons = new ArrayList<ImageButton>();
    private final  ArrayList<CategoryComponent> categoryList;
    public final CommandPrompt terminal;
 
@@ -56,7 +61,7 @@ public class ClickGui extends GuiScreen {
       Version clientVersion = Otaku.versionManager.getClientVersion();
       Version latestVersion = Otaku.versionManager.getLatestVersion();
 
-      if(GuiModule.backGround.isToggled() && !GuiModule.blur.isToggled()) {
+      if(GuiClick.backGround.isToggled() && !GuiClick.blur.isToggled()) {
          drawRect(0, 0, this.width, this.height, (int)(this.aR.getValueFloat(0.0F, 0.7F, 2) * 255.0F) << 24);
       }
 
@@ -82,7 +87,7 @@ public class ClickGui extends GuiScreen {
             margin += 2;
          }
       } else {
-         mc.fontRendererObj.drawStringWithShadow("["+"Otaku " + "b1.3" + " | Config: " + Otaku.configManager.getConfig().getName()+"]", 4, this.height - 3 - mc.fontRendererObj.FONT_HEIGHT, Utils.Client.astolfoColorsDraw(10, 14, speed));
+         mc.fontRendererObj.drawStringWithShadow(Otaku.name+ " | Config: " + Otaku.configManager.getConfig().getName()+"]", 4, this.height - 3 - mc.fontRendererObj.FONT_HEIGHT, Utils.Client.astolfoColorsDraw(10, 14, speed));
       }
 
       this.drawVerticalLine(sW - 10 - w_c, sH - 30, sH + 43, Utils.Client.rainbowDraw(2L, 900L));
@@ -104,23 +109,23 @@ public class ClickGui extends GuiScreen {
          }
       }
 
-      if(GuiModule.time.isToggled()) {
+      if(GuiClick.time.isToggled()) {
          if(!Utils.Player.isPlayerInGame()) return;
 
          mc.fontRendererObj.drawStringWithShadow(Calendar.getInstance().getTime().getHours()
                  + ":" + Calendar.getInstance().getTime().getMinutes() + ":" + Calendar.getInstance().getTime().getSeconds(), this.height - 10, this.width + 5, Utils.Client.rainbowDraw(2L, 900L));
       }
 
-      if(GuiModule.time.isToggled())
+      if(GuiClick.time.isToggled())
             Utils.HUD.fontRender.drawString("", 0, 0, 0xFFFFFFFF);
 
-      if(GuiModule.showPlayer.isToggled())
+      if(GuiClick.showPlayer.isToggled())
          GuiInventory.drawEntityOnScreen(this.width + 15 - this.aE.getValueInt(0, 40, 2), this.height - 19 - this.fontRendererObj.FONT_HEIGHT, 40, (float) (this.width - 25 - x), (float) (this.height - 50 - y), this.mc.thePlayer);
 
       terminal.update(x, y);
       terminal.draw();
 
-      if(GuiModule.blur.isToggled()) {
+      if(GuiClick.blur.isToggled()) {
          BlurUtil.blur(true);
       } else {
          BlurUtil.blur(false);
@@ -237,7 +242,7 @@ public class ClickGui extends GuiScreen {
       Otaku.configManager.save();
       Otaku.clientConfig.saveConfig();
 
-      if(GuiModule.blur.isToggled())
+      if(GuiClick.blur.isToggled())
          BlurUtil.blur(false);
    }
 

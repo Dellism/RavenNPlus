@@ -3,7 +3,7 @@ package a.b.clickgui.otaku.components;
 import a.b.clickgui.otaku.Component;
 import a.b.main.Otaku;
 import a.b.module.Module;
-import a.b.module.modules.client.GuiModule;
+import a.b.module.modules.client.GuiClick;
 import a.b.utils.RoundedUtils;
 import net.minecraft.client.gui.FontRenderer;
 import org.lwjgl.opengl.GL11;
@@ -93,14 +93,14 @@ public class CategoryComponent {
             moduleRenderManager = (Component) moduleInCategoryIterator.next();
          }
 
-         if (GuiModule.rounded.isToggled()) {
-            RoundedUtils.drawSmoothRoundedRect(this.x - 1, this.y, this.x + this.width + 1, this.y + this.bh + categoryHeight + 4,(float)GuiModule.roundedPerc.getInput(), (new Color(0, 0, 0, (int) (GuiModule.backgroundOpacity.getInput() / 100 * 255))).getRGB());
+         if (GuiClick.rounded.isToggled()) {
+            RoundedUtils.drawSmoothRoundedRect(this.x - 1, this.y, this.x + this.width + 1, this.y + this.bh + categoryHeight + 4,(float) GuiClick.roundedPerc.getInput(), (new Color(0, 0, 0, (int) (GuiClick.backgroundOpacity.getInput() / 100 * 255))).getRGB());
          } else {
-            net.minecraft.client.gui.Gui.drawRect(this.x - 1, this.y, this.x + this.width + 1, this.y + this.bh + categoryHeight + 4, (new Color(0, 0, 0, (int) (GuiModule.backgroundOpacity.getInput() / 100 * 255))).getRGB());
+            net.minecraft.client.gui.Gui.drawRect(this.x - 1, this.y, this.x + this.width + 1, this.y + this.bh + categoryHeight + 4, (new Color(0, 0, 0, (int) (GuiClick.backgroundOpacity.getInput() / 100 * 255))).getRGB());
          }
       }
 
-      if(GuiModule.categoryBackground.isToggled())
+      if(GuiClick.categoryBackground.isToggled())
          TickComponent.renderMain((float)(this.x - 2), (float)this.y, (float)(this.x + this.width + 2), (float)(this.y + this.bh + 3), -1);
       renderer.drawString(this.n4m ? this.pvp : this.categoryName.name(), (float)(this.x + 2), (float)(this.y + 4), Color.getHSBColor((float)(System.currentTimeMillis() % (7500L / (long)this.chromaSpeed)) / (7500.0F / (float)this.chromaSpeed), 1.0F, 1.0F).getRGB(), false);
       if (!this.n4m) {

@@ -2,8 +2,6 @@ package a.b.utils.notifications;
 
 import java.awt.Color;
 import a.b.clickgui.otaku.ClickGui;
-import a.b.module.modules.client.GuiModule;
-import a.b.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;

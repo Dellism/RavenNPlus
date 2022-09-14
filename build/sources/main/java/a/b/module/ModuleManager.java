@@ -75,7 +75,7 @@ public class ModuleManager {
          addModule(new StringEncrypt());
          addModule(new WaterBucket());
          addModule(new CommandPrompt());
-         addModule(new GuiModule());
+         addModule(new GuiClick());
          addModule(new SelfDestruct());
          addModule(new ChatLogger());
          addModule(new BridgeAssist());
@@ -164,9 +164,9 @@ public class ModuleManager {
          addModule(new FastLadder());   // (4 settings)
          addModule(new KillAura());       // (12 settings)
          addModule(new AutoHome());    // (4 settings)
-         addModule(new ItemESP());        // (1 settings)
+  //     addModule(new ItemESP());        // (1 settings)
          addModule(new LegoGraphics()); // (1 settings)
-         addModule(new NickName());     // (0 settings)
+         addModule(new InvMgr());          // (6 settings)
 //       addModule(new HypixelFly()); // (2 settings)
 
          initialized = true;

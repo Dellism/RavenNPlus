@@ -1,6 +1,7 @@
 package a.b.utils;
 
 import a.b.module.modules.combat.AntiBot;
+import a.b.utils.notifications.Render;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
@@ -10,9 +11,13 @@ import a.b.module.Module;
 import a.b.module.modules.combat.LeftClicker;
 import a.b.module.setting.impl.DoubleSliderSetting;
 import a.b.module.setting.impl.SliderSetting;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
@@ -25,17 +30,18 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C03PacketPlayer.C05PacketPlayerLook;
 import net.minecraft.potion.Potion;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -68,6 +74,13 @@ public class Utils {
 
       static boolean isPlayerInRANGE = false;
 
+      public static void fakeJump() {
+         if(!Utils.Player.isPlayerInGame()) return;
+
+         mc.thePlayer.isAirBorne = true;
+         mc.thePlayer.triggerAchievement(StatList.jumpStat);
+      }
+
       public static void isPlayerInRange(double dis) {
          getClosestPlayer(dis);
       }
@@ -93,14 +106,40 @@ public class Utils {
          return cplayer;
       }
 
-      public static void sendMessageToSelf(String txt) {
+      public static void place(BlockPos blockPos, EnumFacing facing) {
+         if(facing == EnumFacing.UP)
+            blockPos = blockPos.add(0, -1, 0);
+         else if(facing == EnumFacing.NORTH)
+            blockPos = blockPos.add(0, 0, 1);
+         else if(facing == EnumFacing.EAST)
+            blockPos = blockPos.add(-1, 0, 0);
+         else if(facing == EnumFacing.SOUTH)
+            blockPos = blockPos.add(0, 0, -1);
+         else if(facing == EnumFacing.WEST)
+            blockPos = blockPos.add(1, 0, 0);
+
+         EntityPlayerSP player = mc.thePlayer;
+
+         if(!InvUtils.isPlayerHoldingBlock()) return;
+
+         mc.playerController.onPlayerRightClick(player, mc.theWorld, player.getHeldItem(), blockPos, facing, new Vec3(0.5, 0.5, 0.5));
+         double x = blockPos.getX() + 0.25 - player.posX;
+         double z = blockPos.getZ() + 0.25 - player.posZ;
+         double y = blockPos.getY() + 0.25 - player.posY;
+         double distance = MathHelper.sqrt_double(x * x + z * z);
+         float yaw = (float) (Math.atan2(z, x)*180 / Math.PI - 90);
+         float pitch = (float) - (Math.atan2(y, distance)*180 / Math.PI);
+         mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(player.posX, player.posY, player.posZ, yaw, pitch, player.onGround));
+      }
+
+      public static void sendMessageToSelf(String message) {
          if (isPlayerInGame()) {
-            String m = Client.reformat("&7[&dO&7]&r " + txt);
+            String m = Client.reformat("&7[&dO&7]&r " + message);
             mc.thePlayer.addChatMessage(new ChatComponentText(m));
          }
       }
 
-      public static boolean isPlayerInWotah() {
+      public static boolean isPlayerInWater() {
          if(!Utils.Player.isPlayerInGame()) return false;
          if(mc.thePlayer.isInWater()) {
             return true;
@@ -337,6 +376,15 @@ public class Utils {
             }
          }
       }
+
+      public static boolean isInLiquid() {
+         return mc.thePlayer.isInWater() || mc.thePlayer.isInLava();
+      }
+
+      public static boolean canCrit() {
+         return !Utils.Player.isInLiquid() && mc.thePlayer.onGround && mc.thePlayer.isSwingInProgress;
+      }
+
    }
 
    public static class Client {

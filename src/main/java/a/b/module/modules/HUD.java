@@ -2,11 +2,9 @@ package a.b.module.modules;
 
 import a.b.main.Otaku;
 import a.b.module.*;
-import a.b.module.modules.client.GuiModule;
 import a.b.module.setting.impl.DescriptionSetting;
 import a.b.module.setting.impl.SliderSetting;
 import a.b.module.setting.impl.TickSetting;
-import a.b.utils.SoundUtil;
 import a.b.utils.Utils;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;

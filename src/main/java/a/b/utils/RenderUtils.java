@@ -5,12 +5,10 @@ import a.b.utils.notifications.Manager;
 import a.b.utils.notifications.Type;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiInventory;
-import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -221,7 +219,7 @@ public class RenderUtils {
         if(mc.getSession().getUsername() == target.getName()) return;
         if(target.getName().contains("Empty")) return;
         if(target.getName().contains(" ")) return;
-        if(target.getName().startsWith(":")) return;
+        if(target.getName().contains(":")) return;
         if(target.getName().startsWith("CIT-")) return;
         float targetLookX;
         float targetLookY;
@@ -263,7 +261,7 @@ public class RenderUtils {
         if(mc.getSession().getUsername() == target.getName()) return;
         if(target.getName().contains("Empty")) return;
         if(target.getName().contains(" ")) return;
-        if(target.getName().startsWith(":")) return;
+        if(target.getName().contains(":")) return;
         String targetHealth = "" + (int) target.getHealth();
         if(target.getName().startsWith("CIT-")) return;
 
@@ -515,4 +513,24 @@ public class RenderUtils {
         Manager.show(new Notification(type, title, message, length));
     }
 
+    public static void draw2DImage(ResourceLocation image, int x, int y, int width, int height, Color c) {
+        glDisable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glDepthMask(false);
+        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+        glColor4f(c.getRed()/255f, c.getGreen()/255f, c.getBlue()/255f, c.getAlpha());
+        mc.getTextureManager().bindTexture(image);
+        Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0f, 0.0f, width, height, width, height);
+        mc.getTextureManager().bindTexture(null);
+        glDepthMask(true);
+        glDisable(GL_BLEND);
+        glEnable(GL_DEPTH_TEST);
+        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
+    protected static boolean isHovered(double x, double y, double width, double height, int mouseX, int mouseY) {
+        return mouseX > x && mouseY > y && mouseX < width && mouseY < height;
+    }
+
 }
+

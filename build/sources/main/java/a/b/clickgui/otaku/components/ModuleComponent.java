@@ -2,10 +2,9 @@ package a.b.clickgui.otaku.components;
 
 import a.b.clickgui.otaku.Component;
 import a.b.module.*;
-import a.b.module.modules.client.GuiModule;
+import a.b.module.modules.client.GuiClick;
 import a.b.module.setting.Setting;
 import a.b.module.setting.impl.*;
-import a.b.utils.SoundUtil;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 import java.awt.*;
@@ -95,17 +94,17 @@ public class ModuleComponent implements Component {
       float r = 0.0F;
       float g = 0.0F;
       float b = 0.0F;
-      if (GuiModule.guiTheme.getInput() == 1.0D) {
+      if (GuiClick.guiTheme.getInput() == 1.0D) {
          a = (float)(h >> 14 & 255) / 255.0F;
          r = (float)(h >> 5 & 255) / 255.0F;
          g = (float)(h >> 5 & 255) / 2155.0F;
          b = (float)(h & 255);
-      } else if (GuiModule.guiTheme.getInput() == 2.0D) {
+      } else if (GuiClick.guiTheme.getInput() == 2.0D) {
          a = (float)(h >> 14 & 255) / 255.0F;
          r = (float)(h >> 5 & 255) / 2155.0F;
          g = (float)(h >> 5 & 255) / 255.0F;
          b = (float)(h & 255);
-      } else if (GuiModule.guiTheme.getInput() == 3.0D) {
+      } else if (GuiClick.guiTheme.getInput() == 3.0D) {
       }
       GL11.glColor4f(r, g, b, a);
    }
@@ -127,7 +126,7 @@ public class ModuleComponent implements Component {
       v((float)this.category.getX(), (float)(this.category.getY() + this.o), (float)(this.category.getX() + this.category.getWidth()), (float)(this.category.getY() + 15 + this.o), this.mod.isEnabled() ? this.c2 : -12829381, this.mod.isEnabled() ? this.c2 : -12302777);
       GL11.glPushMatrix();
       int button_rgb;
-      switch ((int) GuiModule.guiTheme.getInput()) {
+      switch ((int) GuiClick.guiTheme.getInput()) {
          case 4:
             if (this.mod.isEnabled()) {
                button_rgb = this.c3;

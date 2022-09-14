@@ -74,7 +74,7 @@ public class Animations extends Module {
             Utils.Player.SlowSwing(digSlow.getInput());
         }
 
-        if(mode.getInput() == 3D ) {
+        if(mode.getInput() == 4D ) {
             Utils.Player.FastSwing(digSpeed.getInput());
         }
 

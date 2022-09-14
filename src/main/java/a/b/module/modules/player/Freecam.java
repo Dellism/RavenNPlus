@@ -81,7 +81,7 @@ public class Freecam extends Module {
          en.rotationYaw = en.rotationYawHead = mc.thePlayer.rotationYaw;
          en.rotationPitch = mc.thePlayer.rotationPitch;
          double s = 0.215D * a.getInput();
-         EntityOtherPlayerMP var10000;
+         EntityOtherPlayerMP otherPlayerMP;
          double rad;
          double dx;
          double dz;
@@ -89,50 +89,50 @@ public class Freecam extends Module {
             rad = (double)en.rotationYawHead * 0.017453292519943295D;
             dx = -1.0D * Math.sin(rad) * s;
             dz = Math.cos(rad) * s;
-            var10000 = en;
-            var10000.posX += dx;
-            var10000 = en;
-            var10000.posZ += dz;
+            otherPlayerMP = en;
+            otherPlayerMP.posX += dx;
+            otherPlayerMP = en;
+            otherPlayerMP.posZ += dz;
          }
 
          if (Keyboard.isKeyDown(mc.gameSettings.keyBindBack.getKeyCode())) {
             rad = (double)en.rotationYawHead * 0.017453292519943295D;
             dx = -1.0D * Math.sin(rad) * s;
             dz = Math.cos(rad) * s;
-            var10000 = en;
-            var10000.posX -= dx;
-            var10000 = en;
-            var10000.posZ -= dz;
+            otherPlayerMP = en;
+            otherPlayerMP.posX -= dx;
+            otherPlayerMP = en;
+            otherPlayerMP.posZ -= dz;
          }
 
          if (Keyboard.isKeyDown(mc.gameSettings.keyBindLeft.getKeyCode())) {
             rad = (double)(en.rotationYawHead - 90.0F) * 0.017453292519943295D;
             dx = -1.0D * Math.sin(rad) * s;
             dz = Math.cos(rad) * s;
-            var10000 = en;
-            var10000.posX += dx;
-            var10000 = en;
-            var10000.posZ += dz;
+            otherPlayerMP = en;
+            otherPlayerMP.posX += dx;
+            otherPlayerMP = en;
+            otherPlayerMP.posZ += dz;
          }
 
          if (Keyboard.isKeyDown(mc.gameSettings.keyBindRight.getKeyCode())) {
             rad = (double)(en.rotationYawHead + 90.0F) * 0.017453292519943295D;
             dx = -1.0D * Math.sin(rad) * s;
             dz = Math.cos(rad) * s;
-            var10000 = en;
-            var10000.posX += dx;
-            var10000 = en;
-            var10000.posZ += dz;
+            otherPlayerMP = en;
+            otherPlayerMP.posX += dx;
+            otherPlayerMP = en;
+            otherPlayerMP.posZ += dz;
          }
 
          if (Keyboard.isKeyDown(mc.gameSettings.keyBindJump.getKeyCode())) {
-            var10000 = en;
-            var10000.posY += 0.93D * s;
+            otherPlayerMP = en;
+            otherPlayerMP.posY += 0.93D * s;
          }
 
          if (Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode())) {
-            var10000 = en;
-            var10000.posY -= 0.93D * s;
+            otherPlayerMP = en;
+            otherPlayerMP.posY -= 0.93D * s;
          }
 
          mc.thePlayer.setSneaking(false);

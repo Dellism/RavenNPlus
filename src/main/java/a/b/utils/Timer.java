@@ -7,9 +7,11 @@ public class Timer {
    private float cached;
    private long last;
 
-   public Timer(float updates) { this.updates = updates; }
+   public Timer(float updates) {
+      this.updates = updates;
+   }
 
-   public boolean hasTimeElapsed(long time) {
+   public static boolean hasTimeElapsed(long time) {
       return System.currentTimeMillis() - lastMS > time;
    }
 
@@ -66,14 +68,14 @@ public class Timer {
    private float bounce(float t) {
       double i2 = 7.5625D;
       double i3 = 2.75D;
-      if ((double)t < 1.0D / i3) {
-         return (float)(i2 * (double)t * (double)t);
-      } else if ((double)t < 2.0D / i3) {
-         return (float)(i2 * (double)(t = (float)((double)t - 1.5D / i3)) * (double)t + 0.75D);
-      } else if ((double)t < 2.5D / i3) {
-         return (float)(i2 * (double)(t = (float)((double)t - 2.25D / i3)) * (double)t + 0.9375D);
+      if ((double) t < 1.0D / i3) {
+         return (float) (i2 * (double) t * (double) t);
+      } else if ((double) t < 2.0D / i3) {
+         return (float) (i2 * (double) (t = (float) ((double) t - 1.5D / i3)) * (double) t + 0.75D);
+      } else if ((double) t < 2.5D / i3) {
+         return (float) (i2 * (double) (t = (float) ((double) t - 2.25D / i3)) * (double) t + 0.9375D);
       } else {
-         return (float)(i2 * (double)(t = (float)((double)t - 2.625D / i3)) * (double)t + 0.984375D);
+         return (float) (i2 * (double) (t = (float) ((double) t - 2.625D / i3)) * (double) t + 0.984375D);
       }
    }
 

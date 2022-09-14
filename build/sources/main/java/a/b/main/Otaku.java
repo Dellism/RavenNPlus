@@ -1,6 +1,6 @@
 package a.b.main;
 
-import a.b.module.modules.client.GuiModule;
+import a.b.module.modules.client.GuiClick;
 import a.b.utils.notifications.Type;
 import a.b.utils.notifications.Render;
 import net.arikia.dev.drpc.DiscordEventHandlers;
@@ -37,6 +37,7 @@ public class Otaku {
    public static final String sourceLocation = " ";
    public static final String downloadLocation = " ";
    public static final String discord = "https://discord.gg/WBApubEaVv";
+   public static String name = "[Otaku b1.3]";
    public static String[] updateText = {"Your version of Otaku ( " + versionManager.getClientVersion().toString() + " ) is outdated!"};
    public static ConfigManager configManager;
    public static ClientConfig clientConfig;
@@ -93,7 +94,7 @@ public class Otaku {
       updateRPC(1);
       handlers.ready = (user) -> System.out.println("Ready!");
 
-      if(GuiModule.monkeee.isToggled()) {
+      if(GuiClick.monkeee.isToggled()) {
          pres.largeImageKey = "monkeeee_-_kopie";
          updateRPC(2);
       } else {
@@ -148,7 +149,7 @@ public class Otaku {
          }
       }
 
-      if(GuiModule.monkeee.isToggled()) {
+      if(GuiClick.monkeee.isToggled()) {
          pres.largeImageKey = "monkeeee_-_kopie";
          DiscordRPC.discordUpdatePresence(pres);
       } else {

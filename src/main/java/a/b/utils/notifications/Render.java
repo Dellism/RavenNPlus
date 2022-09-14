@@ -1,7 +1,7 @@
 package a.b.utils.notifications;
 
 import a.b.module.Module;
-import a.b.module.modules.client.GuiModule;
+import a.b.module.modules.client.GuiClick;
 import a.b.utils.RenderUtils;
 import a.b.utils.Utils;
 import net.minecraft.client.Minecraft;
@@ -15,11 +15,11 @@ public class Render {
 
     @SubscribeEvent
     public void onRender(TickEvent.RenderTickEvent e) {
-        if(GuiModule.notifications.isToggled()) Manager.render();
+        if(GuiClick.notifications.isToggled()) Manager.render();
     }
 
     public static void moduleStateChanged(Module m) {
-        if(!GuiModule.notifications.isToggled() || Minecraft.getMinecraft().currentScreen != null || !Utils.Player.isPlayerInGame()) return;
+        if(!GuiClick.notifications.isToggled() || Minecraft.getMinecraft().currentScreen != null || !Utils.Player.isPlayerInGame()) return;
 
         if(!m.getClass().equals(Gui.class)) {
             String s = m.isEnabled() ? "Enabled" : "Disabled";

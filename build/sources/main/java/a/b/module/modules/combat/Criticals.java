@@ -20,7 +20,7 @@ public class Criticals extends Module {
 
     public Criticals() {
         super("Criticals", ModuleCategory.combat);
-        this.registerSetting(mode = new SliderSetting("Mode", 1, 1, 4, 1));
+        this.registerSetting(mode = new SliderSetting("Mode", 1, 1, 5, 1));
         this.registerSetting(modeMode = new DescriptionSetting(Utils.md+""));
     }
 
@@ -29,33 +29,13 @@ public class Criticals extends Module {
 
         C02PacketUseEntity packet = new C02PacketUseEntity();
 
-        if(mc.thePlayer.onGround && !mc.gameSettings.keyBindJump.isKeyDown() && (packet.getEntityFromWorld(mc.theWorld) instanceof net.minecraft.entity.EntityLivingBase) && !mc.thePlayer.isInWater() && !mc.thePlayer.isInLava()) {
+        if (mc.thePlayer.onGround && (packet.getEntityFromWorld(mc.theWorld) instanceof net.minecraft.entity.EntityLivingBase) && !mc.thePlayer.isInWater() && !mc.thePlayer.isInLava()) {
 
-            if(mode.getInput() == 1) {
-                switch ((Integer) this.packets.getValue()) {
-                    case 1:
-                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.10000000149011612D, mc.thePlayer.posZ, false));
-                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                        break;
-                    case 2:
-                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.0625101D, mc.thePlayer.posZ, false));
-                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 1.1E-5D, mc.thePlayer.posZ, false));
-                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                        break;
-                    case 3:
-                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.0625101D, mc.thePlayer.posZ, false));
-                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.0125D, mc.thePlayer.posZ, false));
-                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                        break;
-                    case 4:
-                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.05D, mc.thePlayer.posZ, false));
-                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.03D, mc.thePlayer.posZ, false));
-                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
-                        break;
-                    case 5:
+            if (Utils.Player.canCrit()) {
+                if (packet.getAction() == C02PacketUseEntity.Action.ATTACK) {
+
+                    if (mode.getInput() == 1) {
+                        Utils.Player.fakeJump();
                         mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.1625D, mc.thePlayer.posZ, false));
                         mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
                         mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 4.0E-6D, mc.thePlayer.posZ, false));
@@ -64,25 +44,29 @@ public class Criticals extends Module {
                         mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
                         mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer());
                         mc.thePlayer.onCriticalHit(Objects.<Entity>requireNonNull(packet.getEntityFromWorld((World) mc.theWorld)));
-                        break;
+                    }
+
+                    if (mode.getInput() == 2) {
+                        mc.thePlayer.motionY /= 2.0D;
+                    }
+
+                    if (mode.getInput() == 3) {
+                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.11D, mc.thePlayer.posZ, false));
+                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.1100013579D, mc.thePlayer.posZ, false));
+                        mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.1100013579D, mc.thePlayer.posZ, false));
+                    }
+
+                    if (mode.getInput() == 4) {
+                        mc.thePlayer.jump();
+                    }
+
+                    if (mode.getInput() == 5) {
+                        Utils.Player.fakeJump();
+                    }
+
                 }
             }
-
-            if(mode.getInput() == 2) {
-                mc.thePlayer.motionY /= 2.0D;
-            }
-
-            if(mode.getInput() == 3) {
-                    mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.11D, mc.thePlayer.posZ, false));
-                    mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.1100013579D, mc.thePlayer.posZ, false));
-                    mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.1100013579D, mc.thePlayer.posZ, false));
-            }
-
-            if(mode.getInput() == 4) {
-                mc.thePlayer.jump();
-            }
         }
-
     }
 
     public void guiUpdate() {
@@ -98,6 +82,9 @@ public class Criticals extends Module {
                 break;
             case 4:
                 modeMode.setDesc(Utils.md + "Jump");
+                break;
+            case 5:
+                modeMode.setDesc(Utils.md + "Fake Jump");
                 break;
         }
     }

@@ -1,5 +1,5 @@
 Symbol range map extraction starting
-Processing 232 files
+Processing 231 files
 processing a\b\clickgui\otaku\ClickGui.java
 processing a\b\clickgui\otaku\CommandPrompt.java
 processing a\b\clickgui\otaku\Component.java
@@ -54,7 +54,7 @@ processing a\b\module\ModuleManager.java
 processing a\b\module\modules\HUD.java
 processing a\b\module\modules\client\ClientNameSpoof.java
 processing a\b\module\modules\client\CommandPrompt.java
-processing a\b\module\modules\client\GuiModule.java
+processing a\b\module\modules\client\GuiClick.java
 processing a\b\module\modules\client\SelfDestruct.java
 processing a\b\module\modules\client\Shutdown.java
 processing a\b\module\modules\client\UpdateCheck.java
@@ -136,6 +136,8 @@ processing a\b\module\modules\player\FallSpeed.java
 processing a\b\module\modules\player\FastPlace.java
 processing a\b\module\modules\player\Flip.java
 processing a\b\module\modules\player\Freecam.java
+processing a\b\module\modules\player\InvManager.java
+processing a\b\module\modules\player\InvMgr.java
 processing a\b\module\modules\player\NoFall.java
 processing a\b\module\modules\player\RightClicker.java
 processing a\b\module\modules\player\SafeWalk.java
@@ -176,7 +178,6 @@ processing a\b\tweaker\transformers\TransformerGuiUtilRenderComponents.java
 processing a\b\tweaker\transformers\TransformerMinecraft.java
 processing a\b\tweaker\transformers\TransformerSplashProgress.java
 processing a\b\tweaker\transformers\TransformerThrowableItem.java
-processing a\b\utils\BlockPosUtil.java
 processing a\b\utils\BlurUtil.java
 processing a\b\utils\ChatHelper.java
 processing a\b\utils\CombatUtils.java
@@ -184,16 +185,14 @@ processing a\b\utils\CoolDown.java
 processing a\b\utils\DebugInfoRenderer.java
 processing a\b\utils\DelayTimer.java
 processing a\b\utils\DimensionHelper.java
-processing a\b\utils\EnumFacingUtil.java
+processing a\b\utils\ImageButton.java
 processing a\b\utils\InvUtils.java
-processing a\b\utils\ItemStackUtil.java
 processing a\b\utils\MouseManager.java
 processing a\b\utils\RenderUtils.java
 processing a\b\utils\RoundedUtils.java
 processing a\b\utils\SoundUtil.java
 processing a\b\utils\Timer.java
 processing a\b\utils\Utils.java
-processing a\b\utils\Vec3Util.java
 processing a\b\utils\animations\Animation.java
 processing a\b\utils\animations\AnimationUtil.java
 processing a\b\utils\animations\Direction.java

@@ -3,7 +3,7 @@ package a.b.clickgui.otaku.components;
 import a.b.clickgui.otaku.Component;
 import a.b.module.Module;
 import a.b.module.setting.impl.TickSetting;
-import a.b.module.modules.client.GuiModule;
+import a.b.module.modules.client.GuiClick;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 import java.awt.*;
@@ -62,7 +62,7 @@ public class TickComponent implements Component {
    }
    public void draw() {
       // drawing main bg rect
-      if (GuiModule.guiTheme.getInput() == 4) {
+      if (GuiClick.guiTheme.getInput() == 4) {
          net.minecraft.client.gui.Gui.drawRect(this.module.category.getX() + 4, this.module.category.getY() + this.o + 4, this.module.category.getX() + 4 + boxSize, this.module.category.getY() + this.o + 4 + boxSize, this.boxC);
          if(this.cl1ckbUtt0n.isToggled()){
             net.minecraft.client.gui.Gui.drawRect(this.module.category.getX() + 5, this.module.category.getY() + this.o + 5, this.module.category.getX() + 5 + boxSize-2, this.module.category.getY() + this.o + 5 + boxSize-2, this.c);
@@ -70,7 +70,7 @@ public class TickComponent implements Component {
       }
       GL11.glPushMatrix();
       GL11.glScaled(0.5D, 0.5D, 0.5D);
-      if(GuiModule.guiTheme.getInput() == 4){
+      if(GuiClick.guiTheme.getInput() == 4){
          Minecraft.getMinecraft().fontRendererObj.drawString(this.cl1ckbUtt0n.isToggled() ? "     " + this.cl1ckbUtt0n.getName() : "     " + this.cl1ckbUtt0n.getName(), (float)((this.module.category.getX() + 4) * 2), (float)((this.module.category.getY() + this.o + 5) * 2), this.cl1ckbUtt0n.isToggled() ? this.c : -1, false);
       }else {
          Minecraft.getMinecraft().fontRendererObj.drawString(this.cl1ckbUtt0n.isToggled() ? "[+]  " + this.cl1ckbUtt0n.getName() : "[-]  " + this.cl1ckbUtt0n.getName(), (float)((this.module.category.getX() + 4) * 2), (float)((this.module.category.getY() + this.o + 5) * 2), this.cl1ckbUtt0n.isToggled() ? this.c : -1, false);

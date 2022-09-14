@@ -25,19 +25,19 @@ public class Jesus extends Module {
 
         if(mode.getInput() == 1D) {
 
-            if(Utils.Player.isPlayerInWotah() && mc.thePlayer.isInsideOfMaterial(Material.air)) {
+            if(Utils.Player.isPlayerInWater() && mc.thePlayer.isInsideOfMaterial(Material.air)) {
                 mc.thePlayer.motionY = 0.08;
             }
 
         } else if(mode.getInput() == 2D) {
 
-            if(Utils.Player.isPlayerInWotah() && mc.thePlayer.onGround) {
+            if(Utils.Player.isPlayerInWater() && mc.thePlayer.onGround) {
                 mc.thePlayer.motionY = 1;
             }
 
         } else if(mode.getInput() == 3D) {
 
-            if(!mc.thePlayer.onGround && Utils.Player.isPlayerInWotah() || mc.thePlayer.isInWater()) {
+            if(!mc.thePlayer.onGround && Utils.Player.isPlayerInWater() || mc.thePlayer.isInWater()) {
 
                 if(!mc.thePlayer.isSprinting()) {
 

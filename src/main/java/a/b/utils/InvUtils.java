@@ -2,17 +2,40 @@ package a.b.utils;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiIngameMenu;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.*;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class InvUtils {
-    private static Minecraft mc = Minecraft.getMinecraft();
+    private static final Minecraft mc = Minecraft.getMinecraft();
+
+    public static boolean isContainerOpen() {
+        return mc.currentScreen instanceof GuiContainer;
+    }
+
+    public static boolean isInvOpen() {
+        return mc.currentScreen instanceof GuiInventory;
+    }
+
+    public static boolean isChatOpen() {
+        return mc.currentScreen instanceof GuiChat;
+    }
+
+    public static boolean isPauseMenuOpen() {
+        return mc.currentScreen instanceof GuiIngameMenu;
+    }
 
     public static int findEmptySlot() {
         for (int i = 0; i < 8; i++) {
@@ -35,8 +58,17 @@ public class InvUtils {
         mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, slot, 0, 1, mc.thePlayer);
     }
 
-    public static void swap(int slot, int hotbarNum) {
-        mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, slot, hotbarNum, 2, mc.thePlayer);
+    public static void swap(int from, int to) {
+        if(from <= 8) {
+            from = 36 + from;
+        }
+
+        mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, from, to, 2, mc.thePlayer);
+    }
+
+    public static void clean(int slot) {
+        mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, slot, 0, 0, mc.thePlayer);
+        mc.playerController.windowClick(mc.thePlayer.inventoryContainer.windowId, -999, 0, 0, mc.thePlayer);
     }
 
     public static void swapItem(int fromSlot, int toSlot, long delay) {
@@ -115,10 +147,6 @@ public class InvUtils {
             return false;
 
         return (mc.thePlayer.inventory.getCurrentItem().getItem() instanceof ItemAxe) || (mc.thePlayer.inventory.getCurrentItem().getItem() instanceof ItemSword);
-    }
-
-    public static boolean isHeldingSword() {
-        return mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof ItemSword;
     }
 
     public static int pickaxeSlot = 37, axeSlot = 38, shovelSlot = 39;
@@ -457,8 +485,8 @@ public class InvUtils {
         return mc.thePlayer.inventory.currentItem;
     }
 
-    public static int setCurrentPlayerSlot(int slot) {
-        return mc.thePlayer.inventory.currentItem = slot;
+    public static void setCurrentPlayerSlot(int slot) {
+        mc.thePlayer.inventory.currentItem = slot;
     }
 
     public static boolean isPlayerHoldingWeapon() {
@@ -497,6 +525,16 @@ public class InvUtils {
         }
     }
 
+    public static boolean isPlayerHoldingFood() {
+        if (mc.thePlayer.getCurrentEquippedItem() == null) {
+            return false;
+        } else {
+            Item item = mc.thePlayer.getCurrentEquippedItem().getItem();
+            return item instanceof ItemFood;
+        }
+    }
+
+
     public static boolean isPlayerHoldingBow() {
         if (mc.thePlayer.getCurrentEquippedItem() == null) {
             return false;
@@ -523,9 +561,9 @@ public class InvUtils {
             ItemStack itemInSlot = mc.thePlayer.inventory.getStackInSlot(slot);
             if (itemInSlot == null)
                 continue;
-            for (AttributeModifier mooommHelp : itemInSlot.getAttributeModifiers().values()) {
-                if (mooommHelp.getAmount() > damage) {
-                    damage = mooommHelp.getAmount();
+            for (AttributeModifier ret : itemInSlot.getAttributeModifiers().values()) {
+                if (ret.getAmount() > damage) {
+                    damage = ret.getAmount();
                     index = slot;
                 }
             }
@@ -538,8 +576,8 @@ public class InvUtils {
         ItemStack itemInSlot = mc.thePlayer.inventory.getStackInSlot(slot);
         if (itemInSlot == null)
             return -1;
-        for (AttributeModifier mooommHelp : itemInSlot.getAttributeModifiers().values()) {
-            return mooommHelp.getAmount();
+        for (AttributeModifier ret : itemInSlot.getAttributeModifiers().values()) {
+            return ret.getAmount();
         }
 
         return -1;
@@ -575,6 +613,236 @@ public class InvUtils {
                 return 0;
             }
         }
+    }
+
+    public static void sortSword(int SwordSlot) {
+        for(int i = 9; i<mc.thePlayer.inventoryContainer.getInventory().size(); i++) {
+
+            boolean swordInSlot = mc.thePlayer.inventoryContainer.getInventory().get(SwordSlot + 35) != null && ((ItemStack) mc.thePlayer.inventoryContainer.getInventory().get(SwordSlot + 35)).getItem() instanceof ItemSword;
+
+            ItemStack iS = mc.thePlayer.inventoryContainer.getInventory().get(i);
+            if(iS != null) {
+                if (!swordInSlot && iS.getItem() instanceof ItemSword) {
+                    InvUtils.swap(i, SwordSlot - 1);
+                }
+            }
+        }
+    }
+
+    public static void sortBlock(int BlockSlot) {
+        for(int i = 9; i<mc.thePlayer.inventoryContainer.getInventory().size(); i++) {
+
+            boolean blockInSlot = mc.thePlayer.inventoryContainer.getInventory().get(BlockSlot + 35) != null && ((ItemStack) mc.thePlayer.inventoryContainer.getInventory().get(BlockSlot + 35)).getItem() instanceof ItemBlock;
+
+            ItemStack iS = mc.thePlayer.inventoryContainer.getInventory().get(i);
+            if(iS != null) {
+                if (!blockInSlot && iS.getItem() instanceof ItemBlock) {
+                    InvUtils.swap(i, BlockSlot - 1);
+                }
+            }
+        }
+    }
+
+    public static void sortFood(int FoodSlot) {
+        for(int i = 9; i<mc.thePlayer.inventoryContainer.getInventory().size(); i++) {
+
+            boolean foodInSlot = mc.thePlayer.inventoryContainer.getInventory().get(FoodSlot + 35) != null && ((ItemStack) mc.thePlayer.inventoryContainer.getInventory().get(FoodSlot + 35)).getItem() instanceof ItemFood;
+
+            ItemStack iS = mc.thePlayer.inventoryContainer.getInventory().get(i);
+            if(iS != null) {
+                if (!foodInSlot && iS.getItem() instanceof ItemFood) {
+                    InvUtils.swap(i, FoodSlot - 1);
+                }
+            }
+        }
+    }
+
+    public static void sortPearl(int PearlSlot) {
+        for(int i = 9; i<mc.thePlayer.inventoryContainer.getInventory().size(); i++) {
+
+            boolean pearlInSlot = mc.thePlayer.inventoryContainer.getInventory().get(PearlSlot + 35) != null && ((ItemStack) mc.thePlayer.inventoryContainer.getInventory().get(PearlSlot + 35)).getItem() instanceof ItemEnderPearl;
+
+            ItemStack iS = mc.thePlayer.inventoryContainer.getInventory().get(i);
+            if(iS != null) {
+                if (!pearlInSlot && iS.getItem() instanceof ItemEnderPearl) {
+                    InvUtils.swap(i, PearlSlot - 1);
+                }
+            }
+        }
+    }
+
+    public static void searchForTrash(boolean SnowBall, boolean Seeds, boolean Egg, boolean XPBottle, boolean Bow) {
+        for(int i = 9; i < mc.thePlayer.inventoryContainer.getInventory().size(); i++) {
+            ItemStack iS = mc.thePlayer.inventoryContainer.getInventory().get(i);
+            if(iS != null) {
+                if(iS.getItem() instanceof ItemSnowball) {
+                    if(SnowBall)
+                        InvUtils.clean(i);
+                }
+
+                if(iS.getItem() instanceof ItemSeeds) {
+                    if(Seeds)
+                        InvUtils.clean(i);
+                }
+
+                if(iS.getItem() instanceof ItemEgg) {
+                    if(Egg)
+                        InvUtils.clean(i);
+                }
+
+                if(iS.getItem() instanceof ItemExpBottle) {
+                    if(XPBottle)
+                        InvUtils.clean(i);
+                }
+
+                if(iS.getItem() instanceof ItemBow) {
+                    if(Bow)
+                        InvUtils.clean(i);
+                }
+            }
+        }
+    }
+
+    public static int getSwordSlot() {
+        if (mc.thePlayer == null) {
+            return -1;
+        }
+
+        int bestSword = -1;
+        float bestDamage = 1F;
+
+        for (int i = 9; i < 45; ++i) {
+            if (mc.thePlayer.inventoryContainer.getSlot ( i ).getHasStack ()) {
+                final ItemStack item = mc.thePlayer.inventoryContainer.getSlot ( i ).getStack ();
+                if (item != null) {
+                    if (item.getItem () instanceof ItemSword) {
+                        ItemSword is = (ItemSword) item.getItem ();
+                        float damage = is.getDamageVsEntity ();
+                        damage += EnchantmentHelper.getEnchantmentLevel ( Enchantment.sharpness.effectId, item ) * 1.26F +
+                                EnchantmentHelper.getEnchantmentLevel ( Enchantment.fireAspect.effectId, item ) * 0.01f;
+                        if (damage > bestDamage) {
+                            bestDamage = damage;
+                            bestSword = i;
+                        }
+                    }
+                }
+            }
+        }
+        return bestSword;
+    }
+
+    public static int getPickaxeSlot() {
+        if (mc.thePlayer == null) {
+            return -1;
+        }
+
+        int bestSword = -1;
+        float bestDamage = 1F;
+
+        for (int i = 9; i < 45; ++i) {
+            if (mc.thePlayer.inventoryContainer.getSlot ( i ).getHasStack ()) {
+                final ItemStack item = mc.thePlayer.inventoryContainer.getSlot ( i ).getStack ();
+                if (item != null) {
+                    if (item.getItem () instanceof ItemPickaxe) {
+                        ItemPickaxe is = (ItemPickaxe) item.getItem ();
+                        float damage = is.getStrVsBlock ( item, Block.getBlockById ( 4 ) );
+                        if (damage > bestDamage) {
+                            bestDamage = damage;
+                            bestSword = i;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return bestSword;
+    }
+
+    public static int getAxeSlot() {
+        if (mc.thePlayer == null) {
+            return -1;
+        }
+
+        int bestSword = -1;
+        float bestDamage = 1F;
+
+        for (int i = 9; i < 45; ++i) {
+            if (mc.thePlayer.inventoryContainer.getSlot ( i ).getHasStack ()) {
+                final ItemStack item = mc.thePlayer.inventoryContainer.getSlot ( i ).getStack ();
+                if (item != null) {
+                    if (item.getItem () instanceof ItemAxe) {
+                        ItemAxe is = (ItemAxe) item.getItem ();
+                        float damage = is.getStrVsBlock ( item, Block.getBlockById ( 17 ) );
+                        if (damage > bestDamage) {
+                            bestDamage = damage;
+                            bestSword = i;
+                        }
+                    }
+                }
+            }
+        }
+
+        return bestSword;
+    }
+
+    public static int getShovelSlot() {
+        if (mc.thePlayer == null) {
+            return -1;
+        }
+
+        int bestSword = -1;
+        float bestDamage = 1F;
+
+        for (int i = 9; i < 45; ++i) {
+            if (mc.thePlayer.inventoryContainer.getSlot ( i ).getHasStack ()) {
+                final ItemStack item = mc.thePlayer.inventoryContainer.getSlot ( i ).getStack ();
+                if (item != null) {
+                    if (item.getItem () instanceof ItemTool) {
+                        ItemTool is = (ItemTool) item.getItem ();
+                        if (isShovel ( is )) {
+                            float damage = is.getStrVsBlock ( item, Block.getBlockById ( 3 ) );
+                            if (damage > bestDamage) {
+                                bestDamage = damage;
+                                bestSword = i;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return bestSword;
+    }
+
+    public static boolean isShovel(Item is) {
+        return Item.getItemById ( 256 ) == is || Item.getItemById ( 269 ) == is || Item.getItemById ( 273 ) == is || Item.getItemById ( 277 ) == is || Item.getItemById ( 284 ) == is;
+    }
+
+    public static float getItemDamage(ItemStack stack) {
+        if (stack.getItem() instanceof ItemSword) {
+            ItemSword sword = (ItemSword) stack.getItem();
+            float sharpness = (float) EnchantmentHelper.getEnchantmentLevel(Enchantment.sharpness.effectId, stack) * 1.25F;
+            float fireAspect = (float) EnchantmentHelper.getEnchantmentLevel(Enchantment.fireAspect.effectId, stack) * 1.5F;
+            return sword.getDamageVsEntity() + sharpness + fireAspect;
+        } else {
+            return 0.0F;
+        }
+    }
+
+    public static boolean isBadPotion(ItemStack stack) {
+        if(stack != null && stack.getItem() instanceof ItemPotion) {
+            ItemPotion potion = (ItemPotion) stack.getItem();
+            if(ItemPotion.isSplash(stack.getItemDamage())) {
+
+                for (PotionEffect o : potion.getEffects(stack)) {
+                    if(o.getPotionID() == Potion.poison.getId() || o.getPotionID() == Potion.harm.getId() || o.getPotionID() == Potion.moveSlowdown.getId() || o.getPotionID() == Potion.weakness.getId()) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
 }

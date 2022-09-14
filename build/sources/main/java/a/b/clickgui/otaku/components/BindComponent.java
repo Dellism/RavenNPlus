@@ -1,7 +1,7 @@
 package a.b.clickgui.otaku.components;
 
 import a.b.clickgui.otaku.Component;
-import a.b.module.modules.client.GuiModule;
+import a.b.module.modules.client.GuiClick;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -55,7 +55,7 @@ public class BindComponent implements Component {
         if (!this.p.mod.getName().equalsIgnoreCase("AutoConfig")) {
             if (this.isBinding) {
                 if (k == 11) {
-                    if (this.p.mod instanceof GuiModule) {
+                    if (this.p.mod instanceof GuiClick) {
                         this.p.mod.setbind(54);
                     } else {
                         this.p.mod.setbind(0);

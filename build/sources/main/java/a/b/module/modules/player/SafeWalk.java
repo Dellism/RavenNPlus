@@ -29,14 +29,13 @@ public class SafeWalk extends Module {
    public static SliderSetting blockShowMode;
    public static DescriptionSetting blockShowModeDesc;
    public static DoubleSliderSetting shiftTime;
-
-   private static boolean shouldBridge = false;
-   private static boolean isShifting = false;
+   private static boolean shouldBridge;
+   private static boolean isShifting;
    private boolean allowedShift;
-   private CoolDown shiftTimer = new CoolDown(0);
+   private final CoolDown shiftTimer = new CoolDown(0);
 
    public SafeWalk() {
-      super("SafeWalk",ModuleCategory.player);
+      super("SafeWalk", ModuleCategory.player);
       this.registerSetting(doShift = new TickSetting("Shift", false));
       this.registerSetting(shiftOnJump = new TickSetting("Shift during jumps", false));
       this.registerSetting(shiftTime = new DoubleSliderSetting("Shift time: (s)", 140, 200, 0, 280, 5));
@@ -59,12 +58,12 @@ public class SafeWalk extends Module {
    }
 
    public void guiUpdate() {
-      blockShowModeDesc.setDesc(Utils.md + BlockAmountInfo.values()[(int)blockShowMode.getInput() - 1]);
+      blockShowModeDesc.setDesc(Utils.md + BlockAmountInfo.values()[(int) blockShowMode.getInput() - 1]);
    }
 
    @SubscribeEvent
    public void p(PlayerTickEvent e) {
-      if(!Utils.Client.currentScreenMinecraft())
+      if (!Utils.Client.currentScreenMinecraft())
          return;
 
       if (!Utils.Player.isPlayerInGame()) {
@@ -73,18 +72,19 @@ public class SafeWalk extends Module {
 
       boolean shiftTimeSettingActive = shiftTime.getInputMax() > 0;
 
-      if(doShift.isToggled()) {
-         if(lookDown.isToggled()) {
-            if(mc.thePlayer.rotationPitch < pitchRange.getInputMin() || mc.thePlayer.rotationPitch > pitchRange.getInputMax()) {
+      if (doShift.isToggled()) {
+         if (lookDown.isToggled()) {
+            if (mc.thePlayer.rotationPitch < pitchRange.getInputMin()
+                    || mc.thePlayer.rotationPitch > pitchRange.getInputMax()) {
                shouldBridge = false;
-               if(Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode())) {
+               if (Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode())) {
                   setShift(true);
                }
                return;
             }
          }
          if (onHold.isToggled()) {
-            if  (!Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode())) {
+            if (!Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode())) {
                shouldBridge = false;
                return;
             }
@@ -104,48 +104,45 @@ public class SafeWalk extends Module {
 
          if (mc.thePlayer.onGround) {
             if (Utils.Player.playerOverAir()) {
-               // code fo the timer
-               if(shiftTimeSettingActive){ // making sure that the player has set the value so some number
-                  shiftTimer.setCooldown(Utils.Java.randomInt(shiftTime.getInputMin(), shiftTime.getInputMax() + 0.1));
+               if (shiftTimeSettingActive) { // making sure that the player has set the value so some number
+                  shiftTimer.setCooldown(
+                          Utils.Java.randomInt(shiftTime.getInputMin(), shiftTime.getInputMax() + 0.1));
                   shiftTimer.start();
                }
 
                isShifting = true;
                this.setShift(true);
                shouldBridge = true;
-            }
-            else if (mc.thePlayer.isSneaking() && !Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && onHold.isToggled()) { // if player is smeaking and shiftDown and holdSetting turned on
+            } else if (mc.thePlayer.isSneaking() && !Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode())
+                    && onHold.isToggled()) { // if player is sneaking and shiftDown and holdSetting turned on
                isShifting = false;
                shouldBridge = false;
                this.setShift(false);
-            }
-            else if(onHold.isToggled() && !Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode())) { // if shiftDown and holdSetting turned on
+            } else if (onHold.isToggled() && !Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode())) { // if
                isShifting = false;
                shouldBridge = false;
                this.setShift(false);
-            }
-            else if(mc.thePlayer.isSneaking() && (Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && onHold.isToggled()) && (!shiftTimeSettingActive|| shiftTimer.hasFinished())) {
+            } else if (mc.thePlayer.isSneaking()
+                    && (Keyboard.isKeyDown(mc.gameSettings.keyBindSneak.getKeyCode()) && onHold.isToggled())
+                    && (!shiftTimeSettingActive || shiftTimer.hasFinished())) {
+               isShifting = false;
+               this.setShift(false);
+               shouldBridge = true;
+            } else if (mc.thePlayer.isSneaking() && !onHold.isToggled()
+                    && (!shiftTimeSettingActive || shiftTimer.hasFinished())) {
                isShifting = false;
                this.setShift(false);
                shouldBridge = true;
             }
-            else if(mc.thePlayer.isSneaking() && !onHold.isToggled()  && (!shiftTimeSettingActive|| shiftTimer.hasFinished())) {
-               isShifting = false;
-               this.setShift(false);
-               shouldBridge = true;
-            }
-         }
-
-         else if (shouldBridge && mc.thePlayer.capabilities.isFlying) {
+         } else if (shouldBridge && mc.thePlayer.capabilities.isFlying) {
             this.setShift(false);
             shouldBridge = false;
-         }
-
-         else if (shouldBridge && Utils.Player.playerOverAir() && shiftOnJump.isToggled()) {
+         } else if (shouldBridge && Utils.Player.playerOverAir() && shiftOnJump.isToggled()) {
             isShifting = true;
             this.setShift(true);
          } else {
-            // rn we are in the air and we are not flying, meaning that we are in a jump. and since shiftOnJump is turned off, we just unshift and uhh... nyoooom
+            // rn we are in the air, and we are not flying, meaning that we are in a jump.
+            // and since shiftOnJump is turned off, we just un-shift and uhh...
             isShifting = false;
             this.setShift(false);
          }
@@ -154,54 +151,53 @@ public class SafeWalk extends Module {
 
    @SubscribeEvent
    public void r(TickEvent.RenderTickEvent e) {
-      if(!showBlockAmount.isToggled() || !Utils.Player.isPlayerInGame()) return;
-      if (e.phase == TickEvent.Phase.END) {
-         if (mc.currentScreen == null) {
-            if(shouldBridge) {
-               ScaledResolution res = new ScaledResolution(mc);
+      if (!showBlockAmount.isToggled() || !Utils.Player.isPlayerInGame())
+         return;
+      if (mc.currentScreen == null) {
+         if (shouldBridge) {
+            ScaledResolution res = new ScaledResolution(mc);
 
-               int totalBlocks = 0;
-               if(BlockAmountInfo.values()[(int)blockShowMode.getInput() - 1] == BlockAmountInfo.BLOCKS_IN_TOTAL) {
-                  totalBlocks = Utils.Player.getBlockAmountInCurrentStack(mc.thePlayer.inventory.currentItem);
-               } else {
-                  for (int slot = 0; slot < 36; slot++){
-                     totalBlocks += Utils.Player.getBlockAmountInCurrentStack(slot);
-                  }
+            int totalBlocks = 0;
+            if (BlockAmountInfo.values()[(int) blockShowMode.getInput()
+                    - 1] == BlockAmountInfo.BLOCKS_IN_CURRENT_STACK) {
+               totalBlocks = Utils.Player.getBlockAmountInCurrentStack(mc.thePlayer.inventory.currentItem);
+            } else {
+               for (int slot = 0; slot < 36; slot++) {
+                  totalBlocks += Utils.Player.getBlockAmountInCurrentStack(slot);
                }
-
-               if(totalBlocks <= 0){
-                  return;
-               }
-
-               int rgb;
-               if (totalBlocks < 16.0D) {
-                  rgb = Color.red.getRGB();
-               } else if (totalBlocks < 32.0D) {
-                  rgb = Color.orange.getRGB();
-               } else if (totalBlocks < 128.0D) {
-                  rgb = Color.yellow.getRGB();
-               } else if (totalBlocks > 128.0D) {
-                  rgb = Color.green.getRGB();
-               } else {
-                  rgb = Color.black.getRGB();
-               }
-
-               String t;
-               if(totalBlocks == 1) {
-                  t = totalBlocks + " block";
-               } else {
-                  t = totalBlocks + " blocks";
-               }
-
-               int x = res.getScaledWidth() / 2 - mc.fontRendererObj.getStringWidth(t) / 2;
-               int y;
-               if(Otaku.debugger) {
-                  y = res.getScaledHeight() / 2 + 17 + mc.fontRendererObj.FONT_HEIGHT;
-               } else {
-                  y = res.getScaledHeight() / 2 + 15;
-               }
-               mc.fontRendererObj.drawString(t, (float)x, (float)y, rgb, false);
             }
+
+            if (totalBlocks <= 0) {
+               return;
+            }
+
+            int rgb;
+            if (totalBlocks < 16.0D) {
+               rgb = Color.red.getRGB();
+            } else if (totalBlocks < 32.0D) {
+               rgb = Color.orange.getRGB();
+            } else if (totalBlocks < 128.0D) {
+               rgb = Color.yellow.getRGB();
+            } else if (totalBlocks > 128.0D) {
+               rgb = Color.green.getRGB();
+            } else {
+               rgb = Color.black.getRGB();
+            }
+
+            String t;
+            if(totalBlocks == 1)
+               t = totalBlocks + " block";
+            else
+               t = totalBlocks + " blocks";
+
+            int x = res.getScaledWidth() / 2 - mc.fontRendererObj.getStringWidth(t) / 2;
+            int y;
+            if (Otaku.debugger) {
+               y = res.getScaledHeight() / 2 + 17 + mc.fontRendererObj.FONT_HEIGHT;
+            } else {
+               y = res.getScaledHeight() / 2 + 15;
+            }
+            mc.fontRendererObj.drawString(t, (float) x, (float) y, rgb, false);
          }
       }
    }
@@ -210,9 +206,7 @@ public class SafeWalk extends Module {
       KeyBinding.setKeyBindState(mc.gameSettings.keyBindSneak.getKeyCode(), sh);
    }
 
-   public static enum BlockAmountInfo {
-      BLOCKS_IN_TOTAL,
-      BLOCKS_IN_CURRENT_STACK;
+   public enum BlockAmountInfo {
+      BLOCKS_IN_TOTAL, BLOCKS_IN_CURRENT_STACK
    }
-
 }

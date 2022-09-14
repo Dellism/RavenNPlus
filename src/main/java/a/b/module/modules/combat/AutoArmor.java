@@ -6,6 +6,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import a.b.module.Module;
 import a.b.module.setting.impl.DescriptionSetting;
 import a.b.module.setting.impl.DoubleSliderSetting;
+import a.b.module.setting.impl.TickSetting;
 import a.b.utils.CoolDown;
 import a.b.utils.Utils;
 import net.minecraft.inventory.ContainerPlayer;
@@ -16,12 +17,11 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class AutoArmor extends Module {
 
-    private final DoubleSliderSetting firstDelay;
-    private final DoubleSliderSetting delay;
+    private final DoubleSliderSetting firstDelay, delay;
+    public static DescriptionSetting desc;
+    private final CoolDown delayTimer = new CoolDown(0);
     private List<Slot> sortedSlots = new ArrayList<>();
     private boolean inInv;
-    private final CoolDown delayTimer = new CoolDown(0);
-    public static DescriptionSetting desc;
 
     public AutoArmor() {
         super("AutoArmor", ModuleCategory.combat);
@@ -33,7 +33,9 @@ public class AutoArmor extends Module {
     public void openChest(TickEvent.RenderTickEvent e) {
         if(!Utils.Player.isPlayerInGame())
             return;
+
         if(mc.currentScreen != null && mc.thePlayer != null) {
+
           //if(mc.thePlayer.openContainer != null && mc.thePlayer.openContainer instanceof ContainerPlayer) {
             if(mc.thePlayer.openContainer instanceof ContainerPlayer) {
                 if(!inInv) {

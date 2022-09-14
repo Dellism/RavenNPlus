@@ -5,7 +5,7 @@ public class BanUtils {
     public void cont_f34d0() {
         String getName = net.minecraft.client.Minecraft.getMinecraft().getSession().getUsername();
 
-        if(getName != "SleepyFish_YT" || getName != "Joel8174") {
+        if(getName != "username") {
             field_29398G();
         } else {
             func_2f293i();

@@ -11,10 +11,12 @@ import a.b.utils.Utils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.play.client.C02PacketUseEntity;
+import net.minecraft.network.play.client.C0APacketAnimation;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class KillAura extends Module {
@@ -22,15 +24,15 @@ public class KillAura extends Module {
     public static TickSetting mouse, background, onlySprint, onlySword, swing, drawEntity, drawHUD, silent;
     public static SliderSetting range, entityX, entityY, mode, entitySize, delay;
     public static DescriptionSetting modeMode;
-    public static boolean rrr = false;
+    public static boolean viewModified = false;
 
     public KillAura() {
         super("KillAura", ModuleCategory.combat);
         this.registerSetting(mode = new SliderSetting("Mode", 2D, 1D, 3D, 1D));
-        this.registerSetting(silent = new TickSetting("Silent", false));
+        this.registerSetting(silent = new TickSetting("Silent", true));
+        this.registerSetting(swing = new TickSetting("Swing", true));
         this.registerSetting(modeMode = new DescriptionSetting(Utils.md +""));
         this.registerSetting(range = new SliderSetting("Range", 3.7D, 2D, 8D, 0.1D));
-        this.registerSetting(swing = new TickSetting("Swing", true));
         this.registerSetting(delay = new SliderSetting("Delay", 5, 0, 50, 1));
         this.registerSetting(drawEntity = new TickSetting("Draw Entity", false));
         this.registerSetting(drawHUD = new TickSetting("Draw HUD", true));
@@ -41,11 +43,6 @@ public class KillAura extends Module {
         this.registerSetting(mouse = new TickSetting("Mouse X and Y", false));
         this.registerSetting(onlySword = new TickSetting("Only Sword", true));
         this.registerSetting(onlySprint = new TickSetting("Only Sprint", false));
-    }
-
-    @Override
-    public void onEnable() {
-        Utils.Player.swing();
     }
 
     @SubscribeEvent
@@ -60,7 +57,7 @@ public class KillAura extends Module {
         if(mc.getSession().getUsername() == target.getName()) return;
         if(target.getName().contains("Empty")) return;
         if(target.getName().contains(" ")) return;
-        if(target.getName().startsWith(":")) return;
+        if(target.getName().contains(":")) return;
         if(target.getName().startsWith("CIT-")) return;
 
         if(onlySword.isToggled())
@@ -72,18 +69,45 @@ public class KillAura extends Module {
         if(mode.getInput() == 2D) {
             if(Timer.hasTimeElapsed((long) delay.getInput() * 5, true)) {
                 Utils.Player.aim(target, 0.0F, false, silent.isToggled());
-                Utils.Player.swing();
-                mc.thePlayer.sendQueue.addToSendQueue(new C02PacketUseEntity(target, C02PacketUseEntity.Action.ATTACK));
 
-                String aaa = String.valueOf(target.getLastAttacker());
-                if(aaa == mc.thePlayer.getName()) {
+                if(swing.isToggled()) {
                     Utils.Player.swing();
+                    mc.thePlayer.sendQueue.addToSendQueue(new C0APacketAnimation());
                 }
 
+                mc.thePlayer.sendQueue.addToSendQueue(new C02PacketUseEntity(target, C02PacketUseEntity.Action.ATTACK));
+            }
+
+            String lastAttack = String.valueOf(target.getLastAttacker());
+            if(Objects.equals(lastAttack, mc.thePlayer.getName())) {
+            //  Utils.Player.swing();
+            Utils.Player.SlowSwing(60);
+            }
+        }
+
+        if(mode.getInput() == 4D) {
+            if(target.getDistanceToEntity(mc.thePlayer) < (int) range.getInput()) {
+                mc.setRenderViewEntity(target);
+                viewModified = true;
+            } else {
+                mc.setRenderViewEntity(mc.thePlayer);
+                viewModified = false;
             }
         }
 
     }
+
+    @Override
+    public void onDisable() {
+        //  Utils.Player.swing();
+        if(swing.isToggled())
+            Utils.Player.SlowSwing(60);
+
+        if(mode.getInput() == 4D && viewModified) {
+            mc.setRenderViewEntity(mc.thePlayer);
+        }
+    }
+
 
     @SubscribeEvent
     public void p(TickEvent.RenderTickEvent e) {
@@ -129,12 +153,10 @@ public class KillAura extends Module {
             case 3:
                 modeMode.setDesc(Utils.md + "More soon...");
                 break;
+            case 4:
+                modeMode.setDesc(Utils.md + "Test");
+                break;
         }
-    }
-
-    @Override
-    public void onDisable() {
-        Utils.Player.swing();
     }
 
 }
