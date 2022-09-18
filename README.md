@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 # RavenNPlus Client
 ![RavenNPlus's logo](https://media.discordapp.net/attachments/1013895361699520603/1014027644372799488/RavenNPlusb13.png?width=500&height=300 "RavenNPlus's logo")
 ![RavenNPlus_Ingamel](https://media.discordapp.net/attachments/1015219944666972180/1015244400131047505/unknown.png?width=1221&height=675 "RavenNPlus Ingame")
+=======
+# Raven N+ Client
+![Raven N+'s logo](https://media.discordapp.net/attachments/1013895361699520603/1014027644372799488/Otakub13.png?width=500&height=300 "Otaku's logo")
+![Raven N+_Ingamel](https://media.discordapp.net/attachments/1015219944666972180/1015244400131047505/unknown.png?width=1221&height=675 "Otaku Ingame")
+>>>>>>> 0f3e8c5662e7f3fcbe042f274e2a40af918672d0
 
 Based from [Raven B+](https://github.com/Kopamed/Raven-bPLUS "Raven B+") and some features from [Raven B++](https://github.com/K-ov/Raven-bPLUS "Raven B++")
 
