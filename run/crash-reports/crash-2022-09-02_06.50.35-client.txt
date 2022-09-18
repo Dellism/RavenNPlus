@@ -1,11 +1,11 @@
 ---- Minecraft Crash Report ----
-// Hi. I'm Minecraft, and I'm a crashaholic.
+// Hi. I'm Minecraft, and I'm ravenNPlus crashaholic.
 
 Time: 02.09.22 06:50
 Description: Ticking entity
 
 java.lang.NullPointerException: Ticking entity
-	at a.b.module.modules.combat.KillAura.r(KillAura.java:87)
+	at ravenNPlus.b.module.modules.combat.KillAura.r(KillAura.java:87)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_17_KillAura_r_PlayerTickEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)
@@ -38,7 +38,7 @@ A detailed walkthrough of the error, its code path and all known details is as f
 
 -- Head --
 Stacktrace:
-	at a.b.module.modules.combat.KillAura.r(KillAura.java:87)
+	at ravenNPlus.b.module.modules.combat.KillAura.r(KillAura.java:87)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_17_KillAura_r_PlayerTickEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)
@@ -75,7 +75,7 @@ Details:
 	Level storage version: 0x00000 - Unknown?
 	Level weather: Rain time: 0 (now: false), thunder time: 0 (now: false)
 	Level game mode: Game mode: adventure (ID 2). Hardcore: false. Cheats: false
-	Forced entities: 9 total; [EntityPlayerSP['Player70'/50920, l='MpServer', x=0,50, y=100,00, z=0,50], EntityArmorStand['§b§lSpleef'/1, l='MpServer', x=6,66, y=98,00, z=0,41], EntityArmorStand['§eClick to join'/2, l='MpServer', x=6,66, y=97,78, z=0,41], EntityArmorStand[' '/3, l='MpServer', x=6,47, y=98,78, z=0,47], EntityArmorStand['Armor Stand'/4, l='MpServer', x=6,72, y=99,69, z=0,53], EntityArmorStand[' '/5, l='MpServer', x=6,72, y=99,50, z=0,53], EntityArmorStand['Armor Stand'/6, l='MpServer', x=6,50, y=99,00, z=1,53], EntityArmorStand['Armor Stand'/7, l='MpServer', x=6,47, y=99,00, z=-0,56], EntityArmorStand[' '/8, l='MpServer', x=6,47, y=98,78, z=-0,56]]
+	Forced entities: 9 total; [EntityPlayerSP['Player70'/50920, l='MpServer', x=0,50, y=100,00, z=0,50], EntityArmorStand['ï¿½bï¿½lSpleef'/1, l='MpServer', x=6,66, y=98,00, z=0,41], EntityArmorStand['ï¿½eClick to join'/2, l='MpServer', x=6,66, y=97,78, z=0,41], EntityArmorStand[' '/3, l='MpServer', x=6,47, y=98,78, z=0,47], EntityArmorStand['Armor Stand'/4, l='MpServer', x=6,72, y=99,69, z=0,53], EntityArmorStand[' '/5, l='MpServer', x=6,72, y=99,50, z=0,53], EntityArmorStand['Armor Stand'/6, l='MpServer', x=6,50, y=99,00, z=1,53], EntityArmorStand['Armor Stand'/7, l='MpServer', x=6,47, y=99,00, z=-0,56], EntityArmorStand[' '/8, l='MpServer', x=6,47, y=98,78, z=-0,56]]
 	Retry entities: 0 total; []
 	Server brand: Waterfall <- Paper
 	Server type: Non-integrated multiplayer server
@@ -111,7 +111,7 @@ Details:
 	UCHIJA	mcp{9.19} [Minecraft Coder Pack] (minecraft.jar) 
 	UCHIJA	FML{8.0.99.99} [Forge Mod Loader] (forgeBin-1.8.9-11.15.1.2318-1.8.9.jar) 
 	UCHIJA	Forge{11.15.1.2318} [Minecraft Forge] (forgeBin-1.8.9-11.15.1.2318-1.8.9.jar) 
-	UCHIJA	a{KMV5} [Otaku] ([1.8.9] Otaku -b1.3.jar) 
+	UCHIJA	ravenNPlus{KMV5} [RavenNPlus] ([1.8.9] RavenNPlus -b1.3.jar)
 	Loaded coremods (and transformers): 
 	GL info: ' Vendor: 'ATI Technologies Inc.' Version: '4.6.14800 Compatibility Profile Context 22.5.1 30.0.15021.11005' Renderer: 'AMD Radeon(TM) Vega 3 Graphics'
 	Launched Version: 1.8.9

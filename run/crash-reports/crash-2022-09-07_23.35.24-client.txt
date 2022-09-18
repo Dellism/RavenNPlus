@@ -7,11 +7,11 @@ Description: Updating screen events
 net.minecraftforge.fml.relauncher.FMLSecurityManager$ExitTrappedException
 	at net.minecraftforge.fml.common.asm.transformers.TerminalTransformer$ExitVisitor.checkAccess(TerminalTransformer.java:142)
 	at net.minecraftforge.fml.common.asm.transformers.TerminalTransformer$ExitVisitor.systemExitCalled(TerminalTransformer.java:112)
-	at a.b.module.modules.client.Shutdown.onEnable(Shutdown.java:29)
-	at a.b.module.Module.enable(Module.java:102)
-	at a.b.module.Module.toggle(Module.java:144)
-	at a.b.clickgui.otaku.components.ModuleComponent.mouseDown(ModuleComponent.java:193)
-	at a.b.clickgui.otaku.ClickGui.mouseClicked(ClickGui.java:166)
+	at ravenNPlus.b.module.modules.client.Shutdown.onEnable(Shutdown.java:29)
+	at ravenNPlus.b.module.Module.enable(Module.java:102)
+	at ravenNPlus.b.module.Module.toggle(Module.java:144)
+	at ravenNPlus.b.clickgui.RavenNPlus.components.ModuleComponent.mouseDown(ModuleComponent.java:193)
+	at ravenNPlus.b.clickgui.RavenNPlus.ClickGui.mouseClicked(ClickGui.java:166)
 	at net.minecraft.client.gui.GuiScreen.handleMouseInput(GuiScreen.java:555)
 	at net.minecraft.client.gui.GuiScreen.handleInput(GuiScreen.java:524)
 	at net.minecraft.client.Minecraft.runTick(Minecraft.java:1674)
@@ -39,17 +39,17 @@ A detailed walkthrough of the error, its code path and all known details is as f
 Stacktrace:
 	at net.minecraftforge.fml.common.asm.transformers.TerminalTransformer$ExitVisitor.checkAccess(TerminalTransformer.java:142)
 	at net.minecraftforge.fml.common.asm.transformers.TerminalTransformer$ExitVisitor.systemExitCalled(TerminalTransformer.java:112)
-	at a.b.module.modules.client.Shutdown.onEnable(Shutdown.java:29)
-	at a.b.module.Module.enable(Module.java:102)
-	at a.b.module.Module.toggle(Module.java:144)
-	at a.b.clickgui.otaku.components.ModuleComponent.mouseDown(ModuleComponent.java:193)
-	at a.b.clickgui.otaku.ClickGui.mouseClicked(ClickGui.java:166)
+	at ravenNPlus.b.module.modules.client.Shutdown.onEnable(Shutdown.java:29)
+	at ravenNPlus.b.module.Module.enable(Module.java:102)
+	at ravenNPlus.b.module.Module.toggle(Module.java:144)
+	at ravenNPlus.b.clickgui.RavenNPlus.components.ModuleComponent.mouseDown(ModuleComponent.java:193)
+	at ravenNPlus.b.clickgui.RavenNPlus.ClickGui.mouseClicked(ClickGui.java:166)
 	at net.minecraft.client.gui.GuiScreen.handleMouseInput(GuiScreen.java:555)
 	at net.minecraft.client.gui.GuiScreen.handleInput(GuiScreen.java:524)
 
 -- Affected screen --
 Details:
-	Screen name: a.b.clickgui.otaku.ClickGui
+	Screen name: ravenNPlus.b.clickgui.RavenNPlus.ClickGui
 
 -- Affected level --
 Details:
@@ -101,7 +101,7 @@ Details:
 	UCHIJAAAA	mcp{9.19} [Minecraft Coder Pack] (minecraft.jar) 
 	UCHIJAAAA	FML{8.0.99.99} [Forge Mod Loader] (forgeBin-1.8.9-11.15.1.2318-1.8.9.jar) 
 	UCHIJAAAA	Forge{11.15.1.2318} [Minecraft Forge] (forgeBin-1.8.9-11.15.1.2318-1.8.9.jar) 
-	UCHIJAAAA	a{KMV5} [Otaku] ([1.8.9] Otaku -b1.3.jar) 
+	UCHIJAAAA	ravenNPlus{KMV5} [RavenNPlus] ([1.8.9] RavenNPlus -b1.3.jar)
 	Loaded coremods (and transformers): 
 	GL info: ' Vendor: 'ATI Technologies Inc.' Version: '4.6.14800 Compatibility Profile Context 22.5.1 30.0.15021.11005' Renderer: 'AMD Radeon(TM) Vega 3 Graphics'
 	Launched Version: 1.8.9

@@ -5,7 +5,7 @@ Time: 25.08.22 16:21
 Description: Initializing game
 
 java.lang.NullPointerException: Initializing game
-	at a.b.module.modules.movement.Scaffold.p(Scaffold.java:40)
+	at ravenNPlus.b.module.modules.movement.Scaffold.p(Scaffold.java:40)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_23_Scaffold_p_Pre.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)
@@ -33,7 +33,7 @@ A detailed walkthrough of the error, its code path and all known details is as f
 
 -- Head --
 Stacktrace:
-	at a.b.module.modules.movement.Scaffold.p(Scaffold.java:40)
+	at ravenNPlus.b.module.modules.movement.Scaffold.p(Scaffold.java:40)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_23_Scaffold_p_Pre.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)
@@ -73,7 +73,7 @@ Details:
 	UCHIJA	mcp{9.19} [Minecraft Coder Pack] (minecraft.jar) 
 	UCHIJA	FML{8.0.99.99} [Forge Mod Loader] (forgeBin-1.8.9-11.15.1.2318-1.8.9.jar) 
 	UCHIJA	Forge{11.15.1.2318} [Minecraft Forge] (forgeBin-1.8.9-11.15.1.2318-1.8.9.jar) 
-	UCHIJA	a{KMV5} [Otaku] ([1.8.9] Otaku -b1.2.jar) 
+	UCHIJA	ravenNPlus{KMV5} [RavenNPlus] ([1.8.9] RavenNPlus -b1.2.jar)
 	Loaded coremods (and transformers): 
 	GL info: ' Vendor: 'ATI Technologies Inc.' Version: '4.6.14761 Compatibility Profile Context 21.30.23.04 30.0.13023.4001' Renderer: 'AMD Radeon(TM) Vega 3 Graphics'
 	Launched Version: 1.8.9

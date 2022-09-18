@@ -1,0 +1,1 @@
+package ravenNPlus.b.utils.event; public enum EventDirection { INCOMING, OUTGOING; }

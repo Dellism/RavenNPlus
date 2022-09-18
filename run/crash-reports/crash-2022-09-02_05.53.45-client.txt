@@ -2,7 +2,7 @@
 // Who set us up the TNT?
 
 Time: 02.09.22 05:53
-Description: There was a severe problem during mod loading that has caused the game to fail
+Description: There was ravenNPlus severe problem during mod loading that has caused the game to fail
 
 net.minecraftforge.fml.common.LoaderException: java.lang.ExceptionInInitializerError
 	at net.minecraftforge.fml.common.LoadController.transition(LoadController.java:162)
@@ -24,9 +24,9 @@ net.minecraftforge.fml.common.LoaderException: java.lang.ExceptionInInitializerE
 	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97)
 	at GradleStart.main(GradleStart.java:26)
 Caused by: java.lang.ExceptionInInitializerError
-	at a.b.module.ModuleManager.<init>(ModuleManager.java:168)
-	at a.b.main.Otaku.<clinit>(Otaku.java:41)
-	at a.c.KeyStrokeMod.init(KeyStrokeMod.java:25)
+	at ravenNPlus.b.module.ModuleManager.<init>(ModuleManager.java:168)
+	at ravenNPlus.b.main.RavenNPlus.<clinit>(RavenNPlus.java:41)
+	at ravenNPlus.c.KeyStrokeMod.init(KeyStrokeMod.java:25)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -56,8 +56,8 @@ Caused by: java.lang.ExceptionInInitializerError
 	at net.minecraftforge.fml.common.Loader.initializeMods(Loader.java:737)
 	... 16 more
 Caused by: java.lang.NullPointerException
-	at a.b.module.modules.combat.KillAura.getEnemy(KillAura.java:172)
-	at a.b.module.modules.combat.KillAura.<clinit>(KillAura.java:46)
+	at ravenNPlus.b.module.modules.combat.KillAura.getEnemy(KillAura.java:172)
+	at ravenNPlus.b.module.modules.combat.KillAura.<clinit>(KillAura.java:46)
 	... 46 more
 
 
@@ -78,6 +78,6 @@ Details:
 	UCHI	mcp{9.19} [Minecraft Coder Pack] (minecraft.jar) 
 	UCHI	FML{8.0.99.99} [Forge Mod Loader] (forgeBin-1.8.9-11.15.1.2318-1.8.9.jar) 
 	UCHI	Forge{11.15.1.2318} [Minecraft Forge] (forgeBin-1.8.9-11.15.1.2318-1.8.9.jar) 
-	UCHE	a{KMV5} [Otaku] ([1.8.9] Otaku -b1.3.jar) 
+	UCHE	ravenNPlus{KMV5} [RavenNPlus] ([1.8.9] RavenNPlus -b1.3.jar)
 	Loaded coremods (and transformers): 
 	GL info: ' Vendor: 'ATI Technologies Inc.' Version: '4.6.14800 Compatibility Profile Context 22.5.1 30.0.15021.11005' Renderer: 'AMD Radeon(TM) Vega 3 Graphics'

@@ -1,1 +1,0 @@
-package a.b.utils.event; public enum EventDirection { INCOMING, OUTGOING; }

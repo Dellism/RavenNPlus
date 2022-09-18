@@ -5,8 +5,8 @@ Time: 08.09.22 00:45
 Description: Unexpected error
 
 java.lang.NullPointerException: Unexpected error
-	at a.b.main.Otaku.onTick(Otaku.java:147)
-	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_10_Otaku_onTick_ClientTickEvent.invoke(.dynamic)
+	at ravenNPlus.b.main.RavenNPlus.onTick(RavenNPlus.java:147)
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_10_RavenNPlus_onTick_ClientTickEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)
 	at net.minecraftforge.fml.common.FMLCommonHandler.onPostClientTick(FMLCommonHandler.java:336)
@@ -45,7 +45,7 @@ Details:
 	UCHIJA	mcp{9.19} [Minecraft Coder Pack] (minecraft.jar) 
 	UCHIJA	FML{8.0.99.99} [Forge Mod Loader] (forgeBin-1.8.9-11.15.1.2318-1.8.9.jar) 
 	UCHIJA	Forge{11.15.1.2318} [Minecraft Forge] (forgeBin-1.8.9-11.15.1.2318-1.8.9.jar) 
-	UCHIJA	a{KMV5} [Otaku] ([1.8.9] Otaku -b1.3.jar) 
+	UCHIJA	ravenNPlus{KMV5} [RavenNPlus] ([1.8.9] RavenNPlus -b1.3.jar)
 	Loaded coremods (and transformers): 
 	GL info: ' Vendor: 'ATI Technologies Inc.' Version: '4.6.14800 Compatibility Profile Context 22.5.1 30.0.15021.11005' Renderer: 'AMD Radeon(TM) Vega 3 Graphics'
 	Launched Version: 1.8.9

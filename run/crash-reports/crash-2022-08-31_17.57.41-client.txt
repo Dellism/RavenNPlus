@@ -1,11 +1,11 @@
 ---- Minecraft Crash Report ----
-// Hi. I'm Minecraft, and I'm a crashaholic.
+// Hi. I'm Minecraft, and I'm ravenNPlus crashaholic.
 
 Time: 31.08.22 17:57
 Description: Ticking entity
 
 java.lang.NullPointerException: Ticking entity
-	at a.b.module.modules.render.ItemCount.s(ItemCount.java:49)
+	at ravenNPlus.b.module.modules.render.ItemCount.s(ItemCount.java:49)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_28_ItemCount_s_PlayerTickEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)
@@ -38,7 +38,7 @@ A detailed walkthrough of the error, its code path and all known details is as f
 
 -- Head --
 Stacktrace:
-	at a.b.module.modules.render.ItemCount.s(ItemCount.java:49)
+	at ravenNPlus.b.module.modules.render.ItemCount.s(ItemCount.java:49)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_28_ItemCount_s_PlayerTickEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)
@@ -111,7 +111,7 @@ Details:
 	UCHIJAAAAAAAAA	mcp{9.19} [Minecraft Coder Pack] (minecraft.jar) 
 	UCHIJAAAAAAAAA	FML{8.0.99.99} [Forge Mod Loader] (forgeBin-1.8.9-11.15.1.2318-1.8.9.jar) 
 	UCHIJAAAAAAAAA	Forge{11.15.1.2318} [Minecraft Forge] (forgeBin-1.8.9-11.15.1.2318-1.8.9.jar) 
-	UCHIJAAAAAAAAA	a{KMV5} [Otaku] ([1.8.9] Otaku -b1.3.jar) 
+	UCHIJAAAAAAAAA	ravenNPlus{KMV5} [RavenNPlus] ([1.8.9] RavenNPlus -b1.3.jar)
 	Loaded coremods (and transformers): 
 	GL info: ' Vendor: 'ATI Technologies Inc.' Version: '4.6.14800 Compatibility Profile Context 22.5.1 30.0.15021.11005' Renderer: 'AMD Radeon(TM) Vega 3 Graphics'
 	Launched Version: 1.8.9

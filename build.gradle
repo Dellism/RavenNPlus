@@ -38,7 +38,7 @@ plugins {
 
 version = "b1.3"
 group = "fpsmod"
-archivesBaseName = "[1.8.9] Otaku "
+archivesBaseName = "[1.8.9] RavenNPlus "
 
 minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"

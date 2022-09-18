@@ -5,9 +5,9 @@ Time: 03.09.22 22:12
 Description: Unexpected error
 
 java.lang.NullPointerException: Unexpected error
-	at a.b.module.modules.minigames.AutoSlot.guiUpdate(AutoSlot.java:153)
-	at a.b.main.Otaku.onTick(Otaku.java:129)
-	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_11_Otaku_onTick_ClientTickEvent.invoke(.dynamic)
+	at ravenNPlus.b.module.modules.minigames.AutoSlot.guiUpdate(AutoSlot.java:153)
+	at ravenNPlus.b.main.RavenNPlus.onTick(RavenNPlus.java:129)
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_11_RavenNPlus_onTick_ClientTickEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)
 	at net.minecraftforge.fml.common.FMLCommonHandler.onPostClientTick(FMLCommonHandler.java:336)
@@ -34,9 +34,9 @@ A detailed walkthrough of the error, its code path and all known details is as f
 
 -- Head --
 Stacktrace:
-	at a.b.module.modules.minigames.AutoSlot.guiUpdate(AutoSlot.java:153)
-	at a.b.main.Otaku.onTick(Otaku.java:129)
-	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_11_Otaku_onTick_ClientTickEvent.invoke(.dynamic)
+	at ravenNPlus.b.module.modules.minigames.AutoSlot.guiUpdate(AutoSlot.java:153)
+	at ravenNPlus.b.main.RavenNPlus.onTick(RavenNPlus.java:129)
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_11_RavenNPlus_onTick_ClientTickEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)
 	at net.minecraftforge.fml.common.FMLCommonHandler.onPostClientTick(FMLCommonHandler.java:336)
@@ -91,7 +91,7 @@ Details:
 	UCHIJAAAA	mcp{9.19} [Minecraft Coder Pack] (minecraft.jar) 
 	UCHIJAAAA	FML{8.0.99.99} [Forge Mod Loader] (forgeBin-1.8.9-11.15.1.2318-1.8.9.jar) 
 	UCHIJAAAA	Forge{11.15.1.2318} [Minecraft Forge] (forgeBin-1.8.9-11.15.1.2318-1.8.9.jar) 
-	UCHIJAAAA	a{KMV5} [Otaku] ([1.8.9] Otaku -b1.3.jar) 
+	UCHIJAAAA	ravenNPlus{KMV5} [RavenNPlus] ([1.8.9] RavenNPlus -b1.3.jar)
 	Loaded coremods (and transformers): 
 	GL info: ' Vendor: 'ATI Technologies Inc.' Version: '4.6.14800 Compatibility Profile Context 22.5.1 30.0.15021.11005' Renderer: 'AMD Radeon(TM) Vega 3 Graphics'
 	Launched Version: 1.8.9

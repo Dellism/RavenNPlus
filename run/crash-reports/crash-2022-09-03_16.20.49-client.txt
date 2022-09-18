@@ -1,12 +1,12 @@
 ---- Minecraft Crash Report ----
-// Hi. I'm Minecraft, and I'm a crashaholic.
+// Hi. I'm Minecraft, and I'm ravenNPlus crashaholic.
 
 Time: 03.09.22 16:20
 Description: Updating screen events
 
 java.lang.NullPointerException: Updating screen events
-	at a.b.clickgui.otaku.components.ModuleComponent.mouseDown(ModuleComponent.java:191)
-	at a.b.clickgui.otaku.ClickGui.mouseClicked(ClickGui.java:166)
+	at ravenNPlus.b.clickgui.RavenNPlus.components.ModuleComponent.mouseDown(ModuleComponent.java:191)
+	at ravenNPlus.b.clickgui.RavenNPlus.ClickGui.mouseClicked(ClickGui.java:166)
 	at net.minecraft.client.gui.GuiScreen.handleMouseInput(GuiScreen.java:555)
 	at net.minecraft.client.gui.GuiScreen.handleInput(GuiScreen.java:524)
 	at net.minecraft.client.Minecraft.runTick(Minecraft.java:1674)
@@ -32,14 +32,14 @@ A detailed walkthrough of the error, its code path and all known details is as f
 
 -- Head --
 Stacktrace:
-	at a.b.clickgui.otaku.components.ModuleComponent.mouseDown(ModuleComponent.java:191)
-	at a.b.clickgui.otaku.ClickGui.mouseClicked(ClickGui.java:166)
+	at ravenNPlus.b.clickgui.RavenNPlus.components.ModuleComponent.mouseDown(ModuleComponent.java:191)
+	at ravenNPlus.b.clickgui.RavenNPlus.ClickGui.mouseClicked(ClickGui.java:166)
 	at net.minecraft.client.gui.GuiScreen.handleMouseInput(GuiScreen.java:555)
 	at net.minecraft.client.gui.GuiScreen.handleInput(GuiScreen.java:524)
 
 -- Affected screen --
 Details:
-	Screen name: a.b.clickgui.otaku.ClickGui
+	Screen name: ravenNPlus.b.clickgui.RavenNPlus.ClickGui
 
 -- Affected level --
 Details:
@@ -91,7 +91,7 @@ Details:
 	UCHIJAAAA	mcp{9.19} [Minecraft Coder Pack] (minecraft.jar) 
 	UCHIJAAAA	FML{8.0.99.99} [Forge Mod Loader] (forgeBin-1.8.9-11.15.1.2318-1.8.9.jar) 
 	UCHIJAAAA	Forge{11.15.1.2318} [Minecraft Forge] (forgeBin-1.8.9-11.15.1.2318-1.8.9.jar) 
-	UCHIJAAAA	a{KMV5} [Otaku] ([1.8.9] Otaku -b1.3.jar) 
+	UCHIJAAAA	ravenNPlus{KMV5} [RavenNPlus] ([1.8.9] RavenNPlus -b1.3.jar)
 	Loaded coremods (and transformers): 
 	GL info: ' Vendor: 'ATI Technologies Inc.' Version: '4.6.14800 Compatibility Profile Context 22.5.1 30.0.15021.11005' Renderer: 'AMD Radeon(TM) Vega 3 Graphics'
 	Launched Version: 1.8.9
