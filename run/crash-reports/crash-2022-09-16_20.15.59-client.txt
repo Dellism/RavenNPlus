@@ -7,13 +7,13 @@ Description: Updating screen events
 net.minecraftforge.fml.relauncher.FMLSecurityManager$ExitTrappedException
 	at net.minecraftforge.fml.common.asm.transformers.TerminalTransformer$ExitVisitor.checkAccess(TerminalTransformer.java:142)
 	at net.minecraftforge.fml.common.asm.transformers.TerminalTransformer$ExitVisitor.systemExitCalled(TerminalTransformer.java:112)
-	at ravenNPlus.b.module.modules.client.Shutdown.onEnable(Shutdown.java:26)
-	at ravenNPlus.b.module.Module.enable(Module.java:114)
-	at ravenNPlus.b.module.Module.toggle(Module.java:171)
-	at ravenNPlus.b.clickgui.RavenNPlus.components.ModuleComponent.mouseDown(ModuleComponent.java:214)
-	at ravenNPlus.b.clickgui.RavenNPlus.ClickGui.mouseClicked(ClickGui.java:169)
+	at ravenNPlus.client.module.modules.client.Shutdown.onEnable(Shutdown.java:26)
+	at ravenNPlus.client.module.Module.enable(Module.java:114)
+	at ravenNPlus.client.module.Module.toggle(Module.java:171)
+	at ravenNPlus.client.clickgui.RavenNPlus.components.ModuleComponent.mouseDown(ModuleComponent.java:214)
+	at ravenNPlus.client.clickgui.RavenNPlus.ClickGui.mouseClicked(ClickGui.java:169)
 	at net.minecraft.client.gui.GuiScreen.handleMouseInput(GuiScreen.java:555)
-	at ravenNPlus.b.clickgui.RavenNPlus.ClickGui.handleMouseInput(ClickGui.java:237)
+	at ravenNPlus.client.clickgui.RavenNPlus.ClickGui.handleMouseInput(ClickGui.java:237)
 	at net.minecraft.client.gui.GuiScreen.handleInput(GuiScreen.java:524)
 	at net.minecraft.client.Minecraft.runTick(Minecraft.java:1674)
 	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1024)
@@ -40,18 +40,18 @@ A detailed walkthrough of the error, its code path and all known details is as f
 Stacktrace:
 	at net.minecraftforge.fml.common.asm.transformers.TerminalTransformer$ExitVisitor.checkAccess(TerminalTransformer.java:142)
 	at net.minecraftforge.fml.common.asm.transformers.TerminalTransformer$ExitVisitor.systemExitCalled(TerminalTransformer.java:112)
-	at ravenNPlus.b.module.modules.client.Shutdown.onEnable(Shutdown.java:26)
-	at ravenNPlus.b.module.Module.enable(Module.java:114)
-	at ravenNPlus.b.module.Module.toggle(Module.java:171)
-	at ravenNPlus.b.clickgui.RavenNPlus.components.ModuleComponent.mouseDown(ModuleComponent.java:214)
-	at ravenNPlus.b.clickgui.RavenNPlus.ClickGui.mouseClicked(ClickGui.java:169)
+	at ravenNPlus.client.module.modules.client.Shutdown.onEnable(Shutdown.java:26)
+	at ravenNPlus.client.module.Module.enable(Module.java:114)
+	at ravenNPlus.client.module.Module.toggle(Module.java:171)
+	at ravenNPlus.client.clickgui.RavenNPlus.components.ModuleComponent.mouseDown(ModuleComponent.java:214)
+	at ravenNPlus.client.clickgui.RavenNPlus.ClickGui.mouseClicked(ClickGui.java:169)
 	at net.minecraft.client.gui.GuiScreen.handleMouseInput(GuiScreen.java:555)
-	at ravenNPlus.b.clickgui.RavenNPlus.ClickGui.handleMouseInput(ClickGui.java:237)
+	at ravenNPlus.client.clickgui.RavenNPlus.ClickGui.handleMouseInput(ClickGui.java:237)
 	at net.minecraft.client.gui.GuiScreen.handleInput(GuiScreen.java:524)
 
 -- Affected screen --
 Details:
-	Screen name: ravenNPlus.b.clickgui.RavenNPlus.ClickGui
+	Screen name: ravenNPlus.client.clickgui.RavenNPlus.ClickGui
 
 -- Affected level --
 Details:

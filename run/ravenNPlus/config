@@ -1,6 +1,6 @@
 hypixel-api~ 
 paste-api~ 
-clickgui-pos~ combat~150~50~true/movement~29~65~false/player~350~50~true/render~550~50~true/minigame~850~50~true/other~750~50~true/client~250~50~true/hotkey~56~18~fals
+clickgui-pos~ combat~324~19~true/movement~75~3~true/player~324~19~true/render~542~47~true/minigame~188~207~true/other~188~207~true/client~193~18~true/hotkey~760~87~fals
 targethud-pos~ 5~5
 killaura-pos~ 80~9
 loaded-cfg~ default

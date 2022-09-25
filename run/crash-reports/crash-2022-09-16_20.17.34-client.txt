@@ -24,7 +24,7 @@ net.minecraftforge.fml.common.LoaderException: java.lang.ExceptionInInitializerE
 	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97)
 	at GradleStart.main(GradleStart.java:26)
 Caused by: java.lang.ExceptionInInitializerError
-	at ravenNPlus.c.KeyStrokeMod.init(KeyStrokeMod.java:25)
+	at ravenNPlus.keystrokemod.KeyStrokeMod.init(KeyStrokeMod.java:25)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -57,9 +57,9 @@ Caused by: java.lang.NullPointerException
 	at java.io.Reader.<init>(Reader.java:78)
 	at java.io.InputStreamReader.<init>(InputStreamReader.java:72)
 	at java.util.Scanner.<init>(Scanner.java:563)
-	at ravenNPlus.b.utils.version.VersionManager.createClientVersion(VersionManager.java:72)
-	at ravenNPlus.b.utils.version.VersionManager.<init>(VersionManager.java:21)
-	at ravenNPlus.b.main.RavenNPlus.<clinit>(RavenNPlus.java:35)
+	at ravenNPlus.client.utils.version.VersionManager.createClientVersion(VersionManager.java:72)
+	at ravenNPlus.client.utils.version.VersionManager.<init>(VersionManager.java:21)
+	at ravenNPlus.client.main.Client.<clinit>(RavenNPlus.java:35)
 	... 44 more
 
 

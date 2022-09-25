@@ -4,7 +4,7 @@
 Time: 04.09.22 23:33
 Description: Unexpected error
 
-java.lang.IncompatibleClassChangeError: Expecting non-static method ravenNPlus.b.module.modules.render.CrossCircle.r(Lnet/minecraftforge/fml/common/gameevent/TickEvent$RenderTickEvent;)V
+java.lang.IncompatibleClassChangeError: Expecting non-static method ravenNPlus.client.module.modules.render.CrossCircle.r(Lnet/minecraftforge/fml/common/gameevent/TickEvent$RenderTickEvent;)V
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_34_CrossCircle_r_RenderTickEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)

@@ -5,7 +5,7 @@ Time: 25.08.22 16:23
 Description: Initializing game
 
 java.lang.NullPointerException: Initializing game
-	at ravenNPlus.b.module.modules.movement.Scaffold.p(Scaffold.java:40)
+	at ravenNPlus.client.module.modules.movement.Scaffold.p(Scaffold.java:40)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_23_Scaffold_p_Pre.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)
@@ -33,7 +33,7 @@ A detailed walkthrough of the error, its code path and all known details is as f
 
 -- Head --
 Stacktrace:
-	at ravenNPlus.b.module.modules.movement.Scaffold.p(Scaffold.java:40)
+	at ravenNPlus.client.module.modules.movement.Scaffold.p(Scaffold.java:40)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_23_Scaffold_p_Pre.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)

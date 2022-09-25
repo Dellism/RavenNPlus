@@ -5,7 +5,7 @@ Time: 31.08.22 17:40
 Description: Unexpected error
 
 java.lang.NullPointerException: Unexpected error
-	at ravenNPlus.b.module.modules.render.UserHud.p(UserHud.java:51)
+	at ravenNPlus.client.module.modules.render.UserHud.p(UserHud.java:51)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_22_UserHud_p_RenderTickEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)
@@ -32,7 +32,7 @@ A detailed walkthrough of the error, its code path and all known details is as f
 
 -- Head --
 Stacktrace:
-	at ravenNPlus.b.module.modules.render.UserHud.p(UserHud.java:51)
+	at ravenNPlus.client.module.modules.render.UserHud.p(UserHud.java:51)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_22_UserHud_p_RenderTickEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)

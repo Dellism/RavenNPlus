@@ -7,7 +7,7 @@ Description: Unexpected error
 java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
 	at java.util.ArrayList.rangeCheck(ArrayList.java:657)
 	at java.util.ArrayList.get(ArrayList.java:433)
-	at ravenNPlus.b.module.modules.combat.KillAura.p(KillAura.java:113)
+	at ravenNPlus.client.module.modules.combat.KillAura.p(KillAura.java:113)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_19_KillAura_p_RenderTickEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)
@@ -36,7 +36,7 @@ A detailed walkthrough of the error, its code path and all known details is as f
 Stacktrace:
 	at java.util.ArrayList.rangeCheck(ArrayList.java:657)
 	at java.util.ArrayList.get(ArrayList.java:433)
-	at ravenNPlus.b.module.modules.combat.KillAura.p(KillAura.java:113)
+	at ravenNPlus.client.module.modules.combat.KillAura.p(KillAura.java:113)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_19_KillAura_p_RenderTickEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)

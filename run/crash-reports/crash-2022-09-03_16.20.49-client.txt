@@ -5,8 +5,8 @@ Time: 03.09.22 16:20
 Description: Updating screen events
 
 java.lang.NullPointerException: Updating screen events
-	at ravenNPlus.b.clickgui.RavenNPlus.components.ModuleComponent.mouseDown(ModuleComponent.java:191)
-	at ravenNPlus.b.clickgui.RavenNPlus.ClickGui.mouseClicked(ClickGui.java:166)
+	at ravenNPlus.client.clickgui.RavenNPlus.components.ModuleComponent.mouseDown(ModuleComponent.java:191)
+	at ravenNPlus.client.clickgui.RavenNPlus.ClickGui.mouseClicked(ClickGui.java:166)
 	at net.minecraft.client.gui.GuiScreen.handleMouseInput(GuiScreen.java:555)
 	at net.minecraft.client.gui.GuiScreen.handleInput(GuiScreen.java:524)
 	at net.minecraft.client.Minecraft.runTick(Minecraft.java:1674)
@@ -32,14 +32,14 @@ A detailed walkthrough of the error, its code path and all known details is as f
 
 -- Head --
 Stacktrace:
-	at ravenNPlus.b.clickgui.RavenNPlus.components.ModuleComponent.mouseDown(ModuleComponent.java:191)
-	at ravenNPlus.b.clickgui.RavenNPlus.ClickGui.mouseClicked(ClickGui.java:166)
+	at ravenNPlus.client.clickgui.RavenNPlus.components.ModuleComponent.mouseDown(ModuleComponent.java:191)
+	at ravenNPlus.client.clickgui.RavenNPlus.ClickGui.mouseClicked(ClickGui.java:166)
 	at net.minecraft.client.gui.GuiScreen.handleMouseInput(GuiScreen.java:555)
 	at net.minecraft.client.gui.GuiScreen.handleInput(GuiScreen.java:524)
 
 -- Affected screen --
 Details:
-	Screen name: ravenNPlus.b.clickgui.RavenNPlus.ClickGui
+	Screen name: ravenNPlus.client.clickgui.RavenNPlus.ClickGui
 
 -- Affected level --
 Details:

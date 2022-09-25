@@ -4,16 +4,16 @@
 Time: 15.09.22 22:41
 Description: Initializing game
 
-java.lang.IllegalArgumentException: Method public static void ravenNPlus.b.module.modules.movement.NoSlow.sr() has @SubscribeEvent annotation, but requires 0 arguments.  Event handler methods must require ravenNPlus single argument.
+java.lang.IllegalArgumentException: Method public static void ravenNPlus.client.module.modules.movement.NoSlow.sr() has @SubscribeEvent annotation, but requires 0 arguments.  Event handler methods must require ravenNPlus single argument.
 	at net.minecraftforge.fml.common.eventhandler.EventBus.register(EventBus.java:72)
-	at ravenNPlus.b.module.Module.enable(Module.java:109)
-	at ravenNPlus.b.module.Module.setToggled(Module.java:123)
-	at ravenNPlus.b.module.Module.applyConfigFromJson(Module.java:79)
-	at ravenNPlus.b.config.ConfigManager.setConfig(ConfigManager.java:108)
-	at ravenNPlus.b.config.ConfigManager.loadConfigByName(ConfigManager.java:121)
-	at ravenNPlus.b.main.ClientConfig.applyConfig(ClientConfig.java:157)
-	at ravenNPlus.b.main.RavenNPlus.init(RavenNPlus.java:81)
-	at ravenNPlus.c.KeyStrokeMod.init(KeyStrokeMod.java:25)
+	at ravenNPlus.client.module.Module.enable(Module.java:109)
+	at ravenNPlus.client.module.Module.setToggled(Module.java:123)
+	at ravenNPlus.client.module.Module.applyConfigFromJson(Module.java:79)
+	at ravenNPlus.client.config.ConfigManager.setConfig(ConfigManager.java:108)
+	at ravenNPlus.client.config.ConfigManager.loadConfigByName(ConfigManager.java:121)
+	at ravenNPlus.client.main.ClientConfig.applyConfig(ClientConfig.java:157)
+	at ravenNPlus.client.main.Client.init(RavenNPlus.java:81)
+	at ravenNPlus.keystrokemod.KeyStrokeMod.init(KeyStrokeMod.java:25)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -65,14 +65,14 @@ A detailed walkthrough of the error, its code path and all known details is as f
 -- Head --
 Stacktrace:
 	at net.minecraftforge.fml.common.eventhandler.EventBus.register(EventBus.java:72)
-	at ravenNPlus.b.module.Module.enable(Module.java:109)
-	at ravenNPlus.b.module.Module.setToggled(Module.java:123)
-	at ravenNPlus.b.module.Module.applyConfigFromJson(Module.java:79)
-	at ravenNPlus.b.config.ConfigManager.setConfig(ConfigManager.java:108)
-	at ravenNPlus.b.config.ConfigManager.loadConfigByName(ConfigManager.java:121)
-	at ravenNPlus.b.main.ClientConfig.applyConfig(ClientConfig.java:157)
-	at ravenNPlus.b.main.RavenNPlus.init(RavenNPlus.java:81)
-	at ravenNPlus.c.KeyStrokeMod.init(KeyStrokeMod.java:25)
+	at ravenNPlus.client.module.Module.enable(Module.java:109)
+	at ravenNPlus.client.module.Module.setToggled(Module.java:123)
+	at ravenNPlus.client.module.Module.applyConfigFromJson(Module.java:79)
+	at ravenNPlus.client.config.ConfigManager.setConfig(ConfigManager.java:108)
+	at ravenNPlus.client.config.ConfigManager.loadConfigByName(ConfigManager.java:121)
+	at ravenNPlus.client.main.ClientConfig.applyConfig(ClientConfig.java:157)
+	at ravenNPlus.client.main.Client.init(RavenNPlus.java:81)
+	at ravenNPlus.keystrokemod.KeyStrokeMod.init(KeyStrokeMod.java:25)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)

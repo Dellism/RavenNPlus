@@ -5,7 +5,7 @@ Time: 02.09.22 04:01
 Description: Ticking entity
 
 java.lang.NullPointerException: Ticking entity
-	at ravenNPlus.b.module.modules.combat.KillAura.r(KillAura.java:65)
+	at ravenNPlus.client.module.modules.combat.KillAura.r(KillAura.java:65)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_18_KillAura_r_PlayerTickEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)
@@ -38,7 +38,7 @@ A detailed walkthrough of the error, its code path and all known details is as f
 
 -- Head --
 Stacktrace:
-	at ravenNPlus.b.module.modules.combat.KillAura.r(KillAura.java:65)
+	at ravenNPlus.client.module.modules.combat.KillAura.r(KillAura.java:65)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_18_KillAura_r_PlayerTickEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)

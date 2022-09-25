@@ -5,8 +5,8 @@ Time: 03.09.22 22:08
 Description: Unexpected error
 
 java.lang.NullPointerException: Unexpected error
-	at ravenNPlus.b.module.modules.minigames.AutoSlot.guiUpdate(AutoSlot.java:154)
-	at ravenNPlus.b.main.RavenNPlus.onTick(RavenNPlus.java:129)
+	at ravenNPlus.client.module.modules.minigames.AutoSlot.guiUpdate(AutoSlot.java:154)
+	at ravenNPlus.client.main.Client.onTick(RavenNPlus.java:129)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_10_RavenNPlus_onTick_ClientTickEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)
@@ -34,8 +34,8 @@ A detailed walkthrough of the error, its code path and all known details is as f
 
 -- Head --
 Stacktrace:
-	at ravenNPlus.b.module.modules.minigames.AutoSlot.guiUpdate(AutoSlot.java:154)
-	at ravenNPlus.b.main.RavenNPlus.onTick(RavenNPlus.java:129)
+	at ravenNPlus.client.module.modules.minigames.AutoSlot.guiUpdate(AutoSlot.java:154)
+	at ravenNPlus.client.main.Client.onTick(RavenNPlus.java:129)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_10_RavenNPlus_onTick_ClientTickEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)

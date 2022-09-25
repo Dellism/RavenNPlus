@@ -5,7 +5,7 @@ Time: 15.09.22 22:47
 Description: Ticking memory connection
 
 java.lang.NullPointerException: Ticking memory connection
-	at ravenNPlus.b.module.modules.player.Flip.r(Flip.java:23)
+	at ravenNPlus.client.module.modules.player.Flip.r(Flip.java:23)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_96_Flip_r_PlayerEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)
@@ -29,7 +29,7 @@ A detailed walkthrough of the error, its code path and all known details is as f
 
 -- Head --
 Stacktrace:
-	at ravenNPlus.b.module.modules.player.Flip.r(Flip.java:23)
+	at ravenNPlus.client.module.modules.player.Flip.r(Flip.java:23)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_96_Flip_r_PlayerEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)

@@ -5,8 +5,8 @@ Time: 02.09.22 06:10
 Description: Unexpected error
 
 java.lang.NullPointerException: Unexpected error
-	at ravenNPlus.b.module.modules.combat.KillAura.getEnemy(KillAura.java:182)
-	at ravenNPlus.b.module.modules.combat.KillAura.p(KillAura.java:124)
+	at ravenNPlus.client.module.modules.combat.KillAura.getEnemy(KillAura.java:182)
+	at ravenNPlus.client.module.modules.combat.KillAura.p(KillAura.java:124)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_19_KillAura_p_RenderTickEvent.invoke(.dynamic)
 	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
 	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)

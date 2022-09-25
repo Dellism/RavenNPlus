@@ -10,10 +10,10 @@ bobView:false
 anaglyph3d:false
 maxFps:260
 fboEnable:true
-difficulty:0
+difficulty:2
 fancyGraphics:false
 ao:1
-renderClouds:false
+renderClouds:fast
 resourcePacks:[]
 incompatibleResourcePacks:[]
 lastServer:
@@ -24,12 +24,12 @@ chatLinks:true
 chatLinksPrompt:true
 chatOpacity:1.0
 snooperEnabled:true
-fullscreen:false
+fullscreen:true
 enableVsync:false
 useVbo:false
 hideServerAddress:false
 advancedItemTooltips:false
-pauseOnLostFocus:true
+pauseOnLostFocus:false
 touchscreen:false
 overrideWidth:0
 overrideHeight:0
@@ -94,7 +94,7 @@ soundCategory_master:1.0
 soundCategory_music:0.0
 soundCategory_record:1.0
 soundCategory_weather:1.0
-soundCategory_block:1.0
+soundCategory_block:0.49295774
 soundCategory_hostile:1.0
 soundCategory_neutral:1.0
 soundCategory_player:1.0
