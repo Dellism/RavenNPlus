@@ -31,7 +31,7 @@ public class MouseManager {
                Utils.Player.sendMessageToSelf("rn: " + en.getName().replace("§", "%"));
                Utils.Player.sendMessageToSelf("d: " + en.getDisplayName().getUnformattedText());
                Utils.Player.sendMessageToSelf("rd: " + en.getDisplayName().getUnformattedText().replace("§", "%"));
-               Utils.Player.sendMessageToSelf("b?: " + AntiBot.bot(en));
+               Utils.Player.sendMessageToSelf("b?: " + AntiBot.isBot(en));
             }
          } else if (mouse.button == 1) {
             addRightClick();

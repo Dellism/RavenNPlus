@@ -86,7 +86,7 @@ public class Tracers extends Module {
                   } while(en.deathTime != 0);
                } while(!a.isToggled() && en.isInvisible());
 
-               if (!AntiBot.bot(en)) {
+               if (!AntiBot.isBot(en)) {
                   Utils.HUD.dtl(en, rgb, (float)f.getValue());
                }
             }

@@ -10,7 +10,7 @@ public class Cls extends Command {
 
     @Override
     public void onCall(String[] args) {
-        CommandPrompt.CommandPromtClear();
+        CommandPrompt.clear();
     }
 
 }

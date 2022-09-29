@@ -55,6 +55,8 @@ public class SliderSetting extends Setting {
    public Component createComponent(ModuleComponent moduleComponent) { return null; }
 
    public double getValue() { return r(this.value, 2); }
+   public float getValueToFloat() { return (float)getValue(); }
+   public int getValueToInt() { return (int)getValue(); }
    public double  getMin()  { return this.min; }
    public double  getMax()  { return this.max; }
 
@@ -74,6 +76,13 @@ public class SliderSetting extends Setting {
       return Math.round(this.getValue());
    }
 
+   public float roundValueToFloat() {
+      return Math.round(this.getValueToFloat());
+   }
+
+   public int roundValueToInt() {
+      return Math.round(this.getValueToInt());
+   }
 
    public static double r(double v, int p) {
       if (p < 0) {

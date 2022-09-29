@@ -23,9 +23,7 @@ public class AntiBot extends Module {
       this.addSetting(a = new TickSetting("Wait 80 ticks before checking", false));
    }
 
-   public void onDisable() {
-      newEnt.clear();
-   }
+   public void onDisable() { newEnt.clear(); }
 
    @SubscribeEvent
    public void onEntityJoinWorld(EntityJoinWorldEvent event) {
@@ -42,8 +40,9 @@ public class AntiBot extends Module {
       }
    }
 
-   public static boolean bot(Entity en) {
+   public static boolean isBot(Entity en) {
       if(!Utils.Player.isPlayerInGame() || mc.currentScreen != null) return false;
+
       if (Freecam.en != null && Freecam.en == en) {
          return true;
       } else {
@@ -65,9 +64,44 @@ public class AntiBot extends Module {
                   return true;
                }
 
-               if(en.getName().contains(" ")) return true;
-               if(en.getName().contains("Empty")) return true;
-               if(en.getName().startsWith("CIT-")) return true;
+               // name checks
+               if(n.startsWith("CIT-")) return true;
+               if(n.equals("Empty")) return true;
+               if(n.contains("Empty"))return true;
+               if(n.contains("BOT")) return true;
+               if(n.contains(" ")) return true;
+               if(n.contains("<"))return true;
+               if(n.contains(">"))return true;
+               if(n.contains("#"))return true;
+               if(n.contains("+"))return true;
+               if(n.contains("&"))return true;
+               if(n.contains("/"))return true;
+               if(n.contains("("))return true;
+               if(n.contains(")"))return true;
+               if(n.contains("}"))return true;
+               if(n.contains("@"))return true;
+               if(n.contains("%"))return true;
+               if(n.contains(";"))return true;
+               if(n.contains("\n"))return true;
+               if(n.contains("^"))return true;
+               if(n.contains("{"))return true;
+               if(n.contains("'"))return true;
+               if(n.contains("*"))return true;
+               if(n.contains("~"))return true;
+               if(n.contains("$"))return true;
+               if(n.contains("["))return true;
+               if(n.contains("]"))return true;
+               if(n.contains(":")) return true;
+               if(n.contains("-")) return true;
+               if(n.contains("!")) return true;
+               if(n.contains("?")) return true;
+               if(n.contains("=")) return true;
+               if(n.contains("§")) return true;
+               if(n.length() < 3) return true;
+
+               // extra checks
+               if(!en.canBePushed()) return true;
+               if(en.isRiding()) return true;
 
                if (n.length() == 10) {
                   int num = 0;

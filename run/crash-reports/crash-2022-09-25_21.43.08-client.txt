@@ -1,0 +1,116 @@
+---- Minecraft Crash Report ----
+// I let you down. Sorry :(
+
+Time: 25.09.22 21:43
+Description: Unexpected error
+
+java.lang.NullPointerException: Unexpected error
+	at ravenNPlus.client.module.modules.render.ReachCircle.r(ReachCircle.java:89)
+	at ravenNPlus.client.module.modules.render.ReachCircle.r1(ReachCircle.java:66)
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_22_ReachCircle_r1_RenderWorldLastEvent.invoke(.dynamic)
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
+	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)
+	at net.minecraftforge.client.ForgeHooksClient.dispatchRenderLast(ForgeHooksClient.java:124)
+	at net.minecraft.client.renderer.EntityRenderer.renderWorldPass(EntityRenderer.java:1460)
+	at net.minecraft.client.renderer.EntityRenderer.renderWorld(EntityRenderer.java:1283)
+	at net.minecraft.client.renderer.EntityRenderer.updateCameraAndRender(EntityRenderer.java:1111)
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1107)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:380)
+	at net.minecraft.client.main.Main.main(Main.java:116)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135)
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97)
+	at GradleStart.main(GradleStart.java:26)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at ravenNPlus.client.module.modules.render.ReachCircle.r(ReachCircle.java:89)
+	at ravenNPlus.client.module.modules.render.ReachCircle.r1(ReachCircle.java:66)
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_22_ReachCircle_r1_RenderWorldLastEvent.invoke(.dynamic)
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49)
+	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140)
+	at net.minecraftforge.client.ForgeHooksClient.dispatchRenderLast(ForgeHooksClient.java:124)
+	at net.minecraft.client.renderer.EntityRenderer.renderWorldPass(EntityRenderer.java:1460)
+	at net.minecraft.client.renderer.EntityRenderer.renderWorld(EntityRenderer.java:1283)
+
+-- Affected level --
+Details:
+	Level name: MpServer
+	All players: 2 total; [EntityPlayerSP['Player294'/341, l='MpServer', x=223,53, y=63,00, z=115,66], EntityOtherPlayerMP['Player294'/-8008, l='MpServer', x=224,39, y=63,00, z=113,90]]
+	Chunk stats: MultiplayerChunkCache: 25, 25
+	Level seed: 0
+	Level generator: ID 00 - default, ver 1. Features enabled: false
+	Level generator options: 
+	Level spawn location: 236,00,64,00,256,00 - World: (236,64,256), Chunk: (at 12,4,0 in 14,16; contains blocks 224,0,256 to 239,255,271), Region: (0,0; contains chunks 0,0 to 31,31, blocks 0,0,0 to 511,255,511)
+	Level time: 227133 game time, 159980 day time
+	Level dimension: 0
+	Level storage version: 0x00000 - Unknown?
+	Level weather: Rain time: 0 (now: false), thunder time: 0 (now: false)
+	Level game mode: Game mode: creative (ID 1). Hardcore: false. Cheats: false
+	Forced entities: 26 total; [EntityCreeper['Creeper'/196, l='MpServer', x=228,00, y=48,00, z=128,59], EntityBat['Bat'/197, l='MpServer', x=228,53, y=29,94, z=160,34], EntityBat['Bat'/134, l='MpServer', x=181,03, y=18,00, z=133,56], EntityPig['Pig'/135, l='MpServer', x=181,41, y=64,00, z=140,25], EntityOtherPlayerMP['Player294'/-8008, l='MpServer', x=224,39, y=63,00, z=113,90], EntitySheep['Sheep'/136, l='MpServer', x=182,56, y=64,00, z=139,44], EntityZombie['Zombie'/137, l='MpServer', x=186,78, y=35,00, z=152,84], EntitySheep['Sheep'/138, l='MpServer', x=187,44, y=63,00, z=153,53], EntitySkeleton['Skeleton'/206, l='MpServer', x=248,13, y=22,00, z=108,25], EntitySkeleton['Skeleton'/207, l='MpServer', x=244,47, y=29,00, z=151,94], EntitySpider['Spider'/403, l='MpServer', x=233,16, y=63,00, z=141,25], EntityBat['Bat'/149, l='MpServer', x=202,50, y=27,50, z=90,75], EntityOtherPlayerMP['Player294'/-8008, l='MpServer', x=224,39, y=63,00, z=113,90], EntityPig['Pig'/150, l='MpServer', x=196,50, y=74,00, z=95,50], EntityPig['Pig'/151, l='MpServer', x=192,19, y=64,00, z=95,84], EntityPig['Pig'/152, l='MpServer', x=192,91, y=64,00, z=98,91], EntityPig['Pig'/153, l='MpServer', x=198,94, y=64,00, z=103,03], EntityPig['Pig'/154, l='MpServer', x=207,50, y=64,00, z=98,22], EntityPig['Pig'/155, l='MpServer', x=199,50, y=64,00, z=116,78], EntityPig['Pig'/156, l='MpServer', x=204,53, y=63,00, z=133,53], EntityPlayerSP['Player294'/341, l='MpServer', x=223,53, y=63,00, z=115,66], EntityPig['Pig'/180, l='MpServer', x=210,69, y=65,00, z=83,41], EntityXPOrb['Experience Orb'/181, l='MpServer', x=223,17, y=63,00, z=121,01], EntitySheep['Sheep'/182, l='MpServer', x=221,50, y=63,00, z=127,72], EntityBat['Bat'/183, l='MpServer', x=213,59, y=23,59, z=158,31], EntityPig['Pig'/184, l='MpServer', x=223,34, y=64,00, z=144,00]]
+	Retry entities: 0 total; []
+	Server brand: fml,forge
+	Server type: Integrated singleplayer server
+Stacktrace:
+	at net.minecraft.client.multiplayer.WorldClient.addWorldInfoToCrashReport(WorldClient.java:383)
+	at net.minecraft.client.Minecraft.addGraphicsAndWorldToCrashReport(Minecraft.java:2645)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:409)
+	at net.minecraft.client.main.Main.main(Main.java:116)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135)
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97)
+	at GradleStart.main(GradleStart.java:26)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.8.9
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 1.8.0_202, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 687940168 bytes (656 MB) / 1465384960 bytes (1397 MB) up to 3329753088 bytes (3175 MB)
+	JVM Flags: 0 total; 
+	IntCache: cache: 0, tcache: 45, allocated: 13, tallocated: 95
+	FML: MCP 9.19 Powered by Forge 11.15.1.2318 4 mods loaded, 4 mods active
+	States: 'U' = Unloaded 'L' = Loaded 'C' = Constructed 'H' = Pre-initialized 'I' = Initialized 'J' = Post-initialized 'A' = Available 'D' = Disabled 'E' = Errored
+	UCHIJAAAA	mcp{9.19} [Minecraft Coder Pack] (minecraft.jar) 
+	UCHIJAAAA	FML{8.0.99.99} [Forge Mod Loader] (forgeSrc-1.8.9-11.15.1.2318-1.8.9.jar) 
+	UCHIJAAAA	Forge{11.15.1.2318} [Minecraft Forge] (forgeSrc-1.8.9-11.15.1.2318-1.8.9.jar) 
+	UCHIJAAAA	ravenNPlus{SLK3} [Raven N+] ([1.8.9] Raven- N+.jar) 
+	Loaded coremods (and transformers): 
+	GL info: ' Vendor: 'ATI Technologies Inc.' Version: '4.6.0 Compatibility Profile Context 22.8.2.220819' Renderer: 'AMD Radeon(TM) Vega 3 Graphics'
+	Launched Version: 1.8.9
+	LWJGL: 2.9.4
+	OpenGL: AMD Radeon(TM) Vega 3 Graphics GL version 4.6.0 Compatibility Profile Context 22.8.2.220819, ATI Technologies Inc.
+	GL Caps: Using GL 1.3 multitexturing.
+Using GL 1.3 texture combiners.
+Using framebuffer objects because OpenGL 3.0 is supported and separate blending is supported.
+Shaders are available because OpenGL 2.1 is supported.
+VBOs are available because OpenGL 1.5 is supported.
+
+	Using VBOs: No
+	Is Modded: Definitely; Client brand changed to 'fml,forge'
+	Type: Client (map_client.txt)
+	Resource Packs: 
+	Current Language: English (US)
+	Profiler Position: N/A (disabled)
+	CPU: 4x AMD Athlon 3000G with Radeon Vega Graphics 

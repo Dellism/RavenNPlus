@@ -30,22 +30,14 @@ public class CommandPrompt implements Component {
     private double windowStartDragX, windowStartDragY, mouseStartDragX, mouseStartDragY;
 
     public CommandPrompt(){
-        this.x = 0; this.y = 0; this.width = 300; this.minWidth = 84; this.height = 214;
+        this.x = 0; this.y = 0; this.width = 300; this.minWidth = 125; this.height = 214;
         this.minHeight = 37; this.barHeight = 13; this.mc = Minecraft.getMinecraft();
         this.fr = mc.fontRendererObj; this.border = 1; this.resizeButtonSize = 6;
     }
 
-    public static void CommandPromtClear() {
-        out.clear();
-    }
-
-    public void show() {
-        this.hidden = false;
-    }
-
-    public void hide() {
-        this.hidden = true;
-    }
+    public static void clear() { out.clear(); }
+    public void show() { this.hidden = false; }
+    public void hide() { this.hidden = true; }
 
     @Override
     public void draw() {
@@ -101,6 +93,8 @@ public class CommandPrompt implements Component {
                     y + height,
                     0xff2D3742
             );
+
+            //resize button
             RoundedUtils.drawSmoothRoundedRect(x + width - resizeButtonSize,
                     y + height - resizeButtonSize-1,
                     x + width-1,

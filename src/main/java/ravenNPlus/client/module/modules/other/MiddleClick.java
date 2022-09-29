@@ -89,8 +89,9 @@ public class MiddleClick extends Module {
         if(player == null) {
             Utils.Player.sendMessageToSelf("Please aim at a player/entity when removing them.");
         } else {
-            if (AimAssist.removeFriend(player)) {
+            if (Utils.FriendUtils.removeFriend(player)) {
                 Utils.Player.sendMessageToSelf("Successfully removed " + player.getName() + " from friends list!");
+                Utils.Player.sendMessageToSelf("You have " + Utils.FriendUtils.getFriendCount() + " Friends");
             } else {
                 Utils.Player.sendMessageToSelf(player.getName() + " was not found in the friends list!");
             }
@@ -103,8 +104,9 @@ public class MiddleClick extends Module {
             Utils.Player.sendMessageToSelf("Please aim at a player/entity when adding them.");
         }
         else {
-            AimAssist.addFriend(player);
+            Utils.FriendUtils.addFriend(player);
             Utils.Player.sendMessageToSelf("Successfully added " + player.getName() + " to friends list.");
+            Utils.Player.sendMessageToSelf("You have " + Utils.FriendUtils.getFriendCount() + " Friends");
         }
     }
 

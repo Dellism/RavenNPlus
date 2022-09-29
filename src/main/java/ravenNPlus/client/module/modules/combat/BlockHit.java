@@ -119,7 +119,7 @@ public class BlockHit extends Module {
                         }
                     }
 
-                    if(AntiBot.bot(target)){
+                    if(AntiBot.isBot(target)){
                         return;
                     }
 

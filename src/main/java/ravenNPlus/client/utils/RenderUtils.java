@@ -8,12 +8,17 @@ import javafx.scene.shape.DrawMode;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import org.lwjgl.util.glu.Disk;
+import ravenNPlus.client.module.modules.combat.AntiBot;
 import ravenNPlus.client.utils.animations.AnimationUtil;
 import ravenNPlus.client.utils.notifications.Notification;
 import ravenNPlus.client.utils.notifications.Manager;
@@ -31,13 +36,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.*;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+
+import java.io.File;
 import java.lang.reflect.Method;
 import java.awt.*;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -244,25 +250,12 @@ public class RenderUtils {
     public static void drawEntityHUD(Entity en, int entityX, int entityY, int backgroundX, int backgroundY, int enSize, int range, boolean cl, boolean bg, boolean mouse) {
         if (!Utils.Player.isPlayerInGame()) return;
 
-        java.util.List<Entity> targets = (List<Entity>) mc.theWorld.loadedEntityList.stream().filter(EntityLivingBase.class::isInstance).collect(Collectors.toList());
+        List<Entity> targets = (List<Entity>) mc.theWorld.loadedEntityList.stream().filter(EntityLivingBase.class::isInstance).collect(Collectors.toList());
         targets = targets.stream().filter(entity -> entity.getDistanceToEntity(mc.thePlayer) < range && entity != mc.thePlayer && !entity.isDead && ((EntityLivingBase) entity).getHealth() > 0).collect(Collectors.toList());
         targets.sort(Comparator.comparingDouble(entity -> ((EntityLivingBase) entity).getDistanceToEntity(mc.thePlayer)));
         if (targets.isEmpty()) return;
-
         EntityLivingBase target = (EntityLivingBase) targets.get(0);
-        if (mc.getSession().getUsername() == target.getName()) return;
-        if (target.getName().contains("Empty")) return;
-        if (target.getName().contains(" ")) return;
-        if (target.getName().contains(":")) return;
-        if (target.getName().contains("-")) return;
-        if (target.getName().contains("!")) return;
-        if (target.getName().contains("BOT")) return;
-        if (target.getName().contains("?")) return;
-        if (target.getName().contains("=")) return;
-        if (target.getName().contains("§")) return;
-        if (target.getName().startsWith("CIT-")) return;
-        if (target.getName().length() > 3) return;
-        if (target.getName().isEmpty()) return;
+        if(AntiBot.isBot(target)) return;
         float targetLookX;
         float targetLookY;
 
@@ -298,21 +291,8 @@ public class RenderUtils {
         targets = targets.stream().filter(entity -> entity.getDistanceToEntity(mc.thePlayer) < range && entity != mc.thePlayer && !entity.isDead && ((EntityLivingBase) entity).getHealth() > 0).collect(Collectors.toList());
         targets.sort(Comparator.comparingDouble(entity -> ((EntityLivingBase) entity).getDistanceToEntity(mc.thePlayer)));
         if (targets.isEmpty()) return;
-
         EntityLivingBase target = (EntityLivingBase) targets.get(0);
-        if (mc.getSession().getUsername() == target.getName()) return;
-        if (target.getName().contains("Empty")) return;
-        if (target.getName().contains(" ")) return;
-        if (target.getName().contains(":")) return;
-        if (target.getName().contains("-")) return;
-        if (target.getName().contains("!")) return;
-        if (target.getName().contains("BOT")) return;
-        if (target.getName().contains("?")) return;
-        if (target.getName().contains("=")) return;
-        if (target.getName().contains("§")) return;
-        if (target.getName().startsWith("CIT-")) return;
-        if (target.getName().length() > 3) return;
-        if (target.getName().isEmpty()) return;
+        if(AntiBot.isBot(target)) return;
 
         /*
         if (target.getHealth() < 5) {
@@ -383,7 +363,8 @@ public class RenderUtils {
             RoundedUtils.drawSmoothRoundedRect(x - 22, y - 3, x + 60 + fr.getStringWidth(target.getName())-12, y + 20, 3, Integer.MIN_VALUE);
 
         if(head)
-            RenderUtils.drawHead(mc.thePlayer.getLocationSkin(), x-20, y-1, 18, 19);
+            RenderUtils.drawHead(target.getName(), x-20, y-1, 18, 19);
+        //RenderUtils.drawHead( ,x-20, y-1, 18, 19);
 
         if(cl)
             Utils.HUD.fontRender.drawString("", 0, 0, 0xFFFFFFFF);
@@ -392,24 +373,28 @@ public class RenderUtils {
         fr.drawString(target.getName(), x + fr.getStringWidth("Target : ") + 2, y, Color.red.getRGB());
 
         fr.drawString("Health : ", x + 1, y + 10, c);
-        fr.drawString(" " + target.getHealth(), x + fr.getStringWidth("Health : ") - 1, y + 10, heartColor);
+        fr.drawString(" " + targetHealth, x + fr.getStringWidth("Health : ") - 1, y + 10, heartColor);
     }
 
     public static void quickDrawHead(ResourceLocation skin, int x, int y, int width, int height) {
         mc.getTextureManager().bindTexture(skin);
-        RenderUtils.drawScaledCustomSizeModalRect(x, y, 8F, 8F, 8, 8, width, height,
-                64F, 64F);
-        RenderUtils.drawScaledCustomSizeModalRect(x, y, 40F, 8F, 8, 8, width, height,
-                64F, 64F);
+        RenderUtils.drawScaledCustomSizeModalRect(x, y, 8F, 8F, 8, 8, width, height, 64F, 64F);
+        RenderUtils.drawScaledCustomSizeModalRect(x, y, 40F, 8F, 8, 8, width, height, 64F, 64F);
+    }
+
+    public static void drawHead(String username, int x, int y, int width, int height) {
+        GL11.glColor4f(1F, 1F, 1F, 1F);
+        ResourceLocation r = new ResourceLocation("http://skins.minecraft.net/MinecraftSkins/%s.png", username);
+        mc.getTextureManager().bindTexture(r);
+        RenderUtils.drawScaledCustomSizeModalRect(x, y, 8F, 8F, 8, 8, width, height, 64F, 64F);
+        RenderUtils.drawScaledCustomSizeModalRect(x, y, 40F, 8F, 8, 8, width, height, 64F, 64F);
     }
 
     public static void drawHead(ResourceLocation skin, int x, int y, int width, int height) {
         GL11.glColor4f(1F, 1F, 1F, 1F);
         mc.getTextureManager().bindTexture(skin);
-        RenderUtils.drawScaledCustomSizeModalRect(x, y, 8F, 8F, 8, 8, width, height,
-                64F, 64F);
-        RenderUtils.drawScaledCustomSizeModalRect(x, y, 40F, 8F, 8, 8, width, height,
-                64F, 64F);
+        RenderUtils.drawScaledCustomSizeModalRect(x, y, 8F, 8F, 8, 8, width, height, 64F, 64F);
+        RenderUtils.drawScaledCustomSizeModalRect(x, y, 40F, 8F, 8, 8, width, height, 64F, 64F);
     }
 
     public static void drawScaledCustomSizeModalRect(int x, int y, float u, float v, int uWidth, int vHeight, int width, int height, float tileWidth, float tileHeight) {
@@ -1204,7 +1189,6 @@ public class RenderUtils {
         GL11.glBegin(3);
         GL11.glVertex3d(-0.375D, 0.0D, 0.0D);
         GL11.glVertex3d(0.375D, 0.0D, 0.0D);
-        GL11.glEnd();
         GL11.glEnd();
         GlStateManager.popMatrix();
         GlStateManager.popMatrix();

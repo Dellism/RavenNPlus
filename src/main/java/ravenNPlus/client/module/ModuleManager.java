@@ -101,13 +101,7 @@ public class ModuleManager {
          addMod(new NameTagsV2());
          addMod(new AutoBlock());
          addMod(new MiddleClick());
-
-//   Stuff added by SleepyFish
-//    | [+] Added DiscordRPC and icon and text
-//    | [+] Added ClickGUI stuff
-//    | [+] Added RGB to clickGUI animation and edited the string / position
-//    | [+] Added BlurUtils and RoundedUtils to draw Rounded Rectangles and blur background
-//    | [+] Added getServerIP and isServerIP and DelayTimer and InvUtils and SoundUtils
+// -----   Stuff added by SleepyFish   -----
          addMod(new Shutdown());   // (2 setting)
          addMod(new AntiVoid());     // (9 settings)
          addMod(new Scaffold());      // (4 settings)
@@ -130,20 +124,22 @@ public class ModuleManager {
          addMod(new UserHud());       // (8 settings)
          addMod(new FastLadder());    // (4 settings)
          addMod(new KillAura());        // (12 settings)
-         addMod(new AutoHome());     // (4 settings)
-         addMod(new LegoGraphics()); // (1 settings)
-         addMod(new InvMgr());          // (6 settings)
+         addMod(new AutoHome());     // (3 settings)
+         addMod(new LegoGraphics()); // (0 settings)
+         addMod(new InvMgr());          // (7 settings)
          addMod(new CategorySett());  // (40 settings)
          addMod(new CrossCircle());    // (3 settings)
          addMod(new ModSettings());  // (17 settings)
-         addMod(new ItemESP());      // (4 settings)
-         addMod(new Projectiles());   // (1 settings)
-         addMod(new Skeletton());   // (1 settings)
+         addMod(new ReachCircle());  // (17 settings)
+         //addMod(new Skeletons());      // (0 settings)
+         //addMod(new ItemESP());      // (4 settings)
+         //addMod(new Projectiles());   // (1 settings)
+         //addMod(new Skeletons());   // (1 settings)
 
          initialized = true;
    }
 
-    //TODO: Fix ItemCount, add autoPlay, add itemESP, add Hypixel Fly
+    //TODO: Fix ItemCount, add autoPlay, fix itemESP, add Hypixel Fly, fix skeletons, add noHurtcam, add / fix Projectiles
 
    private void addMod(Module m) { modules.add(m); }
 

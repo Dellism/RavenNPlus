@@ -85,7 +85,7 @@ public class STap extends Module {
                         }
                     }
 
-                    if(AntiBot.bot(target)){
+                    if(AntiBot.isBot(target)){
                         return;
                     }
 

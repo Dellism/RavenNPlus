@@ -66,25 +66,21 @@ public class PlayerESP extends Module {
                   this.r(en, rgb);
                }
             }
-
          } else {
             var3 = mc.theWorld.playerEntities.iterator();
-
             while(true) {
                EntityPlayer en;
                do {
                   do {
                      do {
-                        if (!var3.hasNext()) {
-                           return;
-                        }
+                        if (!var3.hasNext()) return;
 
                         en = (EntityPlayer)var3.next();
                      } while(en == mc.thePlayer);
                   } while(en.deathTime != 0);
                } while(!f.isToggled() && en.isInvisible());
 
-               if (!AntiBot.bot(en)) {
+               if (!AntiBot.isBot(en)) {
                   if(t7.isToggled() && getColor(en.getCurrentArmor(2)) > 0) {
                      int E = new Color(getColor(en.getCurrentArmor(2))).getRGB();
                      this.r(en, E);

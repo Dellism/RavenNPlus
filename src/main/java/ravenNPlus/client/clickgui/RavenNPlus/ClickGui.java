@@ -129,14 +129,17 @@ public class ClickGui extends GuiScreen {
       LocalDateTime now = LocalDateTime.now();
 
       if(GuiClick.time.isToggled())
-            Utils.HUD.fontRender.drawString("", 0, 0, 0xFFFFFFFF);
+            Utils.HUD.fontRender.drawString("", 0, 0, 0);
 
       if(GuiClick.date.isToggled())
          Utils.HUD.fontRender.drawString(dtf.format(now), 10+fontRendererObj.getStringWidth(Calendar.getInstance().getTime().getHours()
                  + ":" + Calendar.getInstance().getTime().getMinutes() + ":" + Calendar.getInstance().getTime().getSeconds()), 5, Utils.Client.rainbowDraw(2L, 900L));
 
       if(GuiClick.showPlayer.isToggled())
-            GuiInventory.drawEntityOnScreen(this.width + 15 - this.aE.getValueInt(0, 40, 2), this.height - 19 - this.fontRendererObj.FONT_HEIGHT, 40, (float) (this.width - 25 - x), (float) (this.height - 50 - y), this.mc.thePlayer);
+         GuiInventory.drawEntityOnScreen(this.width + 15 - this.aE.getValueInt(0, 40, 2), this.height - 19 - this.fontRendererObj.FONT_HEIGHT, 40, (float) (this.width - 25 - x), (float) (this.height - 50 - y), this.mc.thePlayer);
+
+      if(GuiClick.showPlayer.isToggled())
+         fontRendererObj.drawString("", 0, 0, 0);
 
       commandPrompt.update(x, y);
       commandPrompt.draw();

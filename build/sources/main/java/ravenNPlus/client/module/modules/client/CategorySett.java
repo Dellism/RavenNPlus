@@ -22,7 +22,7 @@ public class CategorySett extends Module {
     static String en = "Enable Mode: ", dn = "Disable Mode: ", cn = "Category Mode: ";
 
     public CategorySett() {
-        super("Category", ModuleCategory.client, "Settings for Categorys | icon path: assets/minecraft/ravenNPlus/icons/modules");
+        super("Category Settings", ModuleCategory.client, "Settings for Categorys | icon path: assets/minecraft/ravenNPlus/icons/modules");
         this.addSetting(desc = new DescriptionSetting("Sound Settings"));
         this.addSetting(sounds = new TickSetting("Sounds", true));
         this.addSetting(enable_volume = new SliderSetting("Enable Sound Volume", 0.4, 0.0, 1.0, 0.1));
@@ -42,10 +42,10 @@ public class CategorySett extends Module {
         this.addSetting(categoryBackground = new TickSetting("Category Background", false));
         this.addSetting(rounded = new TickSetting("Rounded Corners", true));
         this.addSetting(roundedPerc = new SliderSetting("Rounded Corners %", 8, 1, 90, 1));
-        this.addSetting(moduleDescriptions = new TickSetting("Module Descriptions", true));
+        this.addSetting(moduleDescriptions = new TickSetting("Module Descriptions", false));
         this.addSetting(desc = new DescriptionSetting("Icon Settings"));
         this.addSetting(costum_color = new TickSetting("Costum Icon Colors", false));
-        this.addSetting(TextOffset = new SliderSetting("Text Offset", 15, 1, 60, 1));
+        this.addSetting(TextOffset = new SliderSetting("Text Offset", 15, 1, 60, 1)); /*
         this.addSetting(xIconOffset = new SliderSetting("x Icon Offset", 3, 1, 50, 1));
         this.addSetting(yIconOffset = new SliderSetting("y Icon Offset", 3, 1, 10, 1));
         this.addSetting(Icon_client = new TickSetting("Icon Client", true));
@@ -81,7 +81,7 @@ public class CategorySett extends Module {
         this.addSetting(other_blue = new SliderSetting("Other Icon Blue", 1, 1, 255, 1));
         this.addSetting(mini_red = new SliderSetting("Minigame Icon Red", 1, 1, 255, 1));
         this.addSetting(mini_green = new SliderSetting("Minigame Icon Green", 1, 1, 255, 1));
-        this.addSetting(mini_blue = new SliderSetting("Minigame Icon Blue", 1, 1, 255, 1));;
+        this.addSetting(mini_blue = new SliderSetting("Minigame Icon Blue", 1, 1, 255, 1));; */
     }
 
     @Override
@@ -101,75 +101,87 @@ public class CategorySett extends Module {
             mini_color = new java.awt.Color((int) mini_red.getValue(), (int) mini_green.getValue(), (int) mini_blue.getValue());
         }
 
+        String a = "click1", b = "bowhit", c = "player_hurt", d = "player_die";
+        String e = "chest_open", f = "chest_close", g = "tnt_explosion", h = "?";
+
         switch((int) enable_mode.getValue()) {
             case 1:
-                enable_mode_desc.setDesc(en+"click1");
+                enable_mode_desc.setDesc(en+a);
                 break;
             case 2:
-                enable_mode_desc.setDesc(en+"bowhit");
+                enable_mode_desc.setDesc(en+b);
                 break;
             case 3:
-                enable_mode_desc.setDesc(en+"player_hurt");
+                enable_mode_desc.setDesc(en+c);
                 break;
             case 4:
-                enable_mode_desc.setDesc(en+"player_die");
+                enable_mode_desc.setDesc(en+d);
                 break;
             case 5:
-                enable_mode_desc.setDesc(en+"chest_open");
+                enable_mode_desc.setDesc(en+e);
                 break;
             case 6:
-                enable_mode_desc.setDesc(en+"chest_close");
+                enable_mode_desc.setDesc(en+f);
                 break;
             case 7:
-                enable_mode_desc.setDesc(en+"tnt_explosion");
+                enable_mode_desc.setDesc(en+g);
+                break;
+            default:
+                enable_mode_desc.setDesc(en+h);
                 break;
         }
 
         switch((int) disable_mode.getValue()) {
             case 1:
-                disable_mode_desc.setDesc(dn + "click1");
+                disable_mode_desc.setDesc(dn+a);
                 break;
             case 2:
-                disable_mode_desc.setDesc(dn + "bowhit");
+                disable_mode_desc.setDesc(dn+b);
                 break;
             case 3:
-                disable_mode_desc.setDesc(dn + "player_hurt");
+                disable_mode_desc.setDesc(dn+c);
                 break;
             case 4:
-                disable_mode_desc.setDesc(dn + "player_die");
+                disable_mode_desc.setDesc(dn+d);
                 break;
             case 5:
-                disable_mode_desc.setDesc(dn + "chest_open");
+                disable_mode_desc.setDesc(dn+e);
                 break;
             case 6:
-                disable_mode_desc.setDesc(dn + "chest_close");
+                disable_mode_desc.setDesc(dn+f);
                 break;
             case 7:
-                disable_mode_desc.setDesc(dn + "tnt_explosion");
+                disable_mode_desc.setDesc(dn+g);
+                break;
+            default:
+                enable_mode_desc.setDesc(dn+h);
                 break;
         }
 
         switch((int) category_mode.getValue()) {
             case 1:
-                category_mode_desc.setDesc(cn+"click1");
+                category_mode_desc.setDesc(cn+a);
                 break;
             case 2:
-                category_mode_desc.setDesc(cn+"bowhit");
+                category_mode_desc.setDesc(cn+b);
                 break;
             case 3:
-                category_mode_desc.setDesc(cn+"player_hurt");
+                category_mode_desc.setDesc(cn+c);
                 break;
             case 4:
-                category_mode_desc.setDesc(cn+"player_die");
+                category_mode_desc.setDesc(cn+d);
                 break;
             case 5:
-                category_mode_desc.setDesc(cn+"chest_open");
+                category_mode_desc.setDesc(cn+e);
                 break;
             case 6:
-                category_mode_desc.setDesc(cn+"chest_close");
+                category_mode_desc.setDesc(cn+f);
                 break;
             case 7:
-                category_mode_desc.setDesc(cn+"tnt_explosion");
+                category_mode_desc.setDesc(cn+g);
+                break;
+            default:
+                enable_mode_desc.setDesc(cn+h);
                 break;
         }
     }

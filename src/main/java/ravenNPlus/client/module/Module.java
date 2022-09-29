@@ -1,7 +1,5 @@
 package ravenNPlus.client.module;
 
-import ravenNPlus.client.event.imp.EventUpdateModel;
-import ravenNPlus.client.event.imp.Render3DEvent;
 import ravenNPlus.client.module.modules.client.CategorySett;
 import ravenNPlus.client.utils.SoundUtil;
 import ravenNPlus.client.utils.notifications.Render;
@@ -25,6 +23,19 @@ public abstract class Module {
    protected int defualtKeyCode = keycode;
    protected static Minecraft mc;
    private boolean isToggled = false;
+
+   private boolean playSound() {
+      String i = moduleName;
+
+      return
+              i.equals("Update") || i.equals("Module Settings") || i.equals("Category Settings")
+              || i.equals("BurstClicker") || i.equals("Fake Chat") || i.equals("Trajectories")
+              || i.equals("VClip") || i.equals("Stop Motion") || i.equals("Self Destruct")
+              || i.equals("Weapon") || i.equals("Ladders") || i.equals("SlyPort")
+              || i.equals("Healing") || i.equals("Armour") || i.equals("Pearl")
+              || i.equals("Blocks") || i.equals("ClickGUI")
+      ;
+   }
 
    public Module(String name, ModuleCategory moduleCategory, String description) {
       this.moduleName = name;
@@ -111,22 +122,7 @@ public abstract class Module {
       Render.change(this);
 
       if(CategorySett.sounds.isToggled()) {
-         if(moduleName.equals("ClickGUI")) return;
-         if(moduleName.equals("Blocks")) return;
-         if(moduleName.equals("Category")) return;
-         if(moduleName.equals("ModuleSettings")) return;
-         if(moduleName.equals("Update")) return;
-         if(moduleName.equals("Self Destruct")) return;
-         if(moduleName.equals("Stop Motion")) return;
-         if(moduleName.equals("VClip")) return;
-         if(moduleName.equals("Ladders")) return;
-         if(moduleName.equals("Weapon")) return;
-         if(moduleName.equals("Pearl")) return;
-         if(moduleName.equals("Armour")) return;
-         if(moduleName.equals("Healing")) return;
-         if(moduleName.equals("Trajectories")) return;
-         if(moduleName.equals("Fake Chat")) return;
-         if(moduleName.equals("BurstClicker")) return;
+         if(playSound()) return;
 
          if(CategorySett.enable_mode.getValue() == 1)
             SoundUtil.play(SoundUtil.click1, (float) CategorySett.enable_volume.getValue(), (float) CategorySett.enable_pitch.getValue());
@@ -159,22 +155,7 @@ public abstract class Module {
       Render.change(this);
 
       if(CategorySett.sounds.isToggled()) {
-         if(moduleName.equals("ClickGUI")) return;
-         if(moduleName.equals("Blocks")) return;
-         if(moduleName.equals("Category")) return;
-         if(moduleName.equals("ModuleSettings")) return;
-         if(moduleName.equals("Update")) return;
-         if(moduleName.equals("Self Destruct")) return;
-         if(moduleName.equals("Stop Motion")) return;
-         if(moduleName.equals("VClip")) return;
-         if(moduleName.equals("Ladders")) return;
-         if(moduleName.equals("Weapon")) return;
-         if(moduleName.equals("Pearl")) return;
-         if(moduleName.equals("Armour")) return;
-         if(moduleName.equals("Healing")) return;
-         if(moduleName.equals("Trajectories")) return;
-         if(moduleName.equals("Fake Chat")) return;
-         if(moduleName.equals("BurstClicker")) return;
+         if(playSound()) return;
 
          if(CategorySett.disable_mode.getValue() == 1)
             SoundUtil.play(SoundUtil.click1, (float) CategorySett.disable_volume.getValue(), (float) CategorySett.disable_pitch.getValue());

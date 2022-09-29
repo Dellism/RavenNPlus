@@ -125,9 +125,9 @@ public class CategoryComponent {
          TickComponent.renderMain((float)(this.x - 2), (float)this.y, (float)(this.x + this.width + 2), (float)(this.y + this.bh + 3), -1);
 
       Color c = new Color(92, 92, 92, 255);
-      int iconSize = (int) CategorySett.iconSize.getValue();
-      int iconOffX = (int) CategorySett.xIconOffset.getValue();
-      int iconOffY = (int) CategorySett.yIconOffset.getValue();
+//      int iconSize = (int) CategorySett.iconSize.getValue();
+//      int iconOffX = (int) CategorySett.xIconOffset.getValue();
+//      int iconOffY = (int) CategorySett.yIconOffset.getValue();
       int categoryNameOffsett = (int) CategorySett.TextOffset.getValue();
 
       /*

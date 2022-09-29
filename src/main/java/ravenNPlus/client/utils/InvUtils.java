@@ -524,12 +524,11 @@ public class InvUtils {
         }
     }
 
-    public static boolean isPlayerHolding(Item item) {
+    public static Item isPlayerHolding(Item item) {
         if (mc.thePlayer.getCurrentEquippedItem() == null) {
-            return false;
+            return item = null;
         } else {
-            item = mc.thePlayer.getCurrentEquippedItem().getItem();
-            return item != null;
+            return item = mc.thePlayer.getCurrentEquippedItem().getItem();
         }
     }
 

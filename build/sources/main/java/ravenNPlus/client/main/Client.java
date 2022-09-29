@@ -18,11 +18,11 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class Client {
+
    public static boolean debugger = false;
    public static final VersionManager versionManager  = new VersionManager();
    public static CommandManager commandManager;
@@ -36,15 +36,10 @@ public class Client {
    public static final ModuleManager moduleManager = new ModuleManager();
    public static ClickGui clickGui;
    private static final ScheduledExecutorService ex = Executors.newScheduledThreadPool(2);
-   public static final String osName, osArch;
    public static ravenNPlus.client.utils.font.CustomFontrenderer customFontRenderer;
    public static DiscordRichPresence pres = new DiscordRichPresence();
    //static String status = "Menu";
 
-    static {
-      osName = System.getProperty("os.name").toLowerCase();
-      osArch = System.getProperty("os.arch").toLowerCase();
-   }
 
    public static void init() {
 
@@ -60,14 +55,6 @@ public class Client {
       configManager = new ConfigManager();
       clientConfig = new ClientConfig();
       clientConfig.applyConfig();
-
-      ex.execute(() -> {
-         try {
-            LaunchTracker.registerLaunch();
-         } catch (IOException e) {
-            throw new RuntimeException(e);
-         }
-      });
 
       String applicationId = "1010880713551269988";
       String steamId = ""+ Client.discord;

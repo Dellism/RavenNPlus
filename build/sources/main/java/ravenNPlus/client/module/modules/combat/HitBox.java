@@ -75,7 +75,7 @@ public class HitBox extends Module {
 
    public static double exp(Entity en) {
       Module hitBox = Client.moduleManager.getModuleByClazz(HitBox.class);
-      return (hitBox != null && hitBox.isEnabled() && !AntiBot.bot(en)) ? a.getValue() : 1.0D;
+      return (hitBox != null && hitBox.isEnabled() && !AntiBot.isBot(en)) ? a.getValue() : 1.0D;
    }
 
    public static void gmo(float partialTicks) {

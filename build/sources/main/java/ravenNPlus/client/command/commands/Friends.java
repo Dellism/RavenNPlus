@@ -3,6 +3,8 @@ package ravenNPlus.client.command.commands;
 import ravenNPlus.client.command.Command;
 import ravenNPlus.client.module.modules.combat.AimAssist;
 import net.minecraft.entity.Entity;
+import ravenNPlus.client.utils.Utils;
+
 import static ravenNPlus.client.clickgui.RavenNPlus.CommandPrompt.print;
 
 public class Friends extends Command {
@@ -22,15 +24,16 @@ public class Friends extends Command {
 
         else if(args.length == 2){
             if(args[0].equalsIgnoreCase("add")){
-                boolean added = AimAssist.addFriend(args[1]);
+                boolean added = Utils.FriendUtils.addFriend(args[1]);
                 if (added) {
                     print("Successfully added " + args[1] + " to your friends list!");
+                    print("You have "+Utils.FriendUtils.getFriendCount()+" Friends");
                 } else {
                     print("An error occurred!");
                 }
             }
             else if(args[0].equalsIgnoreCase("remove")){
-                boolean removed = AimAssist.removeFriend(args[1]);
+                boolean removed = Utils.FriendUtils.removeFriend(args[1]);
                 if (removed) {
                     print("Successfully removed " + args[1] + " from your friends list!");
                 } else {
@@ -44,12 +47,12 @@ public class Friends extends Command {
     }
 
     public void listFriends(){
-        if(AimAssist.getFriends().isEmpty()){
+        if(Utils.FriendUtils.getFriends().isEmpty()){
             print("You have no friends. L");
         }
         else {
             print("Your friends are:");
-            for (Entity entity : AimAssist.getFriends()){
+            for (Entity entity : Utils.FriendUtils.getFriends()){
                 print(entity.getName());
             }
         }

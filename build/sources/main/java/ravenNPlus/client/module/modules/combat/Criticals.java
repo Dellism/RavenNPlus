@@ -3,6 +3,7 @@ package ravenNPlus.client.module.modules.combat;
 import ravenNPlus.client.module.Module;
 import ravenNPlus.client.module.setting.impl.DescriptionSetting;
 import ravenNPlus.client.module.setting.impl.SliderSetting;
+import ravenNPlus.client.module.setting.impl.TickSetting;
 import ravenNPlus.client.utils.Utils;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.play.client.C02PacketUseEntity;
@@ -16,11 +17,12 @@ public class Criticals extends Module {
 
     public static SliderSetting mode;
     public static DescriptionSetting desc, modeMode;
-    private Utils.Java packets;
+    public static TickSetting jump;
 
     public Criticals() {
         super("Criticals", ModuleCategory.combat, "");
         this.addSetting(mode = new SliderSetting("Mode", 1, 1, 5, 1));
+        this.addSetting(jump = new TickSetting("More Legit Jump", false));
         this.addSetting(modeMode = new DescriptionSetting(Utils.md+""));
     }
 
@@ -35,7 +37,7 @@ public class Criticals extends Module {
                 if (packet.getAction() == C02PacketUseEntity.Action.ATTACK) {
 
                     if (mode.getValue() == 1) {
-                        Utils.Player.fakeJump();
+                        Utils.Player.fakeJump(jump.isToggled());
                         mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 0.1625D, mc.thePlayer.posZ, false));
                         mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, false));
                         mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C04PacketPlayerPosition(mc.thePlayer.posX, mc.thePlayer.posY + 4.0E-6D, mc.thePlayer.posZ, false));
@@ -61,7 +63,7 @@ public class Criticals extends Module {
                     }
 
                     if (mode.getValue() == 5) {
-                        Utils.Player.fakeJump();
+                        Utils.Player.fakeJump(jump.isToggled());
                     }
 
                 }

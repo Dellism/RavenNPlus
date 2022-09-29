@@ -1,43 +1,42 @@
-[01:32:45] [Client thread/INFO]: Setting user: Player106
-[01:32:52] [Client thread/INFO]: LWJGL Version: 2.9.4
-[01:32:59] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Raven N+
-[01:33:00] [Sound Library Loader/INFO]: Starting up SoundSystem...
-[01:33:00] [Thread-9/INFO]: Initializing LWJGL OpenAL
-[01:33:00] [Thread-9/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
-[01:33:00] [Thread-9/INFO]: OpenAL initialized.
-[01:33:01] [Sound Library Loader/INFO]: Sound engine started
-[01:33:08] [Client thread/INFO]: Created: 16x16 textures-atlas
-[01:33:13] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Raven N+
-[01:33:13] [Client thread/INFO]: SoundSystem shutting down...
-[01:33:13] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
-[01:33:13] [Sound Library Loader/INFO]: Starting up SoundSystem...
-[01:33:13] [Thread-12/INFO]: Initializing LWJGL OpenAL
-[01:33:13] [Thread-12/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
-[01:33:13] [Thread-12/INFO]: OpenAL initialized.
-[01:33:13] [Sound Library Loader/INFO]: Sound engine started
-[01:33:20] [Client thread/INFO]: Created: 512x512 textures-atlas
-[01:33:27] [Server thread/INFO]: Starting integrated minecraft server version 1.8.9
-[01:33:27] [Server thread/INFO]: Generating keypair
-[01:33:28] [Server thread/INFO]: Preparing start region for level 0
-[01:33:29] [Server thread/INFO]: Preparing spawn area: 11%
-[01:33:30] [Server thread/INFO]: Preparing spawn area: 96%
-[01:33:30] [Server thread/INFO]: Changing view distance to 2, from 10
-[01:33:31] [Server thread/INFO]: Player106[local:E:0e62108a] logged in with entity id 347 at (247.5744299997536, 63.0, 163.512641671033)
-[01:33:31] [Server thread/INFO]: Player106 joined the game
-[01:33:35] [Server thread/INFO]: Stopping server
-[01:33:35] [Server thread/INFO]: Saving players
-[01:33:35] [Server thread/INFO]: Saving worlds
-[01:33:35] [Server thread/INFO]: Saving chunks for level 'New World'/Overworld
-[01:33:35] [Server thread/INFO]: Saving chunks for level 'New World'/Nether
-[01:33:35] [Server thread/INFO]: Saving chunks for level 'New World'/The End
-[01:33:36] [Client thread/FATAL]: Unreported exception thrown!
-java.lang.NullPointerException
-	at ravenNPlus.client.module.modules.render.Skeletton.r(Skeletton.java:42) ~[Skeletton.class:?]
-	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_18_Skeletton_r_RenderTickEvent.invoke(.dynamic) ~[?:?]
-	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49) ~[ASMEventHandler.class:?]
-	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140) ~[EventBus.class:?]
-	at net.minecraftforge.fml.common.FMLCommonHandler.onRenderTickStart(FMLCommonHandler.java:342) ~[FMLCommonHandler.class:?]
-	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1105) ~[Minecraft.class:?]
+[21:50:12] [Client thread/INFO]: Setting user: Player645
+[21:50:18] [Client thread/INFO]: LWJGL Version: 2.9.4
+[21:50:25] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Raven N+
+[21:50:26] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[21:50:26] [Thread-9/INFO]: Initializing LWJGL OpenAL
+[21:50:26] [Thread-9/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[21:50:26] [Thread-9/INFO]: OpenAL initialized.
+[21:50:26] [Sound Library Loader/INFO]: Sound engine started
+[21:50:34] [Client thread/INFO]: Created: 16x16 textures-atlas
+[21:50:37] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Raven N+
+[21:50:37] [Client thread/INFO]: SoundSystem shutting down...
+[21:50:37] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com
+[21:50:37] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[21:50:37] [Thread-12/INFO]: Initializing LWJGL OpenAL
+[21:50:37] [Thread-12/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[21:50:38] [Thread-12/INFO]: OpenAL initialized.
+[21:50:38] [Sound Library Loader/INFO]: Sound engine started
+[21:50:43] [Client thread/INFO]: Created: 512x512 textures-atlas
+[21:50:49] [Server thread/INFO]: Starting integrated minecraft server version 1.8.9
+[21:50:49] [Server thread/INFO]: Generating keypair
+[21:50:49] [Server thread/INFO]: Preparing start region for level 0
+[21:50:50] [Server thread/INFO]: Preparing spawn area: 61%
+[21:50:51] [Server thread/INFO]: Changing view distance to 2, from 10
+[21:50:52] [Server thread/INFO]: Player645[local:E:7074f389] logged in with entity id 298 at (-223.75556844477475, 68.0, -88.30202156673305)
+[21:50:52] [Server thread/INFO]: Player645 joined the game
+[21:51:00] [Client thread/WARN]: Failed to load texture: http://skins.minecraft.net/minecraftskins/%s.png:Slime
+java.io.FileNotFoundException: http://skins.minecraft.net/minecraftskins/%s.png:Slime
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:68) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.texture.SimpleTexture.loadTexture(SimpleTexture.java:33) ~[SimpleTexture.class:?]
+	at net.minecraft.client.renderer.texture.TextureManager.loadTexture(TextureManager.java:67) [TextureManager.class:?]
+	at net.minecraft.client.renderer.texture.TextureManager.bindTexture(TextureManager.java:42) [TextureManager.class:?]
+	at ravenNPlus.client.utils.RenderUtils.drawHead(RenderUtils.java:388) [RenderUtils.class:?]
+	at ravenNPlus.client.utils.RenderUtils.drawStringHUD(RenderUtils.java:366) [RenderUtils.class:?]
+	at ravenNPlus.client.module.modules.render.TargetHUD.r(TargetHUD.java:29) [TargetHUD.class:?]
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_21_TargetHUD_r_RenderTickEvent.invoke(.dynamic) [?:?]
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49) [ASMEventHandler.class:?]
+	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140) [EventBus.class:?]
+	at net.minecraftforge.fml.common.FMLCommonHandler.onRenderTickStart(FMLCommonHandler.java:342) [FMLCommonHandler.class:?]
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1105) [Minecraft.class:?]
 	at net.minecraft.client.Minecraft.run(Minecraft.java:380) [Minecraft.class:?]
 	at net.minecraft.client.main.Main.main(Main.java:116) [Main.class:?]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_202]
@@ -52,3 +51,240 @@ java.lang.NullPointerException
 	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_202]
 	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
 	at GradleStart.main(GradleStart.java:26) [start/:?]
+[21:51:09] [Client thread/WARN]: Failed to load texture: http://skins.minecraft.net/minecraftskins/%s.png:Sheep
+java.io.FileNotFoundException: http://skins.minecraft.net/minecraftskins/%s.png:Sheep
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:68) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.texture.SimpleTexture.loadTexture(SimpleTexture.java:33) ~[SimpleTexture.class:?]
+	at net.minecraft.client.renderer.texture.TextureManager.loadTexture(TextureManager.java:67) [TextureManager.class:?]
+	at net.minecraft.client.renderer.texture.TextureManager.bindTexture(TextureManager.java:42) [TextureManager.class:?]
+	at ravenNPlus.client.utils.RenderUtils.drawHead(RenderUtils.java:388) [RenderUtils.class:?]
+	at ravenNPlus.client.utils.RenderUtils.drawStringHUD(RenderUtils.java:366) [RenderUtils.class:?]
+	at ravenNPlus.client.module.modules.render.TargetHUD.r(TargetHUD.java:29) [TargetHUD.class:?]
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_21_TargetHUD_r_RenderTickEvent.invoke(.dynamic) [?:?]
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49) [ASMEventHandler.class:?]
+	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140) [EventBus.class:?]
+	at net.minecraftforge.fml.common.FMLCommonHandler.onRenderTickStart(FMLCommonHandler.java:342) [FMLCommonHandler.class:?]
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1105) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:380) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:116) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_202]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_202]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_202]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_202]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_202]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_202]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_202]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_202]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:26) [start/:?]
+[21:51:17] [Client thread/WARN]: Failed to load texture: http://skins.minecraft.net/minecraftskins/%s.png:Endermite
+java.io.FileNotFoundException: http://skins.minecraft.net/minecraftskins/%s.png:Endermite
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:68) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.texture.SimpleTexture.loadTexture(SimpleTexture.java:33) ~[SimpleTexture.class:?]
+	at net.minecraft.client.renderer.texture.TextureManager.loadTexture(TextureManager.java:67) [TextureManager.class:?]
+	at net.minecraft.client.renderer.texture.TextureManager.bindTexture(TextureManager.java:42) [TextureManager.class:?]
+	at ravenNPlus.client.utils.RenderUtils.drawHead(RenderUtils.java:388) [RenderUtils.class:?]
+	at ravenNPlus.client.utils.RenderUtils.drawStringHUD(RenderUtils.java:366) [RenderUtils.class:?]
+	at ravenNPlus.client.module.modules.combat.KillAura.p(KillAura.java:154) [KillAura.class:?]
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_19_KillAura_p_RenderTickEvent.invoke(.dynamic) [?:?]
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49) [ASMEventHandler.class:?]
+	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140) [EventBus.class:?]
+	at net.minecraftforge.fml.common.FMLCommonHandler.onRenderTickStart(FMLCommonHandler.java:342) [FMLCommonHandler.class:?]
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1105) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:380) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:116) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_202]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_202]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_202]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_202]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_202]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_202]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_202]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_202]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:26) [start/:?]
+[21:51:22] [Client thread/WARN]: Failed to load texture: http://skins.minecraft.net/minecraftskins/%s.png:Pig
+java.io.FileNotFoundException: http://skins.minecraft.net/minecraftskins/%s.png:Pig
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:68) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.texture.SimpleTexture.loadTexture(SimpleTexture.java:33) ~[SimpleTexture.class:?]
+	at net.minecraft.client.renderer.texture.TextureManager.loadTexture(TextureManager.java:67) [TextureManager.class:?]
+	at net.minecraft.client.renderer.texture.TextureManager.bindTexture(TextureManager.java:42) [TextureManager.class:?]
+	at ravenNPlus.client.utils.RenderUtils.drawHead(RenderUtils.java:388) [RenderUtils.class:?]
+	at ravenNPlus.client.utils.RenderUtils.drawStringHUD(RenderUtils.java:366) [RenderUtils.class:?]
+	at ravenNPlus.client.module.modules.combat.KillAura.p(KillAura.java:154) [KillAura.class:?]
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_19_KillAura_p_RenderTickEvent.invoke(.dynamic) [?:?]
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49) [ASMEventHandler.class:?]
+	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140) [EventBus.class:?]
+	at net.minecraftforge.fml.common.FMLCommonHandler.onRenderTickStart(FMLCommonHandler.java:342) [FMLCommonHandler.class:?]
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1105) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:380) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:116) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_202]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_202]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_202]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_202]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_202]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_202]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_202]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_202]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:26) [start/:?]
+[21:51:39] [Client thread/WARN]: Failed to load texture: http://skins.minecraft.net/minecraftskins/%s.png:Spider
+java.io.FileNotFoundException: http://skins.minecraft.net/minecraftskins/%s.png:Spider
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:68) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.texture.SimpleTexture.loadTexture(SimpleTexture.java:33) ~[SimpleTexture.class:?]
+	at net.minecraft.client.renderer.texture.TextureManager.loadTexture(TextureManager.java:67) [TextureManager.class:?]
+	at net.minecraft.client.renderer.texture.TextureManager.bindTexture(TextureManager.java:42) [TextureManager.class:?]
+	at ravenNPlus.client.utils.RenderUtils.drawHead(RenderUtils.java:388) [RenderUtils.class:?]
+	at ravenNPlus.client.utils.RenderUtils.drawStringHUD(RenderUtils.java:366) [RenderUtils.class:?]
+	at ravenNPlus.client.module.modules.combat.KillAura.p(KillAura.java:154) [KillAura.class:?]
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_19_KillAura_p_RenderTickEvent.invoke(.dynamic) [?:?]
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49) [ASMEventHandler.class:?]
+	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140) [EventBus.class:?]
+	at net.minecraftforge.fml.common.FMLCommonHandler.onRenderTickStart(FMLCommonHandler.java:342) [FMLCommonHandler.class:?]
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1105) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:380) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:116) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_202]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_202]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_202]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_202]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_202]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_202]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_202]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_202]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:26) [start/:?]
+[21:52:12] [Client thread/WARN]: Failed to load texture: http://skins.minecraft.net/minecraftskins/%s.png:Skeleton
+java.io.FileNotFoundException: http://skins.minecraft.net/minecraftskins/%s.png:Skeleton
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:68) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.texture.SimpleTexture.loadTexture(SimpleTexture.java:33) ~[SimpleTexture.class:?]
+	at net.minecraft.client.renderer.texture.TextureManager.loadTexture(TextureManager.java:67) [TextureManager.class:?]
+	at net.minecraft.client.renderer.texture.TextureManager.bindTexture(TextureManager.java:42) [TextureManager.class:?]
+	at ravenNPlus.client.utils.RenderUtils.drawHead(RenderUtils.java:388) [RenderUtils.class:?]
+	at ravenNPlus.client.utils.RenderUtils.drawStringHUD(RenderUtils.java:366) [RenderUtils.class:?]
+	at ravenNPlus.client.module.modules.combat.KillAura.p(KillAura.java:154) [KillAura.class:?]
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_19_KillAura_p_RenderTickEvent.invoke(.dynamic) [?:?]
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49) [ASMEventHandler.class:?]
+	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140) [EventBus.class:?]
+	at net.minecraftforge.fml.common.FMLCommonHandler.onRenderTickStart(FMLCommonHandler.java:342) [FMLCommonHandler.class:?]
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1105) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:380) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:116) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_202]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_202]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_202]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_202]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_202]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_202]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_202]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_202]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:26) [start/:?]
+[21:52:20] [Client thread/WARN]: Failed to load texture: http://skins.minecraft.net/minecraftskins/%s.png:Enderman
+java.io.FileNotFoundException: http://skins.minecraft.net/minecraftskins/%s.png:Enderman
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:68) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.texture.SimpleTexture.loadTexture(SimpleTexture.java:33) ~[SimpleTexture.class:?]
+	at net.minecraft.client.renderer.texture.TextureManager.loadTexture(TextureManager.java:67) [TextureManager.class:?]
+	at net.minecraft.client.renderer.texture.TextureManager.bindTexture(TextureManager.java:42) [TextureManager.class:?]
+	at ravenNPlus.client.utils.RenderUtils.drawHead(RenderUtils.java:388) [RenderUtils.class:?]
+	at ravenNPlus.client.utils.RenderUtils.drawStringHUD(RenderUtils.java:366) [RenderUtils.class:?]
+	at ravenNPlus.client.module.modules.combat.KillAura.p(KillAura.java:154) [KillAura.class:?]
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler_19_KillAura_p_RenderTickEvent.invoke(.dynamic) [?:?]
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:49) [ASMEventHandler.class:?]
+	at net.minecraftforge.fml.common.eventhandler.EventBus.post(EventBus.java:140) [EventBus.class:?]
+	at net.minecraftforge.fml.common.FMLCommonHandler.onRenderTickStart(FMLCommonHandler.java:342) [FMLCommonHandler.class:?]
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1105) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:380) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:116) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_202]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_202]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_202]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_202]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_202]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_202]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_202]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_202]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:26) [start/:?]
+[21:52:28] [Server thread/INFO]: Saving and pausing game...
+[21:52:28] [Server thread/INFO]: Saving chunks for level 'New World'/Overworld
+[21:52:28] [Server thread/INFO]: Saving chunks for level 'New World'/Nether
+[21:52:28] [Server thread/INFO]: Saving chunks for level 'New World'/The End
+[21:52:29] [Server thread/INFO]: Stopping server
+[21:52:29] [Server thread/INFO]: Saving players
+[21:52:29] [Server thread/INFO]: Saving worlds
+[21:52:29] [Server thread/INFO]: Saving chunks for level 'New World'/Overworld
+[21:52:29] [Server thread/INFO]: Saving chunks for level 'New World'/Nether
+[21:52:29] [Server thread/INFO]: Saving chunks for level 'New World'/The End
+[21:52:32] [Client thread/INFO]: Connecting to ccc.blocksmc.com., 25565
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] 
+[21:52:32] [Client thread/INFO]: [CHAT] /login <password>
+[21:52:32] [Client thread/INFO]: [CHAT] If you lost the password type /resetpassword
+[21:52:42] [Client thread/INFO]: [CHAT] Wrong Password.
+[21:52:51] [Client thread/INFO]: Connecting to java.applemc.fun., 25565
+[22:02:29] [Client thread/INFO]: Stopping!
+[22:02:29] [Client thread/INFO]: SoundSystem shutting down...
+[22:02:29] [Client thread/WARN]: Author: Paul Lamb, www.paulscode.com

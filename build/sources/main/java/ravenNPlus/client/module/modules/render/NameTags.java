@@ -39,7 +39,7 @@ public class NameTags extends Module {
                return;
             }
 
-            if (AntiBot.bot(en) || en.getDisplayNameString().isEmpty()) {
+            if (AntiBot.isBot(en) || en.getDisplayNameString().isEmpty()) {
                return;
             }
 

@@ -9,7 +9,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class KeyStrokeMouse {
-   private static final String[] a = new String[]{" L ", " R "};
+   private static final String[] a = new String[]{"LMB", "RMB"};
    private final Minecraft b = Minecraft.getMinecraft();
    private final int c;
    private final int d;

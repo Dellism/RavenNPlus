@@ -84,7 +84,7 @@ public class ShiftTap extends Module {
                         }
                     }
 
-                    if(AntiBot.bot(target)){
+                    if(AntiBot.isBot(target)){
                         return;
                     }
 

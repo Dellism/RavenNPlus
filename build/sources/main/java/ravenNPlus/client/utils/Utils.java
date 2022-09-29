@@ -6,6 +6,8 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.settings.GameSettings;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.*;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -120,8 +122,9 @@ public class Utils {
          return mc.thePlayer.onGround;
       }
 
-      public static void fakeJump() {
-         if(!Utils.Player.isPlayerInGame()) return;
+      public static void fakeJump(boolean playerMoveInputJump) {
+         if(playerMoveInputJump)
+            mc.thePlayer.movementInput.jump = true;
 
          mc.thePlayer.isAirBorne = true;
          mc.thePlayer.triggerAchievement(StatList.jumpStat);
@@ -194,7 +197,7 @@ public class Utils {
             Entity en = (Entity) entities.next();
             if (en instanceof EntityPlayer && en != mc.thePlayer) {
                EntityPlayer pl = (EntityPlayer) en;
-               if (mc.thePlayer.getDistanceToEntity(pl) < dis && !AntiBot.bot(pl)) {
+               if (mc.thePlayer.getDistanceToEntity(pl) < dis && !AntiBot.isBot(pl)) {
                   dis = mc.thePlayer.getDistanceToEntity(pl);
                   cplayer = pl;
                }
@@ -235,6 +238,12 @@ public class Utils {
          if (isPlayerInGame()) {
             String m = Utils.Client.reformat("&7[&d"+ ravenNPlus.client.main.Client.name+"&7]&r " + message);
             mc.thePlayer.addChatMessage(new ChatComponentText(m));
+         }
+      }
+
+      public static void sendClearMessageToSelf() {
+         if (isPlayerInGame()) {
+            mc.thePlayer.addChatMessage(new ChatComponentText(null));
          }
       }
 
@@ -629,6 +638,7 @@ public class Utils {
 
       public static boolean isServerIP(String ip) {
          if(!Player.isPlayerInGame()) return false;
+         if(mc.isSingleplayer()) return false;
 
          try {
             return !mc.isSingleplayer() && mc.getCurrentServerData().serverIP.toLowerCase().contains(ip);
@@ -639,11 +649,8 @@ public class Utils {
       }
 
       public static String getServerIP() {
+         if(mc.isSingleplayer()) return "Not in Server";
          return mc.getCurrentServerData().serverIP.toLowerCase();
-      }
-
-      public static net.minecraft.util.Timer getTimer() {
-         return ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "timer", "field_71428_T");
       }
 
       public static void resetTimer() {
@@ -661,6 +668,10 @@ public class Utils {
          } catch (final Exception ex) {
             ex.printStackTrace();
          }
+      }
+
+      public static net.minecraft.util.Timer getTimer() {
+         return ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "timer", "field_71428_T");
       }
 
       public static net.minecraft.client.renderer.entity.RenderManager getRenderManager() {
@@ -1277,6 +1288,18 @@ public class Utils {
          }
       }
 
+      public static void drawCircleAroundEntity(Entity e, double shift, double expand, float lineWidth, int sides, int color, boolean damage) {
+         if (e instanceof EntityPlayer && damage && ((EntityPlayer)e).hurtTime != 0) {
+            color = Color.RED.getRGB();
+         }
+
+         double x = e.lastTickPosX + (e.posX - e.lastTickPosX) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosX;
+         double y = e.lastTickPosY + (e.posY - e.lastTickPosY) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosY;
+         double z = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosZ;
+
+         d3p(x, y, z, 0.699999988079071D+expand, sides, lineWidth, color, color == 0);
+      }
+
       public static void drawBoxAroundEntity(Entity e, int type, double expand, double shift, int color, boolean damage) {
          if (e instanceof EntityLivingBase) {
             double x = e.lastTickPosX + (e.posX - e.lastTickPosX) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosX;
@@ -1663,6 +1686,84 @@ public class Utils {
       public enum BridgeMode { GODBRIDGE, MOONWALK, BREEZILY, NORMAL }
       public enum ClickTimings { RavenNPlus, SKID }
       public enum SprintResetTimings { PRE, POST }
+   }
+
+   public static class FriendUtils {
+      public static ArrayList<Entity> friends = new ArrayList<>();
+
+      public static void addFriend(Entity entityPlayer) {
+         friends.add(entityPlayer);
+      }
+
+      public static boolean addFriend(String name) {
+         boolean found = false;
+         for (Entity entity:mc.theWorld.getLoadedEntityList()) {
+            if (entity.getName().equalsIgnoreCase(name) || entity.getCustomNameTag().equalsIgnoreCase(name)) {
+               if(!isAFriend(entity)) {
+                  addFriend(entity);
+                  found = true;
+               }
+            }
+         }
+
+         return found;
+      }
+
+      public static boolean removeFriend(String name) {
+         boolean removed = false;
+         boolean found = false;
+         for (NetworkPlayerInfo networkPlayerInfo : new ArrayList<>(mc.getNetHandler().getPlayerInfoMap())) {
+            Entity entity = mc.theWorld.getPlayerEntityByName(networkPlayerInfo.getDisplayName().getUnformattedText());
+            if (entity.getName().equalsIgnoreCase(name) || entity.getCustomNameTag().equalsIgnoreCase(name)) {
+               removed = removeFriend(entity);
+               found = true;
+            }
+         }
+
+         return found && removed;
+      }
+
+      public static boolean removeFriend(Entity entityPlayer) {
+         try{
+            friends.remove(entityPlayer);
+         } catch (Exception eeeeee){
+            eeeeee.printStackTrace();
+            return false;
+         }
+         return true;
+      }
+
+      public static ArrayList<Entity> getFriends() {
+         return friends;
+      }
+
+      public static int getFriendCount() {
+         return friends.size();
+      }
+
+      public static boolean isAFriend(Entity entity) {
+         if(entity == mc.thePlayer) return true;
+
+         for (Entity en : friends) {
+            if (en.equals(entity))
+               return true;
+         } try {
+            EntityPlayer en = (EntityPlayer) entity;
+            if(ravenNPlus.client.main.Client.debugger){
+               Utils.Player.sendMessageToSelf("unformatted / " + en.getDisplayName().getUnformattedText().replace("§", "%"));
+
+               Utils.Player.sendMessageToSelf("substring entity / " + en.getDisplayName().getUnformattedText().substring(0, 2));
+               Utils.Player.sendMessageToSelf("substring player / " + mc.thePlayer.getDisplayName().getUnformattedText().substring(0, 2));
+            }
+            if(mc.thePlayer.isOnSameTeam((EntityLivingBase) entity) || mc.thePlayer.getDisplayName().getUnformattedText().startsWith(en.getDisplayName().getUnformattedText().substring(0, 2))) return true;
+         } catch (Exception ex) {
+            if(ravenNPlus.client.main.Client.debugger) {
+               Utils.Player.sendMessageToSelf(ex.getMessage());
+            }
+         }
+
+         return false;
+      }
    }
 
 }

@@ -1,5 +1,5 @@
 Symbol range map extraction starting
-Processing 236 files
+Processing 248 files
 processing ravenNPlus\client\clickgui\RavenNPlus\ClickGui.java
 processing ravenNPlus\client\clickgui\RavenNPlus\CommandPrompt.java
 processing ravenNPlus\client\clickgui\RavenNPlus\Component.java
@@ -45,18 +45,25 @@ processing ravenNPlus\client\command\commands\Uwu.java
 processing ravenNPlus\client\command\commands\VersionCommand.java
 processing ravenNPlus\client\config\Config.java
 processing ravenNPlus\client\config\ConfigManager.java
+processing ravenNPlus\client\event\EventStage.java
+processing ravenNPlus\client\event\Phase.java
+processing ravenNPlus\client\event\imp\EventUpdateModel.java
+processing ravenNPlus\client\event\imp\PacketEvent.java
+processing ravenNPlus\client\event\imp\Render2DEvent.java
+processing ravenNPlus\client\event\imp\Render3DEvent.java
+processing ravenNPlus\client\event\imp\RenderEntityModelEvent.java
+processing ravenNPlus\client\event\imp\UpdateWalkingPlayerEvent.java
+processing ravenNPlus\client\main\Client.java
 processing ravenNPlus\client\main\ClientConfig.java
 processing ravenNPlus\client\main\FontRenderer.java
-processing ravenNPlus\client\main\LaunchTracker.java
-processing ravenNPlus\client\main\RavenNPlus.java
 processing ravenNPlus\client\module\Module.java
 processing ravenNPlus\client\module\ModuleManager.java
 processing ravenNPlus\client\module\modules\HUD.java
-processing ravenNPlus\client\module\modules\client\CategorySettings.java
+processing ravenNPlus\client\module\modules\client\CategorySett.java
 processing ravenNPlus\client\module\modules\client\ClientNameSpoof.java
 processing ravenNPlus\client\module\modules\client\CommandPrompt.java
 processing ravenNPlus\client\module\modules\client\GuiClick.java
-processing ravenNPlus\client\module\modules\client\ModuleSettingsSettings.java
+processing ravenNPlus\client\module\modules\client\ModSettings.java
 processing ravenNPlus\client\module\modules\client\SelfDestruct.java
 processing ravenNPlus\client\module\modules\client\Shutdown.java
 processing ravenNPlus\client\module\modules\client\UpdateCheck.java
@@ -147,6 +154,7 @@ processing ravenNPlus\client\module\modules\render\Animations.java
 processing ravenNPlus\client\module\modules\render\AntiShuffle.java
 processing ravenNPlus\client\module\modules\render\Chams.java
 processing ravenNPlus\client\module\modules\render\ChestESP.java
+processing ravenNPlus\client\module\modules\render\CrossCircle.java
 processing ravenNPlus\client\module\modules\render\FOV.java
 processing ravenNPlus\client\module\modules\render\Fullbright.java
 processing ravenNPlus\client\module\modules\render\Hurtcam.java
@@ -156,6 +164,8 @@ processing ravenNPlus\client\module\modules\render\NameTags.java
 processing ravenNPlus\client\module\modules\render\NameTagsV2.java
 processing ravenNPlus\client\module\modules\render\PlayerESP.java
 processing ravenNPlus\client\module\modules\render\Projectiles.java
+processing ravenNPlus\client\module\modules\render\ReachCircle.java
+processing ravenNPlus\client\module\modules\render\Skeletons.java
 processing ravenNPlus\client\module\modules\render\TargetHUD.java
 processing ravenNPlus\client\module\modules\render\Tracers.java
 processing ravenNPlus\client\module\modules\render\UserHud.java
@@ -181,6 +191,7 @@ processing ravenNPlus\client\tweaker\transformers\TransformerGuiUtilRenderCompon
 processing ravenNPlus\client\tweaker\transformers\TransformerMinecraft.java
 processing ravenNPlus\client\tweaker\transformers\TransformerSplashProgress.java
 processing ravenNPlus\client\tweaker\transformers\TransformerThrowableItem.java
+processing ravenNPlus\client\utils\Animate.java
 processing ravenNPlus\client\utils\BlurUtil.java
 processing ravenNPlus\client\utils\ChatHelper.java
 processing ravenNPlus\client\utils\CombatUtils.java
@@ -188,6 +199,7 @@ processing ravenNPlus\client\utils\CoolDown.java
 processing ravenNPlus\client\utils\DebugInfoRenderer.java
 processing ravenNPlus\client\utils\DelayTimer.java
 processing ravenNPlus\client\utils\DimensionHelper.java
+processing ravenNPlus\client\utils\FontUtils.java
 processing ravenNPlus\client\utils\ImageButton.java
 processing ravenNPlus\client\utils\InvUtils.java
 processing ravenNPlus\client\utils\MouseManager.java
