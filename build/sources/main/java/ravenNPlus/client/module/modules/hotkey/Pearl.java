@@ -1,18 +1,15 @@
 package ravenNPlus.client.module.modules.hotkey;
 
 import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
 import ravenNPlus.client.module.setting.impl.TickSetting;
-import ravenNPlus.client.utils.Utils;
-import net.minecraft.client.settings.KeyBinding;
+import ravenNPlus.client.module.setting.impl.SliderSetting;
 import net.minecraft.item.ItemStack;
 
-import java.util.ArrayList;
-
 public class Pearl extends Module {
+
     private final TickSetting preferSlot;
     private final SliderSetting hotbarSlotPreference;
-    public static ArrayList<KeyBinding> changedKeybinds = new ArrayList<>();
+
     public Pearl() {
         super("Pearl", ModuleCategory.hotkey, "");
 
@@ -27,16 +24,16 @@ public class Pearl extends Module {
     }
 
     @Override
-    public void onEnable(){
-        if (!Utils.Player.isPlayerInGame()){
+    public void onEnable() {
+        if (!this.inGame()) {
             return;
         }
 
         if (preferSlot.isToggled()) {
             int preferedSlot = (int) hotbarSlotPreference.getValue() - 1;
 
-            if(checkSlot(preferedSlot)) {
-                mc.thePlayer.inventory.currentItem = preferedSlot;
+            if (checkSlot(preferedSlot)) {
+                this.player().inventory.currentItem = preferedSlot;
                 this.disable();
                 return;
             }
@@ -44,7 +41,7 @@ public class Pearl extends Module {
 
         for (int slot = 0; slot <= 8; slot++) {
             if (checkSlot(slot)) {
-                mc.thePlayer.inventory.currentItem = slot;
+                this.player().inventory.currentItem = slot;
                 this.disable();
                 return;
             }

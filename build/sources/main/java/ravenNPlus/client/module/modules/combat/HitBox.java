@@ -1,37 +1,37 @@
 package ravenNPlus.client.module.modules.combat;
 
+import ravenNPlus.client.utils.Utils;
 import ravenNPlus.client.main.Client;
 import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
 import ravenNPlus.client.module.setting.impl.TickSetting;
-import ravenNPlus.client.utils.Utils;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityArmorStand;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
+import ravenNPlus.client.module.setting.impl.SliderSetting;
 import net.minecraft.util.Vec3;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import java.awt.*;
+import java.util.List;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
-import java.util.List;
-
 public class HitBox extends Module {
-   public static SliderSetting a;
-   public static TickSetting b;
+
+   public static SliderSetting multiPly;
+   public static TickSetting showNewHitBox;
    private static MovingObjectPosition mv;
 
    public HitBox() {
       super("HitBox", ModuleCategory.combat, "Modifies the Hitboxes");
-      this.addSetting(a = new SliderSetting("Multiplier", 1.2D, 1.0D, 5.0D, 0.05D));
-      this.addSetting(b = new TickSetting("Show new Hitbox", false));
+      this.addSetting(multiPly = new SliderSetting("Multiplier", 1.2D, 1.0D, 5.0D, 0.05D));
+      this.addSetting(showNewHitBox = new TickSetting("Show new Hitbox", o));
    }
 
    public void update() {
@@ -40,7 +40,7 @@ public class HitBox extends Module {
 
    @SubscribeEvent
    public void m(MouseEvent e) {
-      if(!Utils.Player.isPlayerInGame()) return;
+      if (!this.inGame()) return;
       if (e.button == 0 && e.buttonstate && mv != null) {
          mc.objectMouseOver = mv;
       }
@@ -49,12 +49,12 @@ public class HitBox extends Module {
    @SubscribeEvent
    public void ef(TickEvent.RenderTickEvent ev) {
       // autoclick event
-      if(!Utils.Player.isPlayerInGame()) return;
+      if (!this.inGame()) return;
 
       Module autoClicker = Client.moduleManager.getModuleByClazz(LeftClicker.class);
-      if(autoClicker != null && !autoClicker.isEnabled()) return;
+      if (autoClicker != null && !autoClicker.isEnabled()) return;
 
-      if (autoClicker != null && autoClicker.isEnabled() && Mouse.isButtonDown(0)){
+      if (autoClicker != null && autoClicker.isEnabled() && Mouse.isButtonDown(0)) {
          if (mv != null) {
             mc.objectMouseOver = mv;
          }
@@ -63,19 +63,18 @@ public class HitBox extends Module {
 
    @SubscribeEvent
    public void r1(RenderWorldLastEvent e) {
-      if (b.isToggled() && Utils.Player.isPlayerInGame()) {
+      if (showNewHitBox.isToggled() && this.inGame()) {
          for (Entity en : mc.theWorld.loadedEntityList) {
             if (en != mc.thePlayer && en instanceof EntityLivingBase && ((EntityLivingBase) en).deathTime == 0 && !(en instanceof EntityArmorStand) && !en.isInvisible()) {
                this.rh(en, Color.WHITE);
             }
          }
-
       }
    }
 
    public static double exp(Entity en) {
       Module hitBox = Client.moduleManager.getModuleByClazz(HitBox.class);
-      return (hitBox != null && hitBox.isEnabled() && !AntiBot.isBot(en)) ? a.getValue() : 1.0D;
+      return (hitBox != null && hitBox.isEnabled() && !NewAntiBot.isBot(en)) ? multiPly.getValue() : 1.0D;
    }
 
    public static void gmo(float partialTicks) {
@@ -142,7 +141,7 @@ public class HitBox extends Module {
          double x = e.lastTickPosX + (e.posX - e.lastTickPosX) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosX;
          double y = e.lastTickPosY + (e.posY - e.lastTickPosY) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosY;
          double z = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosZ;
-         float ex = (float)((double)e.getCollisionBorderSize() * a.getValue());
+         float ex = (float) ((double) e.getCollisionBorderSize() * multiPly.getValue());
          AxisAlignedBB bbox = e.getEntityBoundingBox().expand(ex, ex, ex);
          AxisAlignedBB axis = new AxisAlignedBB(bbox.minX - e.posX + x, bbox.minY - e.posY + y, bbox.minZ - e.posZ + z, bbox.maxX - e.posX + x, bbox.maxY - e.posY + y, bbox.maxZ - e.posZ + z);
          GL11.glBlendFunc(770, 771);

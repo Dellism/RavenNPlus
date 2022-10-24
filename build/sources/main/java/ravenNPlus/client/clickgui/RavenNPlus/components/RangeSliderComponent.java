@@ -1,6 +1,7 @@
 package ravenNPlus.client.clickgui.RavenNPlus.components;
 
 import ravenNPlus.client.clickgui.RavenNPlus.Component;
+import ravenNPlus.client.utils.ColorUtil;
 import ravenNPlus.client.module.setting.impl.DoubleSliderSetting;
 import ravenNPlus.client.utils.Utils;
 import net.minecraft.client.Minecraft;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class RangeSliderComponent implements Component {
+
     private final DoubleSliderSetting doubleSlider;
     private final ModuleComponent module;
     private double barWidth;
@@ -18,10 +20,10 @@ public class RangeSliderComponent implements Component {
     private int moduleStartY;
     private boolean mouseDown, inMotion;
     private Helping mode = Helping.NONE;
-    private final int boxMargin = 4;
-    private final int boxHeight = 4;
+    private final int boxMargin = 4, boxHeight = 4;
     private final int textSize = 11;
-    public RangeSliderComponent(DoubleSliderSetting doubleSlider, ModuleComponent module, int moduleStartY){
+
+    public RangeSliderComponent(DoubleSliderSetting doubleSlider, ModuleComponent module, int moduleStartY) {
         this.doubleSlider = doubleSlider;
         this.module = module;
         this.sliderStartX = this.module.category.getX() + boxMargin;
@@ -29,29 +31,32 @@ public class RangeSliderComponent implements Component {
         this.moduleStartY = moduleStartY;
     }
 
-    public void draw(){
+    public void draw() {
         //drawing the grey box lol
-        net.minecraft.client.gui.Gui.drawRect(this.module.category.getX() + boxMargin, this.module.category.getY() + this.moduleStartY + textSize, this.module.category.getX() - boxMargin + this.module.category.getWidth(), this.module.category.getY() + this.moduleStartY + textSize + boxHeight, -12302777);
+        net.minecraft.client.gui.Gui.drawRect(this.module.category.getX() + boxMargin, this.module.category.getY() + this.moduleStartY + textSize, this.module.category.getX() - boxMargin + this.module.category.getWidth(), this.module.category.getY() + this.moduleStartY + textSize + boxHeight, ColorUtil.color_moduleComponent4);
         int startToDrawFrom = this.module.category.getX() + boxMargin + (int) this.blankWidth;
         int finishDrawingAt = startToDrawFrom + (int)this.barWidth;
         int middleThing = (int)Utils.Java.round(this.barWidth/2, 0) + this.module.category.getX() + (int) this.blankWidth + boxMargin - 1;
         //drwing the main colourded bar
         net.minecraft.client.gui.Gui.drawRect(startToDrawFrom, this.module.category.getY() + this.moduleStartY + textSize, finishDrawingAt, this.module.category.getY() + this.moduleStartY + textSize + boxHeight, Utils.Client.astolfoColorsDraw(14, 10));
-        net.minecraft.client.gui.Gui.drawRect(middleThing, this.module.category.getY() + this.moduleStartY + textSize - 1, middleThing+(middleThing%2==0? 2:1), this.module.category.getY() + this.moduleStartY + textSize + boxHeight + 1, 0xff1D1D1F);
+        net.minecraft.client.gui.Gui.drawRect(middleThing, this.module.category.getY() + this.moduleStartY + textSize - 1, middleThing+(middleThing%2==0? 2:1), this.module.category.getY() + this.moduleStartY + textSize + boxHeight + 1, ColorUtil.color_rangeSliderComponent1);
         //drawing le text
         GL11.glPushMatrix();
         GL11.glScaled(0.5D, 0.5D, 0.5D);
-        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(this.doubleSlider.getName() + ": " + this.doubleSlider.getInputMin() + ", " + this.doubleSlider.getInputMax(), (float)((int)((float)(this.module.category.getX() + 4) * 2.0F)), (float)((int)((float)(this.module.category.getY() + this.moduleStartY + 3) * 2.0F)), -1);
+        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(this.doubleSlider.getName() + ": " + this.doubleSlider.getInputMin() + ", " + this.doubleSlider.getInputMax(), (float)((int)((float)(this.module.category.getX() + 4) * 2.0F)), (float)((int)((float)(this.module.category.getY() + this.moduleStartY + 3) * 2.0F)), ColorUtil.color_white1);
         GL11.glPopMatrix();
     }
+
     public void setComponentStartAt(int posY) {
         this.moduleStartY = posY;
     }
+
     @Override
     public int getHeight() {
         return 0;
     }
-    public void update(int mousePosX, int mousePosY){
+
+    public void update(int mousePosX, int mousePosY) {
         this.sliderStartY = this.module.category.getY() + this.moduleStartY;
         this.sliderStartX = this.module.category.getX() + boxMargin;
         double mousePressedAt = Math.min(this.module.category.getWidth() - boxMargin*2 /*we make it so that the mouse press HAS to be inside the box*/, Math.max(0, mousePosX - this.sliderStartX));
@@ -63,12 +68,12 @@ public class RangeSliderComponent implements Component {
                 / (this.doubleSlider.getMax() - this.doubleSlider.getMin());//divided by total width of grey bar
         //divided by total width of grey bar
 
-      //  if(this.module.category.inUse && this.mode==Helping.NONE){
+      //  if(this.module.category.inUse && this.mode==Helping.NONE) {
            if(this.mouseDown) {
                if (mousePressedAt > blankWidth + barWidth / 2 || mode == Helping.MAX) {
                    //manipulate max slider
                    if (this.mode == Helping.NONE) this.mode = Helping.MAX;
-                   if(this.mode == Helping.MAX){
+                   if(this.mode == Helping.MAX) {
                        if (mousePressedAt <= blankWidth) {
                            this.doubleSlider.setValueMax(this.doubleSlider.getInputMin());
                        } else {
@@ -87,7 +92,7 @@ public class RangeSliderComponent implements Component {
                    if(this.mode == Helping.MIN) {
                        if (mousePressedAt == 0.0D) {
                            this.doubleSlider.setValueMin(this.doubleSlider.getMin());
-                       } else if(mousePressedAt >= barWidth + blankWidth){
+                       } else if(mousePressedAt >= barWidth + blankWidth) {
                            this.doubleSlider.setValueMin(this.doubleSlider.getMax());
                        }else {
                            double n = r(mousePressedAt
@@ -113,21 +118,26 @@ public class RangeSliderComponent implements Component {
             return bd.doubleValue();
         }
     }
+
     public void mouseDown(int x, int y, int b) {
         if (this.u(x, y) && b == 0 && this.module.po) { this.mouseDown = true; }
         if (this.i(x, y) && b == 0 && this.module.po) { this.mouseDown = true; }
     }
+
     public void mouseReleased(int x, int y, int m) {
         this.mouseDown = false;
     }
+
     @Override
     public void keyTyped(char t, int k) { }
     public boolean u(int x, int y) {
         return x > this.sliderStartX && x < this.sliderStartX + this.module.category.getWidth() / 2 + 1 && y > this.sliderStartY && y < this.sliderStartY + 16;
     }
+
     public boolean i(int x, int y) {
         return x > this.sliderStartX + this.module.category.getWidth() / 2 && x < this.sliderStartX + this.module.category.getWidth() && y > this.sliderStartY && y < this.sliderStartY + 16;
     }
+
     public enum Helping { MIN, MAX, NONE }
 
     @Override

@@ -1,11 +1,12 @@
 package ravenNPlus.client.module.setting.impl;
 
 import com.google.gson.JsonObject;
+import ravenNPlus.client.module.setting.Setting;
 import ravenNPlus.client.clickgui.RavenNPlus.Component;
 import ravenNPlus.client.clickgui.RavenNPlus.components.ModuleComponent;
-import ravenNPlus.client.module.setting.Setting;
 
 public class DescriptionSetting extends Setting {
+
    private String desc;
    private final String defaultDesc;
 
@@ -53,4 +54,5 @@ public class DescriptionSetting extends Setting {
    public Component createComponent(ModuleComponent moduleComponent) {
       return null;
    }
+
 }

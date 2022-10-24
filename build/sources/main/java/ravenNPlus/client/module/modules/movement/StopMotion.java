@@ -2,13 +2,10 @@ package ravenNPlus.client.module.modules.movement;
 
 import ravenNPlus.client.module.Module;
 import ravenNPlus.client.module.setting.impl.TickSetting;
-import ravenNPlus.client.utils.Utils;
 
 public class StopMotion extends Module {
 
-   public static TickSetting xStop;
-   public static TickSetting yStop;
-   public static TickSetting zStop;
+   public static TickSetting xStop, yStop, zStop;
 
    public StopMotion() {
       super("Stop Motion", ModuleCategory.movement, "Stop your motion");
@@ -18,19 +15,19 @@ public class StopMotion extends Module {
    }
 
    public void onEnable() {
-      if(!Utils.Player.isPlayerInGame()) {
+      if (!this.inGame()) {
          this.disable();
          return;
       }
 
-      if(xStop.isToggled())
-         mc.thePlayer.motionX = 0;
+      if (xStop.isToggled())
+         this.player().motionX = 0;
 
-      if(yStop.isToggled())
-         mc.thePlayer.motionY = 0;
+      if (yStop.isToggled())
+         this.player().motionY = 0;
 
-      if(zStop.isToggled())
-         mc.thePlayer.motionZ = 0;
+      if (zStop.isToggled())
+         this.player().motionZ = 0;
 
       this.disable();
    }

@@ -13,7 +13,7 @@ public class Uwu extends Command {
     }
 
     @Override
-    public void onCall(String[] args){
+    public void onCall(String[] args) {
         if (u) {
             return;
         }

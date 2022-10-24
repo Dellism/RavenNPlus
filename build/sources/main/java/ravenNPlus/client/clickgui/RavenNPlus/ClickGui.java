@@ -1,23 +1,24 @@
 package ravenNPlus.client.clickgui.RavenNPlus;
 
-import ravenNPlus.client.clickgui.RavenNPlus.components.CategoryComponent;
-import ravenNPlus.client.main.Client;
-import ravenNPlus.client.module.modules.client.CategorySett;
-import ravenNPlus.client.module.modules.client.GuiClick;
-import ravenNPlus.client.utils.version.Version;
-import ravenNPlus.client.module.Module;
 import ravenNPlus.client.utils.*;
-import net.minecraft.client.gui.inventory.GuiInventory;
+import ravenNPlus.client.main.Client;
+import ravenNPlus.client.module.Module;
+import ravenNPlus.client.utils.version.Version;
+import ravenNPlus.client.module.modules.client.GuiClick;
+import ravenNPlus.client.utils.ColorUtil;
+import ravenNPlus.client.module.modules.client.ModSettings;
+import ravenNPlus.client.module.modules.client.CategorySett;
+import ravenNPlus.client.clickgui.RavenNPlus.components.CategoryComponent;
 import net.minecraft.client.gui.*;
-import java.time.format.DateTimeFormatter;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.time.LocalDateTime;
-import java.io.IOException;
+import net.minecraft.client.gui.inventory.GuiInventory;
+import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
-import org.lwjgl.input.Mouse;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ScheduledFuture;
+import java.time.format.DateTimeFormatter;
 
 public class ClickGui extends GuiScreen {
 
@@ -29,8 +30,6 @@ public class ClickGui extends GuiScreen {
    private int mouseX, mouseY;
 
    public ClickGui() {
-      allowBlur = true;
-
       this.commandPrompt = new CommandPrompt();
       this.categoryList = new ArrayList<>();
       int topOffset = 5;
@@ -54,11 +53,17 @@ public class ClickGui extends GuiScreen {
       this.sf = Client.getExecutor().schedule(() -> (
               this.aL = new Timer(650.0F)
       ).start(), 650L, TimeUnit.MILLISECONDS);
+
+      if(GuiClick.blur.isToggled() && allowBlur) {
+         BlurUtils.blur(true);
+         allowBlur = false;
+      }
    }
 
    public void initGui() { super.initGui(); }
 
    public void drawScreen(int x, int y, float p) {
+
       mouseX = x; mouseY = y;
       Version clientVersion = Client.versionManager.getClientVersion();
       Version latestVersion = Client.versionManager.getLatestVersion();
@@ -72,19 +77,17 @@ public class ClickGui extends GuiScreen {
       int sW = this.width / 2;
       int w_c = 30 - this.aT.getValueInt(0, 30, 3);
 
-      /*
+      /* ---- Old ----
       this.drawCenteredString(this.fontRendererObj, "r", sW + 1 - w_c, sH - 23 + off , Utils.Client.rainbowDraw(2L, 900L+300L));
       this.drawCenteredString(this.fontRendererObj, "a", sW - w_c, sH - 13 + off , Utils.Client.rainbowDraw(2L, 900L+150L));
-      this.drawCenteredString(this.fontRendererObj, "v", sW - w_c, sH - 4  + off , Utils.Client.rainbowDraw(2L, 900L));
+      this.drawCenteredString(this.fontRendererObj, "v", sW - w_c, sH - 4  + off , ColorUtil.color_clickGui2);
       this.drawCenteredString(this.fontRendererObj, "e", sW - w_c, sH + 7  + off , Utils.Client.rainbowDraw(2L, 900L-150L));
       this.drawCenteredString(this.fontRendererObj, "n", sW - w_c, sH + 17 + off , Utils.Client.rainbowDraw(2L, 900L-300L));
       */
-      this.drawCenteredString(this.fontRendererObj, "N+", sW +1- w_c, sH + 4 , Utils.Client.rainbowDraw(2L, 900L-300L));
-      // FontUtils.drawStringWithShadowWithUnderline("N+", sW-5-w_c, sH+4, Utils.Client.rainbowDraw(2L, 900L-300L));
 
       float speed = 4890;
 
-      if(latestVersion.isNewerThan(clientVersion)) {
+      if (latestVersion.isNewerThan(clientVersion)) {
          int margin = 2;
          int rows = 1;
          for (int i = Client.updateText.length-1; i >= 0; i--) {
@@ -94,22 +97,33 @@ public class ClickGui extends GuiScreen {
             margin += 2;
          }
       } else {
-         mc.fontRendererObj.drawStringWithShadow("["+ Client.name+ "] | Config: " + Client.configManager.getConfig().getName()+"", 4, this.height - 3 - mc.fontRendererObj.FONT_HEIGHT, Utils.Client.astolfoColorsDraw(10, 14, speed));
+         mc.fontRendererObj.drawStringWithShadow("["+ Client.name+ "] | Config: " + Client.configManager.getConfig().getName()+"",
+            4, this.height - 3 - mc.fontRendererObj.FONT_HEIGHT, Utils.Client.astolfoColorsDraw(10, 14, speed));
       }
 
       int a = 10;  //30
       int b = 10;  //10
       int c = 23;  //43
+      int aniProg;
 
-      this.drawVerticalLine(sW - b - w_c, sH - a, sH + c, Utils.Client.rainbowDraw(2L, 900L));
-      this.drawVerticalLine(sW + b + w_c, sH - a, sH + c, Utils.Client.rainbowDraw(2L, 900L));
+      int color_clickGui1 = ravenNPlus.client.utils.Utils.Client.rainbowDraw(2L, 900L - 300L);
+      int color_clickGui2 = ravenNPlus.client.utils.Utils.Client.rainbowDraw(2L, 900L);
 
-      int animationProggress;
-      if (this.aL != null) {
-         animationProggress = this.aL.getValueInt(0, 20, 2);
+      if (GuiClick.logo.isToggled()) {
+         if (!ModSettings.text_underline.isToggled())
+            this.drawCenteredString(this.fontRendererObj, "N+", sW + 1 - w_c, sH + 4, color_clickGui1);
+         else
+            FontUtils.drawStringWithShadowWithUnderline("N+", sW - 5 - w_c, sH + 4, color_clickGui1);
 
-         this.drawHorizontalLine(sW - b, sW - b + animationProggress, sH - a-1, Utils.Client.rainbowDraw(2L, 900L));
-         this.drawHorizontalLine(sW + b, sW + b - animationProggress, sH + c+1, Utils.Client.rainbowDraw(2L, 900L));
+         this.drawVerticalLine(sW - b - w_c, sH - a, sH + c, color_clickGui2);
+         this.drawVerticalLine(sW + b + w_c, sH - a, sH + c, color_clickGui2);
+
+         if (this.aL != null) {
+            aniProg = this.aL.getValueInt(0, 20, 2);
+
+            this.drawHorizontalLine(sW - b, sW - b + aniProg, sH - a - 1, color_clickGui2);
+            this.drawHorizontalLine(sW + b, sW + b - aniProg, sH + c + 1, color_clickGui2);
+         }
       }
 
       for (CategoryComponent category : categoryList) {
@@ -121,33 +135,35 @@ public class ClickGui extends GuiScreen {
          }
       }
 
+      // time
       if(GuiClick.time.isToggled())
          mc.fontRendererObj.drawStringWithShadow(Calendar.getInstance().getTime().getHours()
-                 + ":" + Calendar.getInstance().getTime().getMinutes() + ":" + Calendar.getInstance().getTime().getSeconds(), 8, 5, Utils.Client.rainbowDraw(2L, 900L));
+                 + ":" + Calendar.getInstance().getTime().getMinutes() + ":" + Calendar.getInstance().getTime().getSeconds(), 8, 5, color_clickGui2);
 
       DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
       LocalDateTime now = LocalDateTime.now();
 
-      if(GuiClick.time.isToggled())
-            Utils.HUD.fontRender.drawString("", 0, 0, 0);
-
+      // date
       if(GuiClick.date.isToggled())
-         Utils.HUD.fontRender.drawString(dtf.format(now), 10+fontRendererObj.getStringWidth(Calendar.getInstance().getTime().getHours()
-                 + ":" + Calendar.getInstance().getTime().getMinutes() + ":" + Calendar.getInstance().getTime().getSeconds()), 5, Utils.Client.rainbowDraw(2L, 900L));
+         Utils.HUD.fontRender.drawStringWithShadow(GuiClick.time.isToggled() ? " | "+dtf.format(now) : ""+dtf.format(now), GuiClick.time.isToggled() ?
+            8+fontRendererObj.getStringWidth(Calendar.getInstance().getTime().getHours() + ":" + Calendar.getInstance().getTime().getMinutes()
+            + ":" + Calendar.getInstance().getTime().getSeconds()) : 5, 5, color_clickGui2);
 
-      if(GuiClick.showPlayer.isToggled())
-         GuiInventory.drawEntityOnScreen(this.width + 15 - this.aE.getValueInt(0, 40, 2), this.height - 19 - this.fontRendererObj.FONT_HEIGHT, 40, (float) (this.width - 25 - x), (float) (this.height - 50 - y), this.mc.thePlayer);
+      // clean player color
+      if(GuiClick.date.isToggled() || GuiClick.time.isToggled())
+         ColorUtil.color_clear(true);
 
+      // render player
       if(GuiClick.showPlayer.isToggled())
-         fontRendererObj.drawString("", 0, 0, 0);
+         GuiInventory.drawEntityOnScreen(this.width + 15 - this.aE.getValueInt(0, 40, 2), this.height - 19
+            - this.fontRendererObj.FONT_HEIGHT,40, (float) (this.width - 25 - x), (float) (this.height - 50 - y), this.mc.thePlayer);
+
+      // clean player color
+      if(GuiClick.showPlayer.isToggled())
+         ColorUtil.color_clear(true);
 
       commandPrompt.update(x, y);
       commandPrompt.draw();
-
-      if(GuiClick.blur.isToggled() && allowBlur) {
-         BlurUtil.blur(true);
-         allowBlur = false;
-      }
    }
 
    public void mouseClicked(int x, int y, int mouseButton) {
@@ -179,26 +195,26 @@ public class ClickGui extends GuiScreen {
                   category.cv(!category.p());
 
                   if(CategorySett.sounds.isToggled()) {
-                     if (CategorySett.category_mode.getValue() == 1)
-                        SoundUtil.play(SoundUtil.click1, (float) CategorySett.category_volume.getValue(), (float) CategorySett.category_pitch.getValue());
+                     if (CategorySett.category_mode.getValueToInt() == 1)
+                        SoundUtil.play(SoundUtil.click1, CategorySett.category_volume.getValueToFloat(), CategorySett.category_pitch.getValueToFloat());
 
-                     if (CategorySett.category_mode.getValue() == 2)
-                        SoundUtil.play(SoundUtil.bowhit, (float) CategorySett.category_volume.getValue(), (float) CategorySett.category_pitch.getValue());
+                     if (CategorySett.category_mode.getValueToInt() == 2)
+                        SoundUtil.play(SoundUtil.bowhit, CategorySett.category_volume.getValueToFloat(), CategorySett.category_pitch.getValueToFloat());
 
-                     if (CategorySett.category_mode.getValue() == 3)
-                        SoundUtil.play(SoundUtil.playerHurt, (float) CategorySett.category_volume.getValue(), (float) CategorySett.category_pitch.getValue());
+                     if (CategorySett.category_mode.getValueToInt() == 3)
+                        SoundUtil.play(SoundUtil.playerHurt, CategorySett.category_volume.getValueToFloat(), CategorySett.category_pitch.getValueToFloat());
 
-                     if (CategorySett.category_mode.getValue() == 4)
-                        SoundUtil.play(SoundUtil.playerDie, (float) CategorySett.category_volume.getValue(), (float) CategorySett.category_pitch.getValue());
+                     if (CategorySett.category_mode.getValueToInt() == 4)
+                        SoundUtil.play(SoundUtil.playerDie, CategorySett.category_volume.getValueToFloat(), CategorySett.category_pitch.getValueToFloat());
 
-                     if (CategorySett.category_mode.getValue() == 5)
-                        SoundUtil.play(SoundUtil.chestOpen, (float) CategorySett.category_volume.getValue(), (float) CategorySett.category_pitch.getValue());
+                     if (CategorySett.category_mode.getValueToInt() == 5)
+                        SoundUtil.play(SoundUtil.chestOpen, CategorySett.category_volume.getValueToFloat(), CategorySett.category_pitch.getValueToFloat());
 
-                     if (CategorySett.category_mode.getValue() == 6)
-                        SoundUtil.play(SoundUtil.chestClose, (float) CategorySett.category_volume.getValue(), (float) CategorySett.category_pitch.getValue());
+                     if (CategorySett.category_mode.getValueToInt() == 6)
+                        SoundUtil.play(SoundUtil.chestClose, CategorySett.category_volume.getValueToFloat(), CategorySett.category_pitch.getValueToFloat());
 
-                     if (CategorySett.category_mode.getValue() == 7)
-                        SoundUtil.play(SoundUtil.tntExplosion, (float) CategorySett.category_volume.getValue(), (float) CategorySett.category_pitch.getValue());
+                     if (CategorySett.category_mode.getValueToInt() == 7)
+                        SoundUtil.play(SoundUtil.tntExplosion, CategorySett.category_volume.getValueToFloat(), CategorySett.category_pitch.getValueToFloat());
                   }
                }
             } while(!category.isOpened());
@@ -241,12 +257,12 @@ public class ClickGui extends GuiScreen {
             }
          }
       }
-      if(Client.clientConfig != null){
+      if(Client.clientConfig != null) {
          Client.clientConfig.saveConfig();
       }
    }
 
-   public void keyTyped(char t, int k) {
+   public void func_73869_a(char t, int k) {
       commandPrompt.keyTyped(t, k);
       if (k == 1) {
          this.mc.displayGuiScreen(null);
@@ -276,7 +292,7 @@ public class ClickGui extends GuiScreen {
       super.handleMouseInput();
       for (CategoryComponent c : visableCategoryList()) {
          if (c.insideAllArea(mouseX, mouseY)) {
-            int i = Mouse.getEventDWheel();
+            int i = org.lwjgl.input.Mouse.getEventDWheel();
             i = Integer.compare(i, 0);
             c.scroll(i * 5f);
          }
@@ -294,9 +310,14 @@ public class ClickGui extends GuiScreen {
       Client.configManager.save();
       Client.clientConfig.saveConfig();
 
+
       if(GuiClick.blur.isToggled() && !allowBlur) {
-         BlurUtil.blur(false);
+         BlurUtils.blur(false);
          allowBlur = true;
+      }
+
+      if(!GuiClick.blur.isToggled() && !allowBlur) {
+         BlurUtils.blur(false);
       }
    }
 

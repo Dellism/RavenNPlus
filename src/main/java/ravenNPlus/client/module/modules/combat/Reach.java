@@ -1,26 +1,27 @@
 package ravenNPlus.client.module.modules.combat;
 
-import ravenNPlus.client.main.Client;
-import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.setting.impl.DoubleSliderSetting;
-import ravenNPlus.client.module.setting.impl.TickSetting;
-import ravenNPlus.client.utils.InvUtils;
 import ravenNPlus.client.utils.Utils;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MovingObjectPosition;
+import ravenNPlus.client.main.Client;
+import ravenNPlus.client.utils.InvUtils;
+import ravenNPlus.client.module.Module;
+import ravenNPlus.client.module.setting.impl.TickSetting;
+import ravenNPlus.client.module.setting.impl.DoubleSliderSetting;
 import net.minecraft.util.Vec3;
+import net.minecraft.init.Blocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraftforge.client.event.MouseEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.lwjgl.input.Mouse;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.List;
+import org.lwjgl.input.Mouse;
 
 public class Reach extends Module {
+
    public static DoubleSliderSetting reach;
    public static TickSetting weapon_only, moving_only, sprint_only, hit_through_blocks;
 
@@ -36,7 +37,7 @@ public class Reach extends Module {
    @SubscribeEvent
    public void onMouse(MouseEvent ev) {
       // legit event
-      if(!Utils.Player.isPlayerInGame()) return;
+      if (!this.inGame()) return;
       Module autoClicker = Client.moduleManager.getModuleByClazz(LeftClicker.class);
       if (autoClicker != null && autoClicker.isEnabled() && Mouse.isButtonDown(0)) return;
       if (ev.button >= 0 && ev.buttonstate) {
@@ -47,11 +48,11 @@ public class Reach extends Module {
    @SubscribeEvent
    public void onRenderTick(TickEvent.RenderTickEvent ev) {
       // autoclick event
-      if(!Utils.Player.isPlayerInGame()) return;
+      if (!this.inGame()) return;
       Module autoClicker = Client.moduleManager.getModuleByClazz(LeftClicker.class);
       if (autoClicker == null || !autoClicker.isEnabled()) return;
 
-      if (autoClicker.isEnabled()  && Mouse.isButtonDown(0)){
+      if (autoClicker.isEnabled() && Mouse.isButtonDown(0)) {
          call();
       }
    }
@@ -59,7 +60,8 @@ public class Reach extends Module {
    public static boolean call() {
       if (!Utils.Player.isPlayerInGame()) return false;
       if (weapon_only.isToggled() && !InvUtils.isPlayerHoldingWeapon()) return false;
-      if (moving_only.isToggled() && (double)mc.thePlayer.moveForward == 0.0D && (double)mc.thePlayer.moveStrafing == 0.0D) return false;
+      if (moving_only.isToggled() && (double) mc.thePlayer.moveForward == 0.0D && (double) mc.thePlayer.moveStrafing == 0.0D)
+         return false;
       if (sprint_only.isToggled() && !mc.thePlayer.isSprinting()) return false;
       if (!hit_through_blocks.isToggled() && mc.objectMouseOver != null) {
          BlockPos p = mc.objectMouseOver.getBlockPos();
@@ -73,8 +75,8 @@ public class Reach extends Module {
       if (o == null) {
          return false;
       } else {
-         Entity en = (Entity)o[0];
-         mc.objectMouseOver = new MovingObjectPosition(en, (Vec3)o[1]);
+         Entity en = (Entity) o[0];
+         mc.objectMouseOver = new MovingObjectPosition(en, (Vec3) o[1]);
          mc.pointedEntity = en;
          return true;
       }

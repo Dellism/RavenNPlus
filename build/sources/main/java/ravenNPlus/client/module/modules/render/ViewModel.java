@@ -1,13 +1,11 @@
 package ravenNPlus.client.module.modules.render;
 
+import org.lwjgl.opengl.GL11;
 import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
 import ravenNPlus.client.module.setting.impl.TickSetting;
-import ravenNPlus.client.utils.Utils;
+import ravenNPlus.client.module.setting.impl.SliderSetting;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import static org.lwjgl.opengl.GL11.glTranslated;
-import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public class ViewModel extends Module {
 
@@ -30,22 +28,21 @@ public class ViewModel extends Module {
 
     @SubscribeEvent
     public void onRenderArms(RenderHandEvent e) {
-        if(!Utils.Player.isPlayerInGame()) return;
+        if (!this.inGame()) return;
 
-        if(onlyGround.isToggled())
-            if(!mc.thePlayer.onGround) return;
+        if (onlyGround.isToggled())
+            if (!this.player().onGround) return;
 
-        if(onlyServer.isToggled())
-            if(mc.isSingleplayer()) return;
+        if (onlyServer.isToggled())
+            if (mc.isSingleplayer()) return;
 
-        if(onlySprint.isToggled())
-            if(!mc.thePlayer.isSprinting()) return;
+        if (onlySprint.isToggled())
+            if (!this.player().isSprinting()) return;
 
-
-        if(translateF.isToggled()) {
-            glTranslated(Trandx.getValue(), Trandy.getValue(), Trandz.getValue());
+        if (translateF.isToggled()) {
+            GL11.glTranslated(Trandx.getValue(), Trandy.getValue(), Trandz.getValue());
         } else {
-            glTranslatef((float) Tranfx.getValue(), (float) Tranfy.getValue(), (float) Tranfz.getValue());
+            GL11.glTranslatef(Tranfx.getValueToFloat(), Tranfy.getValueToFloat(), Tranfz.getValueToFloat());
         }
     }
 

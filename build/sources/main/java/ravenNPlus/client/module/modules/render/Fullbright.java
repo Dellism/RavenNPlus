@@ -1,9 +1,8 @@
 package ravenNPlus.client.module.modules.render;
 
 import ravenNPlus.client.module.Module;
-import ravenNPlus.client.utils.Utils;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class Fullbright extends Module {
 
@@ -22,14 +21,14 @@ public class Fullbright extends Module {
     }
 
     @Override
-    public void onDisable(){
+    public void onDisable() {
         super.onEnable();
         mc.gameSettings.gammaSetting = this.defaultGamma;
     }
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent e) {
-        if (!Utils.Player.isPlayerInGame()) {
+        if (!this.inGame()) {
             onDisable();
             return;
         }

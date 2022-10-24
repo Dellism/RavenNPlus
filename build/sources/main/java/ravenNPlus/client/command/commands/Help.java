@@ -50,7 +50,7 @@ public class Help extends Command {
                 CommandPrompt.print("Min args: " + command.getMinArgs() + ", max args: " + command.getMaxArgs());
                 int argIndex = 1;
                 int printLine;
-                for (String argText : command.getArgs()){
+                for (String argText : command.getArgs()) {
                     CommandPrompt.print("Argument " + argIndex + ": " + argText);
                     argIndex++;
                 }

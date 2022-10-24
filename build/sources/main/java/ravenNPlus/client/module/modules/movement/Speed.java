@@ -1,10 +1,10 @@
 package ravenNPlus.client.module.modules.movement;
 
-import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.setting.impl.DescriptionSetting;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
-import ravenNPlus.client.module.setting.impl.TickSetting;
 import ravenNPlus.client.utils.Utils;
+import ravenNPlus.client.module.Module;
+import ravenNPlus.client.module.setting.impl.TickSetting;
+import ravenNPlus.client.module.setting.impl.SliderSetting;
+import ravenNPlus.client.module.setting.impl.DescriptionSetting;
 import org.lwjgl.input.Keyboard;
 
 public class Speed extends Module {
@@ -23,9 +23,9 @@ public class Speed extends Module {
    public void update() {
       double csp = Utils.Player.pythagorasMovement();
       if (csp != 0.0D) {
-         if (mc.thePlayer.onGround && !mc.thePlayer.capabilities.isFlying) {
-            if (!strafe.isToggled() || mc.thePlayer.moveStrafing != 0.0F) {
-               if (mc.thePlayer.hurtTime != mc.thePlayer.maxHurtTime || mc.thePlayer.maxHurtTime <= 0) {
+         if (this.onGround() && !this.player().capabilities.isFlying) {
+            if (!strafe.isToggled() || this.player().moveStrafing != 0.0F) {
+               if (this.player().hurtTime != this.player().maxHurtTime || this.player().maxHurtTime <= 0) {
                   if (!Keyboard.isKeyDown(mc.gameSettings.keyBindJump.getKeyCode())) {
                      double val = speed.getValue() - (speed.getValue() - 1.0D) * 0.5D;
                      Utils.Player.fixMovementSpeed(csp * val, true);

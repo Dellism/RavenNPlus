@@ -113,7 +113,7 @@ public class FontRenderer extends net.minecraft.client.gui.FontRenderer {
         this.readGlyphSizes();
     }
 
-    public void onResourceManagerReload(IResourceManager resourceManager)
+    public void func_110549_a(IResourceManager resourceManager)
     {
         this.readFontTexture();
         this.readGlyphSizes();
@@ -207,14 +207,14 @@ public class FontRenderer extends net.minecraft.client.gui.FontRenderer {
         else
         {
             int i = "\u00c0\u00c1\u00c2\u00c8\u00ca\u00cb\u00cd\u00d3\u00d4\u00d5\u00da\u00df\u00e3\u00f5\u011f\u0130\u0131\u0152\u0153\u015e\u015f\u0174\u0175\u017e\u0207\u0000\u0000\u0000\u0000\u0000\u0000\u0000 !\"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\u0000\u00c7\u00fc\u00e9\u00e2\u00e4\u00e0\u00e5\u00e7\u00ea\u00eb\u00e8\u00ef\u00ee\u00ec\u00c4\u00c5\u00c9\u00e6\u00c6\u00f4\u00f6\u00f2\u00fb\u00f9\u00ff\u00d6\u00dc\u00f8\u00a3\u00d8\u00d7\u0192\u00e1\u00ed\u00f3\u00fa\u00f1\u00d1\u00aa\u00ba\u00bf\u00ae\u00ac\u00bd\u00bc\u00a1\u00ab\u00bb\u2591\u2592\u2593\u2502\u2524\u2561\u2562\u2556\u2555\u2563\u2551\u2557\u255d\u255c\u255b\u2510\u2514\u2534\u252c\u251c\u2500\u253c\u255e\u255f\u255a\u2554\u2569\u2566\u2560\u2550\u256c\u2567\u2568\u2564\u2565\u2559\u2558\u2552\u2553\u256b\u256a\u2518\u250c\u2588\u2584\u258c\u2590\u2580\u03b1\u03b2\u0393\u03c0\u03a3\u03c3\u03bc\u03c4\u03a6\u0398\u03a9\u03b4\u221e\u2205\u2208\u2229\u2261\u00b1\u2265\u2264\u2320\u2321\u00f7\u2248\u00b0\u2219\u00b7\u221a\u207f\u00b2\u25a0\u0000".indexOf(ch);
-            return i != -1 && !this.unicodeFlag ? this.renderDefaultChar(i, italic) : this.renderUnicodeChar(ch, italic);
+            return i != -1 && !this.unicodeFlag ? this.func_78266_a(i, italic) : this.func_78277_a(ch, italic);
         }
     }
 
     /**
      * Render a single character with the default.png font at current (posX,posY) location...
      */
-    protected float renderDefaultChar(int ch, boolean italic)
+    protected float func_78266_a(int ch, boolean italic)
     {
         int i = ch % 16 * 8;
         int j = ch / 16 * 8;
@@ -256,7 +256,7 @@ public class FontRenderer extends net.minecraft.client.gui.FontRenderer {
     /**
      * Render a single Unicode character at current (posX,posY) location using one of the /font/glyph_XX.png files...
      */
-    protected float renderUnicodeChar(char ch, boolean italic)
+    protected float func_78277_a(char ch, boolean italic)
     {
         if (this.glyphWidth[ch] == 0)
         {
@@ -670,15 +670,15 @@ public class FontRenderer extends net.minecraft.client.gui.FontRenderer {
     /**
      * Trims a string to fit a specified Width.
      */
-    public String trimStringToWidth(String text, int width)
+    public String func_78269_a(String text, int width)
     {
-        return this.trimStringToWidth(text, width, false);
+        return this.func_78262_a(text, width, false);
     }
 
     /**
      * Trims a string to a specified width, and will reverse it if par3 is set.
      */
-    public String trimStringToWidth(String text, int width, boolean reverse)
+    public String func_78262_a(String text, int width, boolean reverse)
     {
         StringBuilder stringbuilder = new StringBuilder();
         int i = 0;
@@ -756,7 +756,7 @@ public class FontRenderer extends net.minecraft.client.gui.FontRenderer {
     /**
      * Splits and draws a String with wordwrap (maximum length is parameter k)
      */
-    public void drawSplitString(String str, int x, int y, int wrapWidth, int textColor)
+    public void func_78279_b(String str, int x, int y, int wrapWidth, int textColor)
     {
         this.resetStyles();
         this.textColor = textColor;
@@ -770,7 +770,7 @@ public class FontRenderer extends net.minecraft.client.gui.FontRenderer {
      */
     private void renderSplitString(String str, int x, int y, int wrapWidth, boolean addShadow)
     {
-        for (String s : this.listFormattedStringToWidth(str, wrapWidth))
+        for (String s : this.func_78271_c(str, wrapWidth))
         {
             this.renderStringAligned(s, x, y, wrapWidth, this.textColor, addShadow);
             y += this.FONT_HEIGHT;
@@ -780,16 +780,16 @@ public class FontRenderer extends net.minecraft.client.gui.FontRenderer {
     /**
      * Returns the width of the wordwrapped String (maximum length is parameter k)
      */
-    public int splitStringWidth(String p_78267_1_, int p_78267_2_)
+    public int func_78267_b(String p_78267_1_, int p_78267_2_)
     {
-        return this.FONT_HEIGHT * this.listFormattedStringToWidth(p_78267_1_, p_78267_2_).size();
+        return this.FONT_HEIGHT * this.func_78271_c(p_78267_1_, p_78267_2_).size();
     }
 
     /**
      * Set unicodeFlag controlling whether strings should be rendered with Unicode fonts instead of the default.png
      * font.
      */
-    public void setUnicodeFlag(boolean unicodeFlagIn)
+    public void func_78264_a(boolean unicodeFlagIn)
     {
         this.unicodeFlag = unicodeFlagIn;
     }
@@ -798,7 +798,7 @@ public class FontRenderer extends net.minecraft.client.gui.FontRenderer {
      * Get unicodeFlag controlling whether strings should be rendered with Unicode fonts instead of the default.png
      * font.
      */
-    public boolean getUnicodeFlag()
+    public boolean func_82883_a()
     {
         return this.unicodeFlag;
     }
@@ -806,12 +806,12 @@ public class FontRenderer extends net.minecraft.client.gui.FontRenderer {
     /**
      * Set bidiFlag to control if the Unicode Bidirectional Algorithm should be run before rendering any string.
      */
-    public void setBidiFlag(boolean bidiFlagIn)
+    public void func_78275_b(boolean bidiFlagIn)
     {
         this.bidiFlag = bidiFlagIn;
     }
 
-    public List<String> listFormattedStringToWidth(String str, int wrapWidth)
+    public List<String> func_78271_c(String str, int wrapWidth)
     {
         return Arrays.<String>asList(this.wrapFormattedStringToWidth(str, wrapWidth).split("\n"));
     }
@@ -952,7 +952,7 @@ public class FontRenderer extends net.minecraft.client.gui.FontRenderer {
     /**
      * Get bidiFlag that controls if the Unicode Bidirectional Algorithm should be run before rendering any string
      */
-    public boolean getBidiFlag()
+    public boolean func_78260_a()
     {
         return this.bidiFlag;
     }
@@ -977,7 +977,7 @@ public class FontRenderer extends net.minecraft.client.gui.FontRenderer {
         return Minecraft.getMinecraft().getResourceManager().getResource(location).getInputStream();
     }
 
-    public int getColorCode(char character)
+    public int func_175064_b(char character)
     {
         return this.colorCode["0123456789abcdef".indexOf(character)];
     }

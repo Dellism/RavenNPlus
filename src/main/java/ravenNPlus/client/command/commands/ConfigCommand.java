@@ -11,8 +11,8 @@ public class ConfigCommand extends Command {
     }
 
     @Override
-    public void onCall(String[] args){
-        if(Client.clientConfig != null){
+    public void onCall(String[] args) {
+        if(Client.clientConfig != null) {
             Client.clientConfig.saveConfig();
             Client.configManager.save(); // as now configs only save upon exiting the gui, this is required
         }
@@ -24,7 +24,7 @@ public class ConfigCommand extends Command {
         else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("list")) {
                 this.listConfigs();
-            } else if(args[0].equalsIgnoreCase("clear")){
+            } else if(args[0].equalsIgnoreCase("clear")) {
                 CommandPrompt.print("Are you sure you want to reset the config " + Client.configManager.getConfig().getName() + "? If so, run \"config clear confirm\"");
             }
             else {
@@ -62,8 +62,8 @@ public class ConfigCommand extends Command {
             else if (args[0].equalsIgnoreCase("remove")) {
                 boolean found = false;
                 CommandPrompt.print("Removing " + args[1] + "...");
-                for(Config config : Client.configManager.getConfigs()){
-                    if(config.getName().equalsIgnoreCase(args[1])){
+                for(Config config : Client.configManager.getConfigs()) {
+                    if(config.getName().equalsIgnoreCase(args[1])) {
                         Client.configManager.deleteConfig(config);
                         found = true;
                         CommandPrompt.print("Removed " + args[1] + " successfully! Current config: " + Client.configManager.getConfig().getName());
@@ -76,7 +76,7 @@ public class ConfigCommand extends Command {
                 }
 
             } else if(args[0].equalsIgnoreCase("clear")) {
-                if(args[1].equalsIgnoreCase("confirm")){
+                if(args[1].equalsIgnoreCase("confirm")) {
                     Client.configManager.resetConfig();
                     Client.configManager.save();
                     CommandPrompt.print("Cleared config!");
@@ -99,4 +99,5 @@ public class ConfigCommand extends Command {
                 CommandPrompt.print(config.getName());
         }
     }
+
 }

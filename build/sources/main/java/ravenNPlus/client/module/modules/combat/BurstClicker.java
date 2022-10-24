@@ -1,21 +1,19 @@
 package ravenNPlus.client.module.modules.combat;
 
+import ravenNPlus.client.utils.Utils;
 import ravenNPlus.client.main.Client;
 import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.setting.impl.DescriptionSetting;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
 import ravenNPlus.client.module.setting.impl.TickSetting;
-import ravenNPlus.client.utils.Utils;
+import ravenNPlus.client.module.setting.impl.SliderSetting;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 
 public class BurstClicker extends Module {
 
-   public static DescriptionSetting artificialDragClicking;
    public static SliderSetting clicks;
    public static SliderSetting delay;
    public static TickSetting delayRandomizer;
@@ -29,6 +27,7 @@ public class BurstClicker extends Module {
       this.addSetting(delay = new SliderSetting("Delay (ms)", 5.0D, 1.0D, 40.0D, 1.0D));
       this.addSetting(delayRandomizer = new TickSetting("Delay randomizer", true));
       this.addSetting(placeWhenBlock = new TickSetting("Place when block", false));
+
       try {
          try {
             this.rightClickMouse = mc.getClass().getDeclaredMethod("func_147121_ag");
@@ -38,24 +37,23 @@ public class BurstClicker extends Module {
             } catch (NoSuchMethodException ignored) {
             }
          }
-      } catch(NoClassDefFoundError error){
+      } catch (NoClassDefFoundError error) {
          error.printStackTrace();
       }
 
       if (this.rightClickMouse != null) {
          this.rightClickMouse.setAccessible(true);
       }
-
    }
 
    public void onEnable() {
-      if (clicks.getValue() != 0.0D && mc.currentScreen == null && mc.inGameHasFocus) {
+      if (clicks.getValue() != 0.0D && mc.currentScreen == null && this.inFocus()) {
          Client.getExecutor().execute(() -> {
             try {
                int cl = (int) clicks.getValue();
                int del = (int) delay.getValue();
 
-               for(int i = 0; i < cl * 2 && this.isEnabled() && Utils.Player.isPlayerInGame() && mc.currentScreen == null && mc.inGameHasFocus; ++i) {
+               for (int i = 0; i < cl * 2 && this.isEnabled() && this.inGame() && mc.currentScreen == null && this.inFocus(); ++i) {
                   if (i % 2 == 0) {
                      this.l_c = true;
                      if (del != 0) {
@@ -66,21 +64,17 @@ public class BurstClicker extends Module {
                               realDel = del / 3 - realDel;
                            }
                         }
-
                         Thread.sleep(realDel);
                      }
                   } else {
                      this.l_r = true;
                   }
                }
-
                this.disable();
             } catch (InterruptedException var5) {
             }
-
          });
       } else {
-
          this.disable();
       }
    }
@@ -92,7 +86,7 @@ public class BurstClicker extends Module {
 
    @SubscribeEvent
    public void r(RenderTickEvent ev) {
-      if (Utils.Player.isPlayerInGame()) {
+      if (this.inGame()) {
          if (this.l_c) {
             this.c(true);
             this.l_c = false;

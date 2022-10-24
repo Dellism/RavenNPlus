@@ -1,7 +1,5 @@
 package ravenNPlus.client.module.setting;
 
-import com.google.gson.JsonObject;
-import ravenNPlus.client.clickgui.RavenNPlus.Component;
 import ravenNPlus.client.clickgui.RavenNPlus.components.ModuleComponent;
 
 public abstract class Setting {
@@ -9,8 +7,8 @@ public abstract class Setting {
    public Setting(String name) { this.settingName = name; }
    public String getName() { return this.settingName; }
    public abstract void resetToDefaults();
-   public abstract JsonObject getConfigAsJson();
+   public abstract com.google.gson.JsonObject getConfigAsJson();
    public abstract String getSettingType();
-   public abstract void applyConfigFromJson(JsonObject data);
-   public abstract Component createComponent(ModuleComponent moduleComponent);
+   public abstract void applyConfigFromJson(com.google.gson.JsonObject data);
+   public abstract ravenNPlus.client.clickgui.RavenNPlus.Component createComponent(ModuleComponent moduleComponent);
 }

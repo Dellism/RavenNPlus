@@ -11,7 +11,7 @@ public class Nick extends Command {
     }
 
     @Override
-    public void onCall(String[] args){
+    public void onCall(String[] args) {
         if (args.length == 0) {
             this.incorrectArgs();
             return;

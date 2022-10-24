@@ -1,22 +1,22 @@
 package ravenNPlus.client.module.modules.minigames;
 
+import ravenNPlus.client.utils.Utils;
 import ravenNPlus.client.module.Module;
 import ravenNPlus.client.module.setting.impl.TickSetting;
-import ravenNPlus.client.utils.Utils;
-import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.init.Blocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
@@ -27,18 +27,17 @@ public class BridgeInfo extends Module {
 
    public static TickSetting ep;
    private static final int rgb = (new Color(0, 200, 200)).getRGB();
-   private static int hudX = 5;
-   private static int hudY = 70;
+   public static TickSetting shadow;
+   private static int hudX = 5, hudY = 70;
    private String en = "";
-   private BlockPos g1p = null;
-   private BlockPos g2p = null;
+   private BlockPos g1p = null, g2p = null;
    private boolean q = false;
-   private double d1 = 0.0D;
-   private double d2 = 0.0D;
+   private double d1 = 0.0D, d2 = 0.0D;
    private int blc = 0;
 
    public BridgeInfo() {
       super("Bridge Info", ModuleCategory.minigame, "Only for solos");
+      this.addSetting(shadow = new TickSetting("Drop Shadow", true));
       this.addSetting(ep = new TickSetting("Edit position", false));
    }
 
@@ -51,7 +50,6 @@ public class BridgeInfo extends Module {
          ep.disable();
          mc.displayGuiScreen(new BridgeInfo.eh());
       }
-
    }
 
    public void update() {
@@ -75,7 +73,7 @@ public class BridgeInfo extends Module {
          }
 
          if (this.g1p != null && this.g2p != null) {
-            this.d1 = Utils.Java.round(mc.thePlayer.getDistance(this.g2p.getX(), this.g2p.getY(), this.g2p.getZ()) - 1.4D, 1);
+            this.d1 = Utils.Java.round(this.player().getDistance(this.g2p.getX(), this.g2p.getY(), this.g2p.getZ()) - 1.4D, 1);
             if (this.d1 < 0.0D) {
                this.d1 = 0.0D;
             }
@@ -88,9 +86,9 @@ public class BridgeInfo extends Module {
 
          int blc2 = 0;
 
-         for(int i = 0; i < 9; ++i) {
-            ItemStack stack = mc.thePlayer.inventory.getStackInSlot(i);
-            if (stack != null && stack.getItem() instanceof ItemBlock && ((ItemBlock)stack.getItem()).block.equals(Blocks.stained_hardened_clay)) {
+         for (int i = 0; i < 9; ++i) {
+            ItemStack stack = this.player().inventory.getStackInSlot(i);
+            if (stack != null && stack.getItem() instanceof ItemBlock && ((ItemBlock) stack.getItem()).block.equals(Blocks.stained_hardened_clay)) {
                blc2 += stack.stackSize;
             }
          }
@@ -101,26 +99,25 @@ public class BridgeInfo extends Module {
 
    @SubscribeEvent
    public void a(RenderTickEvent ev) {
-      if (ev.phase == Phase.END && Utils.Player.isPlayerInGame() && this.ibd()) {
+      if (ev.phase == Phase.END && this.inGame() && this.ibd()) {
          if (mc.currentScreen != null || mc.gameSettings.showDebugInfo) {
             return;
          }
 
          String t1 = "Enemy: ";
-         mc.fontRendererObj.drawString(t1 + this.en, (float)hudX, (float)hudY, rgb, true);
+         mc.fontRendererObj.drawString(t1 + this.en, (float) hudX, (float) hudY, rgb, shadow.isToggled());
          String t2 = "Distance to goal: ";
-         mc.fontRendererObj.drawString(t2 + this.d1, (float)hudX, (float)(hudY + 11), rgb, true);
+         mc.fontRendererObj.drawString(t2 + this.d1, (float) hudX, (float) (hudY + 11), rgb, shadow.isToggled());
          String t3 = "Enemy distance to goal: ";
-         mc.fontRendererObj.drawString(t3 + this.d2, (float)hudX, (float)(hudY + 22), rgb, true);
+         mc.fontRendererObj.drawString(t3 + this.d2, (float) hudX, (float) (hudY + 22), rgb, shadow.isToggled());
          String t4 = "Blocks: ";
-         mc.fontRendererObj.drawString(t4 + this.blc, (float)hudX, (float)(hudY + 33), rgb, true);
+         mc.fontRendererObj.drawString(t4 + this.blc, (float) hudX, (float) (hudY + 33), rgb, shadow.isToggled());
       }
-
    }
 
    @SubscribeEvent
    public void o(ClientChatReceivedEvent c) {
-      if (Utils.Player.isPlayerInGame()) {
+      if (this.inGame()) {
          String s = Utils.Java.str(c.message.getUnformattedText());
          if (s.startsWith(" ")) {
             String qt = "First player to score 5 goals wins";
@@ -137,15 +134,13 @@ public class BridgeInfo extends Module {
             }
          }
       }
-
    }
 
    @SubscribeEvent
    public void w(EntityJoinWorldEvent j) {
-      if (j.entity == mc.thePlayer) {
+      if (j.entity == this.player()) {
          this.rv();
       }
-
    }
 
    private boolean ibd() {
@@ -203,9 +198,12 @@ public class BridgeInfo extends Module {
          ScaledResolution res = new ScaledResolution(this.mc);
          int x = res.getScaledWidth() / 2 - 84;
          int y = res.getScaledHeight() / 2 - 20;
-         drawString(mc.fontRendererObj, "Edit the position by dragging", x, y+10, Utils.Client.rainbowDraw(900L-300L));
+         drawString(mc.fontRendererObj, "Edit the position by dragging", x, y + 10, Utils.Client.rainbowDraw(900L - 300L));
 
-         try { this.handleInput(); } catch (IOException ignored) {  }
+         try {
+            this.handleInput();
+         } catch (IOException ignored) {
+         }
 
          super.drawScreen(mX, mY, pt);
       }
@@ -254,7 +252,6 @@ public class BridgeInfo extends Module {
       public boolean doesGuiPauseGame() {
          return false;
       }
-
 
    }
 

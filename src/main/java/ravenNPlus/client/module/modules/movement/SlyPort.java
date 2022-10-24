@@ -1,22 +1,22 @@
 package ravenNPlus.client.module.modules.movement;
 
-import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
-import ravenNPlus.client.module.setting.impl.TickSetting;
-import ravenNPlus.client.module.modules.combat.AntiBot;
-import ravenNPlus.client.utils.SoundUtil;
 import ravenNPlus.client.utils.Utils;
+import ravenNPlus.client.utils.SoundUtil;
+import ravenNPlus.client.module.Module;
+import ravenNPlus.client.module.setting.impl.TickSetting;
+import ravenNPlus.client.module.setting.impl.SliderSetting;
+import ravenNPlus.client.module.modules.combat.NewAntiBot;
+import net.minecraft.util.Vec3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.Vec3;
 import java.util.Iterator;
 
 public class SlyPort extends Module {
 
     public static TickSetting sound, playersOnly, aim, ignoreFriends;
     public static SliderSetting range;
-    
+
     public SlyPort() {
         super("SlyPort", ModuleCategory.movement, "Teleport behind enemies");
         this.addSetting(range = new SliderSetting("Range", 6.0D, 2.0D, 15.0D, 1.0D));
@@ -41,16 +41,15 @@ public class SlyPort extends Module {
         }
 
         if (ignoreFriends.isToggled())
-            if(Utils.FriendUtils.isAFriend(en)) return;
+            if (Utils.FriendUtils.isAFriend(en)) return;
 
         Vec3 vec = en.getLookVec();
         double x = en.posX - vec.xCoord * 2.5D;
         double z = en.posZ - vec.zCoord * 2.5D;
-        mc.thePlayer.setPosition(x, mc.thePlayer.posY, z);
+        this.player().setPosition(x, this.player().posY, z);
         if (aim.isToggled()) {
             Utils.Player.aim(en, 0.0F, false, false);
         }
-
     }
 
     private Entity ge() {
@@ -59,7 +58,7 @@ public class SlyPort extends Module {
         double dist = r + 1.0D;
         Iterator<Entity> var6 = mc.theWorld.loadedEntityList.iterator();
 
-        while(true) {
+        while (true) {
             Entity ent;
             do {
                 do {
@@ -70,13 +69,13 @@ public class SlyPort extends Module {
                             }
 
                             ent = var6.next();
-                        } while(ent == mc.thePlayer);
-                    } while(!(ent instanceof EntityLivingBase));
-                } while(((EntityLivingBase)ent).deathTime != 0);
-            } while(SlyPort.playersOnly.isToggled() && !(ent instanceof EntityPlayer));
+                        } while (ent == this.player());
+                    } while (!(ent instanceof EntityLivingBase));
+                } while (((EntityLivingBase) ent).deathTime != 0);
+            } while (SlyPort.playersOnly.isToggled() && !(ent instanceof EntityPlayer));
 
-            if (!AntiBot.isBot(ent)) {
-                double d = mc.thePlayer.getDistanceSqToEntity(ent);
+            if (!NewAntiBot.isBot(ent)) {
+                double d = this.player().getDistanceSqToEntity(ent);
                 if (!(d > r) && !(dist < d)) {
                     dist = d;
                     en = ent;

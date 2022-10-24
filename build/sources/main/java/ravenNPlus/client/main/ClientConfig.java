@@ -29,15 +29,15 @@ public class ClientConfig {
    private final String terminalOpenedPrefix = "terminal-opened~ ";
    private final String targetHudPosPrefix = "targethud-pos~ ";
    private final String killauraPosPrefix = "killaura-pos~ ";
+   public static String killAuraInfo = ":";
 
-   public ClientConfig(){
+   public ClientConfig() {
       configDir = new File(Minecraft.getMinecraft().mcDataDir, "ravenNPlus");
-      if(!configDir.exists()){
+      if (!configDir.exists())
          configDir.mkdir();
-      }
 
       configFile = new File(configDir, fileName);
-      if(!configFile.exists()){
+      if (!configFile.exists()) {
          try {
             configFile.createNewFile();
          } catch (IOException e) {
@@ -48,7 +48,7 @@ public class ClientConfig {
 
    public static void saveKeyStrokeSettingsToConfigFile() {
       try {
-         File file = new File(mc.mcDataDir + File.separator + "a", "config");
+         File file = new File(mc.mcDataDir + File.separator + "ravenNPlus", "KeyStrokeConfig");
          if (!file.exists()) {
             file.getParentFile().mkdirs();
             file.createNewFile();
@@ -72,34 +72,33 @@ public class ClientConfig {
 
    public static void applyKeyStrokeSettingsFromConfigFile() {
       try {
-         File file = new File(mc.mcDataDir + File.separator + "a", "config");
-         if (!file.exists()) {
+         File file = new File(mc.mcDataDir + File.separator + "ravenNPlus", "KeyStrokeConfig");
+         if (!file.exists())
             return;
-         }
 
          BufferedReader reader = new BufferedReader(new FileReader(file));
          int i = 0;
 
          String line;
-         while((line = reader.readLine()) != null) {
-            switch(i) {
-            case 0:
-               KeyStroke.x = Integer.parseInt(line);
-               break;
-            case 1:
-               KeyStroke.y = Integer.parseInt(line);
-               break;
-            case 2:
-               KeyStroke.enabled = Boolean.parseBoolean(line);
-               break;
-            case 3:
-               KeyStroke.showMouseButtons = Boolean.parseBoolean(line);
-               break;
-            case 4:
-               KeyStroke.currentColorNumber = Integer.parseInt(line);
-               break;
-            case 5:
-               KeyStroke.outline = Boolean.parseBoolean(line);
+         while ((line = reader.readLine()) != null) {
+            switch (i) {
+               case 0:
+                  KeyStroke.x = Integer.parseInt(line);
+                  break;
+               case 1:
+                  KeyStroke.y = Integer.parseInt(line);
+                  break;
+               case 2:
+                  KeyStroke.enabled = Boolean.parseBoolean(line);
+                  break;
+               case 3:
+                  KeyStroke.showMouseButtons = Boolean.parseBoolean(line);
+                  break;
+               case 4:
+                  KeyStroke.currentColorNumber = Integer.parseInt(line);
+                  break;
+               case 5:
+                  KeyStroke.outline = Boolean.parseBoolean(line);
             }
             ++i;
          }
@@ -108,9 +107,7 @@ public class ClientConfig {
       } catch (Throwable var4) {
          var4.printStackTrace();
       }
-
    }
-
 
    public void saveConfig() {
       List<String> config = new ArrayList<>();
@@ -139,11 +136,11 @@ public class ClientConfig {
       }
    }
 
-   public void applyConfig(){
+   public void applyConfig() {
       List<String> config = this.parseConfigFile();
 
-      for(String line : config){
-         if(line.startsWith(hypixelApiKeyPrefix)){
+      for (String line : config) {
+         if (line.startsWith(hypixelApiKeyPrefix)) {
             Utils.URLS.hypixelApiKey = line.replace(hypixelApiKeyPrefix, "");
             Client.getExecutor().execute(() -> {
                if (!Utils.URLS.isHypixelKeyValid(Utils.URLS.hypixelApiKey)) {
@@ -151,59 +148,69 @@ public class ClientConfig {
                }
 
             });
-         } else if(line.startsWith(pasteApiKeyPrefix)) {
+         } else if (line.startsWith(pasteApiKeyPrefix)) {
             Utils.URLS.pasteApiKey = line.replace(pasteApiKeyPrefix, "");
-         } else if(line.startsWith(clickGuiPosPrefix)) {
+         } else if (line.startsWith(clickGuiPosPrefix)) {
             loadClickGuiCoords(line.replace(clickGuiPosPrefix, ""));
-         } else if(line.startsWith(loadedConfigPrefix)) {
+         } else if (line.startsWith(loadedConfigPrefix)) {
             Client.configManager.loadConfigByName(line.replace(loadedConfigPrefix, ""));
          } else if (line.startsWith(HUD.HUDX_prefix)) {
             try {
                HUD.setHudX(Integer.parseInt(line.replace(HUD.HUDX_prefix, "")));
-            } catch (Exception e) {e.printStackTrace();}
+            } catch (Exception e) {
+               e.printStackTrace();
+            }
          } else if (line.startsWith(HUD.HUDY_prefix)) {
             try {
                HUD.setHudY(Integer.parseInt(line.replace(HUD.HUDY_prefix, "")));
-            } catch (Exception e) {e.printStackTrace();}
-         } else if(line.startsWith(terminalPosPrefix)) {
-            try{
+            } catch (Exception e) {
+               e.printStackTrace();
+            }
+         } else if (line.startsWith(terminalPosPrefix)) {
+            try {
                String[] split_up = line.replace(terminalPosPrefix, "").split(",");
                int i1 = Integer.parseInt(split_up[0]);
                int i2 = Integer.parseInt(split_up[1]);
                Client.clickGui.commandPrompt.setLocation(i1, i2);
-            } catch (Exception ignored) {  }
-         } else if(line.startsWith(terminalSizePrefix)) {
-            try{
+            } catch (Exception ignored) {
+            }
+         } else if (line.startsWith(terminalSizePrefix)) {
+            try {
                String[] split_up = line.replace(terminalSizePrefix, "").split(",");
                int i1 = Integer.parseInt(split_up[0]);
                int i2 = Integer.parseInt(split_up[1]);
                Client.clickGui.commandPrompt.setSize(i1, i2);
-            } catch (Exception ignored){  }
-         } else if(line.startsWith(terminalOpenedPrefix)) {
-            try{
+            } catch (Exception ignored) {
+            }
+         } else if (line.startsWith(terminalOpenedPrefix)) {
+            try {
                Client.clickGui.commandPrompt.opened = Boolean.parseBoolean(line.replace(terminalOpenedPrefix, ""));
-            } catch (Exception ignored){  }
-         } else if(line.startsWith(terminalHiddenPrefix)) {
-            try{
+            } catch (Exception ignored) {
+            }
+         } else if (line.startsWith(terminalHiddenPrefix)) {
+            try {
                CommandPrompt terminalModule = (CommandPrompt) Client.moduleManager.getModuleByClazz(CommandPrompt.class);
                terminalModule.setToggled(!Boolean.parseBoolean(line.replace(terminalHiddenPrefix, "")));
-            } catch (Exception ignored){  }
-         } else if(line.startsWith(targetHudPosPrefix)) {
-            try{
+            } catch (Exception ignored) {
+            }
+         } else if (line.startsWith(targetHudPosPrefix)) {
+            try {
                String[] split_up = line.replace(targetHudPosPrefix, "").split(",");
                int i1 = Integer.parseInt(split_up[0]);
                int i2 = Integer.parseInt(split_up[1]);
                TargetHUD.x.setValue(i1);
                TargetHUD.y.setValue(i2);
-            } catch (Exception ignored) {  }
-         } else if(line.startsWith(killauraPosPrefix)) {
-            try{
+            } catch (Exception ignored) {
+            }
+         } else if (line.startsWith(killauraPosPrefix)) {
+            try {
                String[] split_up = line.replace(killauraPosPrefix, "").split(",");
                int i1 = Integer.parseInt(split_up[0]);
                int i2 = Integer.parseInt(split_up[1]);
-               KillAura.entityX.setValue(i1);
-               KillAura.entityY.setValue(i2);
-            } catch (Exception ignored) {  }
+               KillAura.posX.setValue(i1);
+               KillAura.posY.setValue(i2);
+            } catch (Exception ignored) {
+            }
          }
       }
    }
@@ -223,9 +230,9 @@ public class ClientConfig {
    }
 
    private void loadClickGuiCoords(String decryptedString) {
-      for (String what : decryptedString.split("/")){
+      for (String what : decryptedString.split("/")) {
          for (CategoryComponent cat : Client.clickGui.getCategoryList()) {
-            if(what.startsWith(cat.categoryName.name())){
+            if (what.startsWith(cat.categoryName.name())) {
                List<String> cfg = Utils.Java.StringListToList(what.split("~"));
                cat.setX(Integer.parseInt(cfg.get(1)));
                cat.setY(Integer.parseInt(cfg.get(2)));
@@ -253,22 +260,22 @@ public class ClientConfig {
 
    public String getTargetHudPos() {
       StringBuilder posConfig = new StringBuilder();
-         posConfig.append((int)TargetHUD.x.getValue());
-         posConfig.append("~");
-         posConfig.append((int)TargetHUD.y.getValue());
-         posConfig.append("~");
+      posConfig.append((int) TargetHUD.x.getValue());
+      posConfig.append("~");
+      posConfig.append((int) TargetHUD.y.getValue());
+      posConfig.append("~");
 
-      return posConfig.substring(0, posConfig.toString().length() -2);
+      return posConfig.substring(0, posConfig.toString().length() - 2);
    }
 
    public String getKillauraPos() {
       StringBuilder posConfig = new StringBuilder();
-      posConfig.append((int) KillAura.entityX.getValue());
+      posConfig.append((int) KillAura.posX.getValue());
       posConfig.append("~");
-      posConfig.append((int)KillAura.entityY.getValue());
+      posConfig.append((int) KillAura.posY.getValue());
       posConfig.append("~");
 
-      return posConfig.substring(0, posConfig.toString().length() -2);
+      return posConfig.substring(0, posConfig.toString().length() - 2);
    }
 
 }

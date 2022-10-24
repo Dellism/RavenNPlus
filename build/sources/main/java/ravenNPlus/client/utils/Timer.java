@@ -87,8 +87,8 @@ public class Timer {
       lastMS = System.currentTimeMillis();
    }
 
-   public static boolean hasTimeElapsed(long time, boolean reset) {
-      if (System.currentTimeMillis() - lastMS > time) {
+   public static boolean hasTimeElapsed(long milliseconds, boolean reset) {
+      if (System.currentTimeMillis() - lastMS > milliseconds) {
 
          if (reset)
             reset();

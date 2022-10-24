@@ -1,14 +1,14 @@
 package ravenNPlus.client.module.setting.impl;
 
 import com.google.gson.JsonObject;
+import ravenNPlus.client.module.setting.Setting;
 import ravenNPlus.client.clickgui.RavenNPlus.Component;
 import ravenNPlus.client.clickgui.RavenNPlus.components.ModuleComponent;
-import ravenNPlus.client.module.setting.Setting;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class DoubleSliderSetting extends Setting {
+
     private final String name;
     private double valMax, valMin;
     private final double max;
@@ -70,8 +70,17 @@ public class DoubleSliderSetting extends Setting {
     public double getInputMin() {
         return round(this.valMin, 2);
     }
+
     public double getInputMax() {
         return round(this.valMax, 2);
+    }
+
+    public long getInputMinToLong() {
+        return (long) round(this.valMin, 2);
+    }
+
+    public long getInputMaxToLong() {
+        return (long) round(this.valMax, 2);
     }
 
     public double getMin() {
@@ -109,4 +118,5 @@ public class DoubleSliderSetting extends Setting {
             return bd.doubleValue();
         }
     }
+
 }

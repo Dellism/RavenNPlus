@@ -21,7 +21,7 @@ public class Render {
         if(!GuiClick.notifications.isToggled() || Minecraft.getMinecraft().currentScreen != null || !Utils.Player.isPlayerInGame()) return;
 
         String s = m.isEnabled() ? "enabled" : "disabled";
-        RenderUtils.Notify(Type.OTHER, m.getName(), s, 2);
+        RenderUtils.notification(Type.OTHER, m.getName(), s, 2);
     }
 
 }

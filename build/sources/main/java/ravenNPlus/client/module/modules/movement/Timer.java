@@ -1,12 +1,13 @@
 package ravenNPlus.client.module.modules.movement;
 
-import ravenNPlus.client.clickgui.RavenNPlus.ClickGui;
-import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
-import ravenNPlus.client.module.setting.impl.TickSetting;
 import ravenNPlus.client.utils.Utils;
+import ravenNPlus.client.module.Module;
+import ravenNPlus.client.clickgui.RavenNPlus.ClickGui;
+import ravenNPlus.client.module.setting.impl.TickSetting;
+import ravenNPlus.client.module.setting.impl.SliderSetting;
 
 public class Timer extends Module {
+
    public static SliderSetting speed;
    public static TickSetting strafe;
 
@@ -18,12 +19,12 @@ public class Timer extends Module {
 
    public void update() {
       if (!(mc.currentScreen instanceof ClickGui)) {
-         if (strafe.isToggled() && mc.thePlayer.moveStrafing == 0.0F) {
+         if (strafe.isToggled() && this.player().moveStrafing == 0.0F) {
             Utils.Client.resetTimer();
             return;
          }
 
-         Utils.Client.getTimer().timerSpeed = (float) speed.getValue();
+         Utils.Client.getTimer().timerSpeed = speed.getValueToFloat();
       } else {
          Utils.Client.resetTimer();
       }

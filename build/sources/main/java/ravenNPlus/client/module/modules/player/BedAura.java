@@ -1,29 +1,37 @@
 package ravenNPlus.client.module.modules.player;
 
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import ravenNPlus.client.module.setting.impl.TickSetting;
+import ravenNPlus.client.utils.*;
 import ravenNPlus.client.module.Module;
 import ravenNPlus.client.module.setting.impl.SliderSetting;
-import ravenNPlus.client.utils.Utils;
 import net.minecraft.init.Blocks;
-import net.minecraft.network.play.client.C07PacketPlayerDigging;
-import net.minecraft.network.play.client.C07PacketPlayerDigging.Action;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.network.play.client.C07PacketPlayerDigging;
+import net.minecraft.network.play.client.C07PacketPlayerDigging.Action;
 import java.util.TimerTask;
 
+import net.minecraft.network.play.client.C07PacketPlayerDigging.Action;
 public class BedAura extends Module {
 
-   public static SliderSetting r;
+   public static SliderSetting bedRange;
+   public static TickSetting renderBed;
    private java.util.Timer t;
    private BlockPos m = null;
-   private final long per = 600L;
 
    public BedAura() {
       super("BedAura", ModuleCategory.player, "Destroys beds in a blocks distance");
-      this.addSetting(r = new SliderSetting("Range", 5.0D, 2.0D, 10.0D, 1.0D));
+      this.addSetting(bedRange = new SliderSetting("Range", 5.0D, 2.0D, 10.0D, 1.0D));
+      this.addSetting(renderBed = new TickSetting("Render Bed", x));
    }
 
    public void onEnable() {
-      (this.t = new java.util.Timer()).scheduleAtFixedRate(this.t(), 0L, 600L);
+      long per = 600L;
+      (this.t = new java.util.Timer()).scheduleAtFixedRate(this.t(), 0L, per);
    }
 
    public void onDisable() {
@@ -39,11 +47,11 @@ public class BedAura extends Module {
    public TimerTask t() {
       return new TimerTask() {
          public void run() {
-            int ra = (int)BedAura.r.getValue();
+            int range = (int) BedAura.bedRange.getValue();
 
-            for(int y = ra; y >= -ra; --y) {
-               for(int x = -ra; x <= ra; ++x) {
-                  for(int z = -ra; z <= ra; ++z) {
+            for (int y = range; y >= -range; --y) {
+               for (int x = -range; x <= range; ++x) {
+                  for (int z = -range; z <= range; ++z) {
                      if (Utils.Player.isPlayerInGame()) {
                         BlockPos p = new BlockPos(Module.mc.thePlayer.posX + (double) x, Module.mc.thePlayer.posY + (double) y, Module.mc.thePlayer.posZ + (double) z);
                         boolean bed = Module.mc.theWorld.getBlockState(p).getBlock() == Blocks.bed;
@@ -65,8 +73,13 @@ public class BedAura extends Module {
    }
 
    private void mi(BlockPos p) {
-      mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(Action.START_DESTROY_BLOCK, p, EnumFacing.NORTH));
-      mc.thePlayer.sendQueue.addToSendQueue(new C07PacketPlayerDigging(Action.STOP_DESTROY_BLOCK, p, EnumFacing.NORTH));
+      if (renderBed.isToggled())
+         RoundedUtils.drawRoundedRect(p.getX() - 1, p.getY() - 1, p.getX() + 1, p.getY() + 1, 2, ColorUtil.color_int_min);
+
+      this.sendPacketPlayer(new C07PacketPlayerDigging(Action.START_DESTROY_BLOCK, p, EnumFacing.NORTH));
+
+      if (Timer.hasTimeElapsed(2500L, true))
+         this.sendPacketPlayer(new C07PacketPlayerDigging(Action.STOP_DESTROY_BLOCK, p, EnumFacing.NORTH));
    }
 
 }

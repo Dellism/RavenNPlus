@@ -1,11 +1,12 @@
 package ravenNPlus.client.module.setting.impl;
 
 import com.google.gson.JsonObject;
+import ravenNPlus.client.module.setting.Setting;
 import ravenNPlus.client.clickgui.RavenNPlus.Component;
 import ravenNPlus.client.clickgui.RavenNPlus.components.ModuleComponent;
-import ravenNPlus.client.module.setting.Setting;
 
 public class TickSetting extends Setting {
+
    private final String name;
    private boolean isEnabled;
    private final boolean defaultValue;

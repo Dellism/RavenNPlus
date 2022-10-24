@@ -1,185 +1,241 @@
 package ravenNPlus.client.module.modules.combat;
 
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.scoreboard.IScoreObjectiveCriteria;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import ravenNPlus.client.utils.*;
 import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.setting.impl.DescriptionSetting;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
-import ravenNPlus.client.module.setting.impl.TickSetting;
-import ravenNPlus.client.utils.InvUtils;
-import ravenNPlus.client.utils.RenderUtils;
-import ravenNPlus.client.utils.Timer;
-import ravenNPlus.client.utils.Utils;
+import ravenNPlus.client.module.setting.impl.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.play.client.C02PacketUseEntity;
-import net.minecraft.network.play.client.C0APacketAnimation;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class KillAura extends Module {
 
-    public static TickSetting mouse, background, onlySprint, onlySword, swing, drawEntity, drawHUD, silent, ignoreFriends, head;
-    public static SliderSetting range, entityX, entityY /*, mode*/, entitySize, delay, chance;
-    //public static DescriptionSetting modeMode;
-    //public static boolean viewModified = false;
+    public static ModeSetting mode;
+    public static TickSetting background, onlySprint, onlyWeapon, swing, drawHUD, lookPacket, onlyAlive, disableOnDeath, disableOnFall;
+    public static TickSetting silent, ignoreFriends, head, allowBlock, onlyInFocus, sortBots, fovv, fovIndicator;
+    public static SliderSetting range, posX, posY, delay, chance, fov;
+    public static DescriptionSetting desc;
+    public static boolean isHudShown = false;
 
     public KillAura() {
         super("KillAura", ModuleCategory.combat, "Automatically Attacks Players");
-        //this.addSetting(mode = new SliderSetting("Mode", 1, 1, 3, 1));
-        //this.addSetting(modeMode = new DescriptionSetting(Utils.md +""));
-        this.addSetting(chance =  new SliderSetting("Chance %", 100, 0, 100, 1));
-        this.addSetting(silent = new TickSetting("Silent", true));
-        this.addSetting(swing = new TickSetting("Swing", true));
-        this.addSetting(ignoreFriends = new TickSetting("Ignore Friends", true));
-        this.addSetting(range = new SliderSetting("Range", 3.7D, 2D, 8D, 0.1D));
-        this.addSetting(delay = new SliderSetting("Delay", 5, 0, 100, 1));
-        this.addSetting(head = new TickSetting("Head", false));
-        this.addSetting(drawHUD = new TickSetting("Draw HUD", true));
-        this.addSetting(entityX = new SliderSetting("HUD X", 80, 20, mc.displayWidth+50, 1));
-        this.addSetting(entityY = new SliderSetting("HUD Y", 90, 20, mc.displayHeight+50, 1));
-        this.addSetting(background = new TickSetting("Background", true));
-        this.addSetting(drawEntity = new TickSetting("Draw Entity", false));
-        this.addSetting(entitySize = new SliderSetting("Entity Size", 35, 10, 100, 1));
-        this.addSetting(mouse = new TickSetting("Mouse X and Y", false));
-        this.addSetting(onlySword = new TickSetting("Only Sword", true));
-        this.addSetting(onlySprint = new TickSetting("Only Sprint", false));
-    }
 
-    @SubscribeEvent
-    public void r(TickEvent.PlayerTickEvent p) {
-        if (!Utils.Player.isPlayerInGame()) return;
-        if(!mc.thePlayer.isEntityAlive()) return;
-
-        List<Entity> targets = (List<Entity>) mc.theWorld.loadedEntityList.stream().filter(EntityLivingBase.class::isInstance).collect(Collectors.toList());
-        targets = targets.stream().filter(entity -> entity.getDistanceToEntity(mc.thePlayer) < (int) range.getValue() && entity != mc.thePlayer && !entity.isDead &&
-                ((EntityLivingBase) entity).getHealth() > 0).collect(Collectors.toList());
-        targets.sort(Comparator.comparingDouble(entity -> ((EntityLivingBase) entity).getDistanceToEntity(mc.thePlayer)));
-        if (targets.isEmpty()) return;
-        EntityLivingBase target = (EntityLivingBase) targets.get(0);
-        if (AntiBot.isBot(target)) return;
-
-        if (ignoreFriends.isToggled())
-            if (Utils.FriendUtils.isAFriend(target)) return;
-
-        if (onlySword.isToggled())
-            if (!InvUtils.isPlayerHoldingWeapon()) return;
-
-        if (onlySprint.isToggled())
-            if (!mc.thePlayer.isSprinting()) return;
-
-        //if (mode.getValue() == 1D) {
-        if (Timer.hasTimeElapsed((long) delay.getValue() * 5, true)) {
-            Utils.Player.aim(target, 0.0F, false, silent.isToggled());
-
-            int killInteger;
-            if (swing.isToggled()) {
-                killInteger = 1;
-
-                if (IScoreObjectiveCriteria.playerKillCount.equals(killInteger)) {
-
-                    Utils.Player.swing();
-                    mc.thePlayer.sendQueue.addToSendQueue(new C0APacketAnimation());
-
-                    killInteger = 0;
-                } else killInteger = 0;
-            } else killInteger = 0;
-
-            if (!(chance.getValue() == 100 || Math.random() <= chance.getValue() / 100))
-                return;
-
-            mc.thePlayer.sendQueue.addToSendQueue(new C02PacketUseEntity(target, C02PacketUseEntity.Action.ATTACK));
-            //    }
-
-            if (Objects.equals(1, mc.thePlayer.getName())) {
-                Utils.Player.swing();
-            }
-        }
-
-       /*
-        if (mode.getValue() == 2D) {
-            if (target.getDistanceToEntity(mc.thePlayer) < (int) range.getValue()) {
-                mc.setRenderViewEntity(target);
-                viewModified = true;
-            } else {
-                mc.setRenderViewEntity(mc.thePlayer);
-                viewModified = false;
-            }
-        }
-      */
-
+        this.addSetting(desc = new DescriptionSetting("Attack Settings"));
+        this.addSetting(mode = new ModeSetting("Attack Mode", KillAura.modes.Legit));
+        this.addSetting(swing = new TickSetting("Swing", x));
+        this.addSetting(silent = new TickSetting("Silent", x));
+        this.addSetting(lookPacket = new TickSetting("Look Packet", o));
+        this.addSetting(chance = new SliderSetting("Chance %", 100.0D, 0.0D, 100.0D, 1.0D));
+        this.addSetting(range = new SliderSetting("Range", 3.3D, 2D, 6D, 0.1D));
+        this.addSetting(delay = new SliderSetting("Delay", 46.0D, 25.0D, 150.0D, 0.5D));
+        this.addSetting(desc = new DescriptionSetting("Disable Settings"));
+        this.addSetting(disableOnDeath = new TickSetting("on Death (0 Hearts)", x));
+        this.addSetting(disableOnFall = new TickSetting("on Fall (5 Blocks)", o));
+        this.addSetting(desc = new DescriptionSetting("Allow Settings"));
+        this.addSetting(ignoreFriends = new TickSetting("Ignore Friends", x));
+        this.addSetting(sortBots = new TickSetting("Ignore Bots", x));
+        this.addSetting(allowBlock = new TickSetting("Allow blocking", o));
+        this.addSetting(onlyInFocus = new TickSetting("Only When focus", x));
+        this.addSetting(onlyWeapon = new TickSetting("Only Weapon", x));
+        this.addSetting(onlyAlive = new TickSetting("Only Alive", x));
+        this.addSetting(onlySprint = new TickSetting("Only Sprint", o));
+        this.addSetting(desc = new DescriptionSetting("Fov Settings"));
+        this.addSetting(fovv = new TickSetting("Fov", x));
+        this.addSetting(fovIndicator = new TickSetting("Fov Indicator", x));
+        this.addSetting(fov = new SliderSetting("Fov", 40.0D, 15.0D, 360.0D, 1.0D));
+        this.addSetting(desc = new DescriptionSetting("HUD Settings"));
+        this.addSetting(drawHUD = new TickSetting("Draw HUD", x));
+        this.addSetting(head = new TickSetting("Head", o));
+        this.addSetting(background = new TickSetting("Background", x));
+        this.addSetting(posX = new SliderSetting("HUD X", (float) mc.displayWidth / 2 + 5, 20, mc.displayWidth + 50, 1));
+        this.addSetting(posY = new SliderSetting("HUD Y", (float) mc.displayHeight / 2 - 10, 20, mc.displayHeight + 50, 1));
     }
 
     @Override
     public void onDisable() {
-        if(swing.isToggled())
-            Utils.Player.swing();
 
-        //if(mode.getValue() == 2D && viewModified) {
-        //    mc.setRenderViewEntity(mc.thePlayer);
-        //}
+        // animation reset
+        circleRange = 0;
+        RenderUtils.drawStringHUD_Disable(range.getValue(), sortBots.isToggled(), KillAura.posX.getValueToInt() + 2);
+
+        if (swing.isToggled())
+            this.swing(!silent.isToggled());
+
+        isHudShown = false;
     }
 
+    @SubscribeEvent
+    public void r(TickEvent.PlayerTickEvent p) {
+        if (!this.inGame()) return;
+
+        if (canAttack(getTarget())) {
+
+            if (CombatUtils.isEntityInPlayerRange(getTarget(), range.getValue(), true)) {
+
+                if (Timer.hasTimeElapsed(delay.getValueToLong() * 5, true)) {
+
+                    if (mode.getMode() == KillAura.modes.Packets) {
+                        Utils.Player.aim(getTarget(), 0.0F, lookPacket.isToggled(), silent.isToggled());
+
+                        this.sendPacketPlayer(new C02PacketUseEntity(getTarget(), C02PacketUseEntity.Action.ATTACK));
+
+                        if (swing.isToggled())
+                            performSwing();
+                    }
+
+                    if (mode.getMode() == KillAura.modes.NetPackets) {
+                        Utils.Player.aim(getTarget(), 0.0F, lookPacket.isToggled(), silent.isToggled());
+                        this.sendPacketNetHandler(new C02PacketUseEntity(getTarget(), C02PacketUseEntity.Action.ATTACK));
+
+                        if (swing.isToggled())
+                            performSwing();
+                    }
+
+                    if (mode.getMode() == KillAura.modes.AttackEntityVoid) {
+                        Utils.Player.aim(getTarget(), 0.0F, lookPacket.isToggled(), silent.isToggled());
+                        this.attackPlayer(getTarget());
+
+                        if (swing.isToggled())
+                            performSwing();
+                    }
+
+                    if (mode.getMode() == KillAura.modes.HitByEntity) {
+                        Utils.Player.aim(getTarget(), 0.0F, lookPacket.isToggled(), silent.isToggled());
+
+                        AttackEntityEvent e = new AttackEntityEvent(this.player(), getTarget());
+                        e.target.hitByEntity(getTarget());
+
+                        if (swing.isToggled())
+                            performSwing();
+                    }
+
+                    if (mode.getMode() == KillAura.modes.Legit) {
+                        if (mc.objectMouseOver.entityHit instanceof net.minecraft.entity.player.EntityPlayer) {
+                            this.attackPlayer(getTarget());
+
+                            if (swing.isToggled())
+                                performSwing();
+                        }
+                    }
+
+                    // swing when mc.thePlayer killed someone
+
+                }
+            }
+        }
+
+    }
+
+    // animation integer
+    static int circleRange = 0;
 
     @SubscribeEvent
     public void p(TickEvent.RenderTickEvent e) {
-        if(!Utils.Player.isPlayerInGame()) return;
+        if (!this.inGame()) return;
 
-        List<Entity> targets = (List<Entity>) mc.theWorld.loadedEntityList.stream().filter(EntityLivingBase.class::isInstance).collect(Collectors.toList());
-        targets = targets.stream().filter(entity -> entity.getDistanceToEntity(mc.thePlayer) < (int) range.getValue() && entity != mc.thePlayer && !entity.isDead &&
-        ((EntityLivingBase) entity).getHealth() > 0).collect(Collectors.toList());
-        targets.sort(Comparator.comparingDouble(entity -> ((EntityLivingBase) entity).getDistanceToEntity(mc.thePlayer)));
-        if (targets.isEmpty()) return;
-        EntityLivingBase target = (EntityLivingBase) targets.get(0);
-        if(AntiBot.isBot(target)) return;
+        if (fovv.isToggled() && fovIndicator.isToggled()) {
+            int foV = fov.getValueToInt() + 10;
 
-        int xxx  = (int) entityX.getValue();
-        int yyy  = (int) entityY.getValue();
-        int rang = (int) range.getValue();
-        int size  = (int) entitySize.getValue();
-        int backgroundOffset = 50;
+            // animation in
+            if (circleRange < foV /*|| mc.thePlayer.getDistanceToEntity(getTarget()) > range.getValueToFloat()*/)
+                circleRange++;
 
-        if(onlySword.isToggled())
-            if(!InvUtils.isPlayerHoldingWeapon()) return;
+            // animation out
+            if (circleRange > foV /*|| mc.thePlayer.getDistanceToEntity(getTarget()) < range.getValueToFloat()*/)
+                circleRange--;
 
-        if(onlySprint.isToggled())
-            if(!mc.thePlayer.isSprinting()) return;
-
-        if(drawHUD.isToggled()) {
-            RenderUtils.drawStringHUD(xxx, yyy, rang, background.isToggled(), true, head.isToggled());
-
-            if(drawEntity.isToggled()) drawEntity.disable();
+            if (canAttack(getTarget()) && foV < 280)
+                RenderUtils.drawCircle(this.screenWidth(), this.screenHeight(), circleRange, 1, 380);
         }
 
-        if(drawEntity.isToggled()) {
-            RenderUtils.drawEntityHUD(target, xxx, yyy, xxx + backgroundOffset, yyy + backgroundOffset, size, rang, true, background.isToggled(), mouse.isToggled());
-
-            if(drawHUD.isToggled()) drawHUD.disable();
-        }
+        if (drawHUD.isToggled())
+            drawHud();
     }
 
-  /*
-    public void guiUpdate() {
-        switch ((int) mode.getValue()) {
-            case 1:
-                modeMode.setDesc(Utils.md + "Legit");
-                break;
-            case 2:
-                modeMode.setDesc(Utils.md + "Packets");
-                break;
-            case 3:
-                modeMode.setDesc(Utils.md + "More soon...");
-                break;
-            case 4:
-                modeMode.setDesc(Utils.md + "Test");
-                break;
+    public static void drawHud() {
+        try {
+            RenderUtils.drawStringHUD(posX.getValueToInt(), posY.getValueToInt(), range.getValueToInt(), background.isToggled(), true, head.isToggled(), sortBots.isToggled());
+        } catch (Exception e) {
+            e.printStackTrace();
+            head.disable();
         }
+        isHudShown = true;
     }
-  */
+
+    //----------------------------------------------------------------------------------------------------
+
+    boolean canAttack(Entity en) {
+
+        if (en == mc.thePlayer || getTarget() == null)
+            return false;
+
+        if (sortBots.isToggled())
+            if (NewAntiBot.isBot(en))
+                return false;
+
+        if (ignoreFriends.isToggled())
+            if (Utils.FriendUtils.isAFriend(en))
+                return false;
+
+        if (!(chance.getValue() == 100 || Math.random() <= chance.getValue() / 100))
+            return false;
+
+        if (fovv.isToggled())
+            if (!Utils.Player.fov(en, fov.getValueToFloat() + 10))
+                return false;
+
+        if (onlyAlive.isToggled())
+            if (!this.isAlive())
+                return false;
+
+        if (onlyInFocus.isToggled())
+            if (!this.inFocus())
+                return false;
+
+        if (allowBlock.isToggled())
+            if (!this.player().isBlocking())
+                return false;
+
+        if (onlySprint.isToggled())
+            if (!this.player().isSprinting())
+                return false;
+
+        if (onlyWeapon.isToggled())
+            if (!InvUtils.isPlayerHoldingWeapon())
+                return false;
+
+        return true;
+    }
+
+    public Entity getTarget() {
+        java.util.List<net.minecraft.entity.Entity> targets = mc.theWorld.loadedEntityList.stream().filter(net.minecraft.entity.EntityLivingBase.class::isInstance).collect(java.util.stream.Collectors.toList());
+        targets = targets.stream().filter(entity -> entity != mc.thePlayer && !entity.isDead && ((net.minecraft.entity.EntityLivingBase) entity).getHealth() > 0).collect(java.util.stream.Collectors.toList());
+        targets.sort(java.util.Comparator.comparingDouble(entity -> entity.getDistanceToEntity(mc.thePlayer)));
+        EntityLivingBase target = null;
+        
+        if (!targets.isEmpty()) {
+            target = (EntityLivingBase) targets.get(0);
+        }
+        
+        return target;
+    }
+
+    public void performSwing() {
+        if (mc.objectMouseOver.entityHit instanceof net.minecraft.entity.player.EntityPlayer) {
+            this.attackPlayer(getTarget());
+        }
+
+        if (swing.isToggled())
+            this.swing(!silent.isToggled());
+    }
+
+    public enum modes {
+        Packets, NetPackets, AttackEntityVoid,
+        HitByEntity, Legit, //Maybe More ?
+    }
 
 }

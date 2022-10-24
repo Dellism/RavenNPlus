@@ -7,6 +7,7 @@ import ravenNPlus.client.utils.Utils;
 import ravenNPlus.client.utils.profile.PlayerProfile;
 
 public class Duels extends Command {
+
     public Duels()  {
         super("duels", "Fetches a player's stats", 1, 2,  new String[] {"Player name", "overall/uhc/bridge/skywars/sumo/classic/op"},  new String[] {"d", "duel", "stat", "stats", "check"});
     }
@@ -22,14 +23,14 @@ public class Duels extends Command {
             return;
         }
 
-        if(args.length == 1){
+        if(args.length == 1) {
             String n;
             n = args[0];
             CommandPrompt.print("Retrieving data...");
             Client.getExecutor().execute(() -> {
                 PlayerProfile playerProfile = new PlayerProfile(n, Utils.Profiles.DuelsStatsMode.OVERALL);
                 playerProfile.populateStats();
-                if(!playerProfile.isPlayer){
+                if(!playerProfile.isPlayer) {
                     CommandPrompt.print(n + " does not exist");
                 } else if (playerProfile.nicked) {
                     CommandPrompt.print(n + " is nicked");
@@ -45,12 +46,12 @@ public class Duels extends Command {
         } else if (args.length == 2) {
             String stringGamemode = args[1];
             Utils.Profiles.DuelsStatsMode gameMode = null;
-            for(Utils.Profiles.DuelsStatsMode mode : Utils.Profiles.DuelsStatsMode.values()){
+            for(Utils.Profiles.DuelsStatsMode mode : Utils.Profiles.DuelsStatsMode.values()) {
                 if(String.valueOf(mode).equalsIgnoreCase(stringGamemode))
                     gameMode = mode;
             }
 
-            if(gameMode == null){
+            if(gameMode == null) {
                 CommandPrompt.print(stringGamemode + " is not a known gamemode. See \"help duels\" for a known list of gamemode");
             } else {
                 String n;
@@ -60,7 +61,7 @@ public class Duels extends Command {
                 Client.getExecutor().execute(() -> {
                     PlayerProfile playerProfile = new PlayerProfile(n, finalGameMode);
                     playerProfile.populateStats();
-                    if(!playerProfile.isPlayer){
+                    if(!playerProfile.isPlayer) {
                         CommandPrompt.print(n + " does not exist");
                     } else if (playerProfile.nicked) {
                         CommandPrompt.print(n + " is nicked");

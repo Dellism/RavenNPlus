@@ -1,53 +1,48 @@
 package ravenNPlus.client.module.modules.minigames.sumo;
 
-import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.modules.player.RightClicker;
-import ravenNPlus.client.module.setting.impl.*;
-import ravenNPlus.client.utils.InvUtils;
 import ravenNPlus.client.utils.Utils;
+import ravenNPlus.client.utils.InvUtils;
+import ravenNPlus.client.module.Module;
+import ravenNPlus.client.module.setting.impl.*;
+import ravenNPlus.client.module.modules.player.RightClicker;
+import net.minecraft.init.Blocks;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
+import net.minecraft.util.BlockPos;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiInventory;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.Random;
+import java.lang.reflect.Method;
 import java.util.concurrent.ThreadLocalRandom;
+import java.lang.reflect.InvocationTargetException;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.input.Keyboard;
 
 public class SumoClicker extends Module {
+
     public static DescriptionSetting bestWithDelayRemover;
     public static SliderSetting jitterLeft;
     public static TickSetting weaponOnly;
     public static TickSetting breakBlocks;
     public static DoubleSliderSetting leftCPS;
     public static TickSetting inventoryFill;
-    public static ComboSetting clickStyle, clickTimings;
-    private long lastClick;
-    private long leftHold;
+    public static ModeSetting clickStyle, clickTimings;
     public static boolean autoClickerEnabled;
     private boolean leftDown;
-    private long leftDownTime;
-    private long leftUpTime;
-    private long leftk;
-    private long leftl;
+    private long leftl, leftk, leftUpTime, leftDownTime, leftHold, lastClick;
     private double leftm;
-    private boolean leftn;
-    private boolean breakHeld;
+    private boolean breakHeld, leftn;
     private Random rand = null;
     private Method playerMouseInput;
 
-    public SumoClicker(){
+    public SumoClicker() {
         super("Sumo Clicker", ModuleCategory.minigame, "");
         this.addSetting(bestWithDelayRemover = new DescriptionSetting("Best with delay remover."));
         this.addSetting(leftCPS = new DoubleSliderSetting("Left CPS", 9, 13, 1, 60, 0.5));
@@ -55,8 +50,8 @@ public class SumoClicker extends Module {
         this.addSetting(inventoryFill = new TickSetting("Inventory fill", false));
         this.addSetting(weaponOnly = new TickSetting("Weapon only", false));
         this.addSetting(breakBlocks = new TickSetting("Break blocks", false));
-        this.addSetting(clickTimings = new ComboSetting("Click event", RightClicker.ClickEvent.Render));
-        this.addSetting(clickStyle = new ComboSetting("Click Style", RightClicker.ClickStyle.Raven));
+        this.addSetting(clickTimings = new ModeSetting("Click event", RightClicker.ClickEvent.Render));
+        this.addSetting(clickStyle = new ModeSetting("Click Style", RightClicker.ClickStyle.Raven));
 
         try {
             this.playerMouseInput = ReflectionHelper.findMethod(
@@ -74,19 +69,16 @@ public class SumoClicker extends Module {
             ex.printStackTrace();
         }
 
-        if (this.playerMouseInput != null) {
+        if (this.playerMouseInput != null)
             this.playerMouseInput.setAccessible(true);
-        }
 
         autoClickerEnabled = false;
     }
 
     @Override
     public void onEnable() {
-        if (this.playerMouseInput == null) {
+        if (this.playerMouseInput == null)
             this.disable();
-        }
-
 
         boolean allowedClick = false;
         this.rand = new Random();
@@ -102,64 +94,53 @@ public class SumoClicker extends Module {
 
     @SubscribeEvent
     public void onRenderTick(TickEvent.RenderTickEvent ev) {
-        if(!Utils.Client.currentScreenMinecraft() &&
+        if (!Utils.Client.currentScreenMinecraft() &&
                 !(Minecraft.getMinecraft().currentScreen instanceof GuiInventory) // to make it work in survival inventory
                 && !(Minecraft.getMinecraft().currentScreen instanceof GuiChest) // to make it work in chests
-        )
+        ) return;
+
+        if (clickTimings.getMode() != RightClicker.ClickEvent.Render)
             return;
 
-        if(clickTimings.getMode() != RightClicker.ClickEvent.Render)
-            return;
-
-        if(clickStyle.getMode() == RightClicker.ClickStyle.Raven){
+        if (clickStyle.getMode() == RightClicker.ClickStyle.Raven) {
             ravenClick();
-        }
-        else if (clickStyle.getMode() == RightClicker.ClickStyle.SKid){
+        } else if (clickStyle.getMode() == RightClicker.ClickStyle.SKid) {
             skidClick(ev, null);
         }
     }
 
     @SubscribeEvent
     public void onTick(TickEvent.PlayerTickEvent ev) {
-        if(!Utils.Client.currentScreenMinecraft() && !(Minecraft.getMinecraft().currentScreen instanceof GuiInventory)
+        if (!Utils.Client.currentScreenMinecraft() && !(Minecraft.getMinecraft().currentScreen instanceof GuiInventory)
                 && !(Minecraft.getMinecraft().currentScreen instanceof GuiChest) // to make it work in chests
         )
             return;
 
-        if(clickTimings.getMode() != RightClicker.ClickEvent.Tick)
+        if (clickTimings.getMode() != RightClicker.ClickEvent.Tick)
             return;
 
-        if(clickStyle.getMode() == RightClicker.ClickStyle.Raven){
+        if (clickStyle.getMode() == RightClicker.ClickStyle.Raven) {
             ravenClick();
-        }
-        else if (clickStyle.getMode() == RightClicker.ClickStyle.SKid){
+        } else if (clickStyle.getMode() == RightClicker.ClickStyle.SKid) {
             skidClick(null, ev);
         }
     }
 
     private void skidClick(TickEvent.RenderTickEvent er, TickEvent.PlayerTickEvent e) {
-        if (!Utils.Player.isPlayerInGame())
+        if (!this.inGame())
             return;
 
         double speedLeft1 = 1.0 / io.netty.util.internal.ThreadLocalRandom.current().nextDouble(leftCPS.getInputMin() - 0.2D, leftCPS.getInputMax());
         double leftHoldLength = speedLeft1 / io.netty.util.internal.ThreadLocalRandom.current().nextDouble(leftCPS.getInputMin() - 0.02D, leftCPS.getInputMax());
-        //If none of the buttons are allowed to click, what is the point in generating clicktimes anyway?
-        //if (!leftActive && !rightActive) {
-        // return;
-        //}
+
         Mouse.poll();
-        if(mc.currentScreen != null || !mc.inGameHasFocus) {
+        if (mc.currentScreen != null || !this.inFocus()) {
             doInventoryClick();
             return;
         }
 
-
-
-
-
-        // Uhh left click only, mate
         if (Mouse.isButtonDown(0)) {
-            if(breakBlock()) return;
+            if (breakBlock()) return;
             if (weaponOnly.isToggled() && !InvUtils.isPlayerHoldingWeapon()) {
                 return;
             }
@@ -167,26 +148,26 @@ public class SumoClicker extends Module {
                 double a = jitterLeft.getValue() * 0.45D;
                 EntityPlayerSP entityPlayer;
                 if (this.rand.nextBoolean()) {
-                    entityPlayer = mc.thePlayer;
-                    entityPlayer.rotationYaw = (float)((double)entityPlayer.rotationYaw + (double)this.rand.nextFloat() * a);
+                    entityPlayer = this.player();
+                    entityPlayer.rotationYaw = (float) ((double) entityPlayer.rotationYaw + (double) this.rand.nextFloat() * a);
                 } else {
-                    entityPlayer = mc.thePlayer;
-                    entityPlayer.rotationYaw = (float)((double)entityPlayer.rotationYaw - (double)this.rand.nextFloat() * a);
+                    entityPlayer = this.player();
+                    entityPlayer.rotationYaw = (float) ((double) entityPlayer.rotationYaw - (double) this.rand.nextFloat() * a);
                 }
 
                 if (this.rand.nextBoolean()) {
-                    entityPlayer = mc.thePlayer;
-                    entityPlayer.rotationPitch = (float)((double)entityPlayer.rotationPitch + (double)this.rand.nextFloat() * a * 0.45D);
+                    entityPlayer = this.player();
+                    entityPlayer.rotationPitch = (float) ((double) entityPlayer.rotationPitch + (double) this.rand.nextFloat() * a * 0.45D);
                 } else {
-                    entityPlayer = mc.thePlayer;
-                    entityPlayer.rotationPitch = (float)((double)entityPlayer.rotationPitch - (double)this.rand.nextFloat() * a * 0.45D);
+                    entityPlayer = this.player();
+                    entityPlayer.rotationPitch = (float) ((double) entityPlayer.rotationPitch - (double) this.rand.nextFloat() * a * 0.45D);
                 }
             }
 
             double speedLeft = 1.0 / ThreadLocalRandom.current().nextDouble(leftCPS.getInputMin() - 0.2, leftCPS.getInputMax());
             if (System.currentTimeMillis() - lastClick > speedLeft * 1000) {
                 lastClick = System.currentTimeMillis();
-                if (leftHold < lastClick){
+                if (leftHold < lastClick) {
                     leftHold = lastClick;
                 }
                 int key = mc.gameSettings.keyBindAttack.getKeyCode();
@@ -201,7 +182,7 @@ public class SumoClicker extends Module {
     }
 
     private void ravenClick() {
-        if(mc.currentScreen != null) {
+        if (mc.currentScreen != null) {
             doInventoryClick();
             return;
         }
@@ -215,25 +196,25 @@ public class SumoClicker extends Module {
 
     public void leftClickExecute(int key) {
 
-        if(breakBlock()) return;
+        if (breakBlock()) return;
 
         if (jitterLeft.getValue() > 0.0D) {
             double a = jitterLeft.getValue() * 0.45D;
             EntityPlayerSP entityPlayer;
             if (this.rand.nextBoolean()) {
-                entityPlayer = mc.thePlayer;
-                entityPlayer.rotationYaw = (float)((double)entityPlayer.rotationYaw + (double)this.rand.nextFloat() * a);
+                entityPlayer = this.player();
+                entityPlayer.rotationYaw = (float) ((double) entityPlayer.rotationYaw + (double) this.rand.nextFloat() * a);
             } else {
-                entityPlayer = mc.thePlayer;
-                entityPlayer.rotationYaw = (float)((double)entityPlayer.rotationYaw - (double)this.rand.nextFloat() * a);
+                entityPlayer = this.player();
+                entityPlayer.rotationYaw = (float) ((double) entityPlayer.rotationYaw - (double) this.rand.nextFloat() * a);
             }
 
             if (this.rand.nextBoolean()) {
-                entityPlayer = mc.thePlayer;
-                entityPlayer.rotationPitch = (float)((double)entityPlayer.rotationPitch + (double)this.rand.nextFloat() * a * 0.45D);
+                entityPlayer = this.player();
+                entityPlayer.rotationPitch = (float) ((double) entityPlayer.rotationPitch + (double) this.rand.nextFloat() * a * 0.45D);
             } else {
-                entityPlayer = mc.thePlayer;
-                entityPlayer.rotationPitch = (float)((double)entityPlayer.rotationPitch - (double)this.rand.nextFloat() * a * 0.45D);
+                entityPlayer = this.player();
+                entityPlayer.rotationPitch = (float) ((double) entityPlayer.rotationPitch - (double) this.rand.nextFloat() * a * 0.45D);
             }
         }
 
@@ -252,12 +233,11 @@ public class SumoClicker extends Module {
         } else {
             this.genLeftTimings();
         }
-
     }
 
     public void genLeftTimings() {
         double clickSpeed = Utils.Client.ranModuleVal(leftCPS, this.rand) + 0.4D * this.rand.nextDouble();
-        long delay = (int)Math.round(1000.0D / clickSpeed);
+        long delay = (int) Math.round(1000.0D / clickSpeed);
         if (System.currentTimeMillis() > this.leftk) {
             if (!this.leftn && this.rand.nextInt(100) >= 85) {
                 this.leftn = true;
@@ -266,23 +246,23 @@ public class SumoClicker extends Module {
                 this.leftn = false;
             }
 
-            this.leftk = System.currentTimeMillis() + 500L + (long)this.rand.nextInt(1500);
+            this.leftk = System.currentTimeMillis() + 500L + (long) this.rand.nextInt(1500);
         }
 
         if (this.leftn) {
-            delay = (long)((double)delay * this.leftm);
+            delay = (long) ((double) delay * this.leftm);
         }
 
         if (System.currentTimeMillis() > this.leftl) {
             if (this.rand.nextInt(100) >= 80) {
-                delay += 50L + (long)this.rand.nextInt(100);
+                delay += 50L + (long) this.rand.nextInt(100);
             }
 
-            this.leftl = System.currentTimeMillis() + 500L + (long)this.rand.nextInt(1500);
+            this.leftl = System.currentTimeMillis() + 500L + (long) this.rand.nextInt(1500);
         }
 
         this.leftUpTime = System.currentTimeMillis() + delay;
-        this.leftDownTime = System.currentTimeMillis() + delay / 2L - (long)this.rand.nextInt(10);
+        this.leftDownTime = System.currentTimeMillis() + delay / 2L - (long) this.rand.nextInt(10);
     }
 
     private void inInvClick(GuiScreen guiScreen) {
@@ -293,7 +273,6 @@ public class SumoClicker extends Module {
             this.playerMouseInput.invoke(guiScreen, mouseInGUIPosX, mouseInGUIPosY, 0);
         } catch (IllegalAccessException | InvocationTargetException var5) {
         }
-
     }
 
     public boolean breakBlock() {
@@ -311,15 +290,16 @@ public class SumoClicker extends Module {
                     }
                     return true;
                 }
-                if(breakHeld) {
+                if (breakHeld) {
                     breakHeld = false;
                 }
             }
         }
+
         return false;
     }
 
-    public void doInventoryClick(){
+    public void doInventoryClick() {
         if (inventoryFill.isToggled() && (mc.currentScreen instanceof GuiInventory || mc.currentScreen instanceof GuiChest)) {
             if (!Mouse.isButtonDown(0) || !Keyboard.isKeyDown(54) && !Keyboard.isKeyDown(42)) {
                 this.leftDownTime = 0L;
@@ -335,6 +315,7 @@ public class SumoClicker extends Module {
         }
     }
 
+    /*
     public enum ClickStyle {
         Raven,
         SKid
@@ -344,4 +325,6 @@ public class SumoClicker extends Module {
         Tick,
         Render
     }
+    */
+
 }

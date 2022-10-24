@@ -1,6 +1,5 @@
 package ravenNPlus.client.module.modules.render;
 
-import ravenNPlus.client.utils.Utils;
 import ravenNPlus.client.module.Module;
 import ravenNPlus.client.module.setting.impl.SliderSetting;
 import net.minecraft.client.settings.GameSettings;
@@ -17,19 +16,17 @@ public class FOV extends Module {
 
     @Override
     public void onEnable() {
-        if(!Utils.Player.isPlayerInGame()) return;
+        if (!this.inGame()) return;
 
         oldFov = mc.gameSettings.getOptionFloatValue(GameSettings.Options.FOV);
-        mc.gameSettings.fovSetting = (float)fov.getValue();
-        super.onEnable();
+        mc.gameSettings.fovSetting = fov.getValueToFloat();
     }
 
     @Override
     public void onDisable() {
-        if(!Utils.Player.isPlayerInGame()) return;
+        if (!this.inGame()) return;
 
         mc.gameSettings.fovSetting = oldFov;
-        super.onDisable();
     }
 
 }

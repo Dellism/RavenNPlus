@@ -51,7 +51,7 @@ public class TransformerFMLCommonHandler implements Transformer {
 
     public static String getModName() {
         Module cns = Client.moduleManager.getModuleByClazz(ClientNameSpoof.class);
-        if (cns != null && cns.isEnabled()){
+        if (cns != null && cns.isEnabled()) {
             return ClientNameSpoof.newName;
         }
         List<String> modNames = Lists.newArrayListWithExpectedSize(3);

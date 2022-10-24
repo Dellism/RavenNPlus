@@ -52,4 +52,5 @@ public class KeyStrokeKeyRenderer {
 
       this.mc.fontRendererObj.drawString(p, l + this.c + 8, m + this.d + 8, -16777216 + ((int)((double)q * h) << 16) + ((int)((double)r * h) << 8) + (int)((double)s * h));
    }
+
 }

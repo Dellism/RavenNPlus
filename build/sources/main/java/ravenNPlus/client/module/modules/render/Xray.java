@@ -1,37 +1,37 @@
 package ravenNPlus.client.module.modules.render;
 
-import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
-import ravenNPlus.client.module.setting.impl.TickSetting;
 import ravenNPlus.client.utils.Utils;
-import net.minecraft.block.Block;
+import ravenNPlus.client.module.Module;
+import ravenNPlus.client.module.setting.impl.TickSetting;
+import ravenNPlus.client.module.setting.impl.SliderSetting;
 import net.minecraft.init.Blocks;
+import net.minecraft.block.Block;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.TimerTask;
 
 public class Xray extends Module {
 
    public static SliderSetting range;
-   public static TickSetting iron, gold, diamond, emerald, lapis, redstone, coal,spawner;
+   public static TickSetting iron, gold, diamond, emerald, lapis, redstone, coal, spawner;
    private java.util.Timer t;
    private List<BlockPos> ren;
 
    public Xray() {
       super("XRay", ModuleCategory.render, "Draw a outline around ores");
       this.addSetting(range = new SliderSetting("Range", 80.0D, 5.0D, 200.0D, 1.0D));
-      this.addSetting(iron = new TickSetting("Iron", true));
-      this.addSetting(gold = new TickSetting("Gold", true));
+      this.addSetting(spawner = new TickSetting("Spawner", true));
       this.addSetting(diamond = new TickSetting("Diamond", true));
       this.addSetting(emerald = new TickSetting("Emerald", true));
+      this.addSetting(gold = new TickSetting("Gold", true));
       this.addSetting(lapis = new TickSetting("Lapis", true));
-      this.addSetting(redstone = new TickSetting("Redstone", true));
+      this.addSetting(iron = new TickSetting("Iron", true));
       this.addSetting(coal = new TickSetting("Coal", true));
-      this.addSetting(spawner = new TickSetting("Spawner", true));
+      this.addSetting(redstone = new TickSetting("Redstone", true));
    }
 
    @Override
@@ -53,13 +53,13 @@ public class Xray extends Module {
       return new TimerTask() {
          public void run() {
             Xray.this.ren.clear();
-            int ra = (int)Xray.range.getValue();
+            int ra = (int) Xray.range.getValue();
 
-            for(int y = ra; y >= -ra; --y) {
-               for(int x = -ra; x <= ra; ++x) {
-                  for(int z = -ra; z <= ra; ++z) {
+            for (int y = ra; y >= -ra; --y) {
+               for (int x = -ra; x <= ra; ++x) {
+                  for (int z = -ra; z <= ra; ++z) {
                      if (Utils.Player.isPlayerInGame()) {
-                        BlockPos p = new BlockPos(Module.mc.thePlayer.posX + (double)x, Module.mc.thePlayer.posY + (double)y, Module.mc.thePlayer.posZ + (double)z);
+                        BlockPos p = new BlockPos(Module.mc.thePlayer.posX + (double) x, Module.mc.thePlayer.posY + (double) y, Module.mc.thePlayer.posZ + (double) z);
                         Block bl = Module.mc.theWorld.getBlockState(p).getBlock();
                         if (Xray.iron.isToggled() && bl.equals(Blocks.iron_ore) || Xray.gold.isToggled() && bl.equals(Blocks.gold_ore) ||
                                 Xray.diamond.isToggled() && bl.equals(Blocks.diamond_ore) || Xray.emerald.isToggled() && bl.equals(Blocks.emerald_ore) ||
@@ -77,22 +77,20 @@ public class Xray extends Module {
 
    @SubscribeEvent
    public void orl(RenderWorldLastEvent ev) {
-      if (Utils.Player.isPlayerInGame() && !this.ren.isEmpty()) {
+      if (this.inGame() && !this.ren.isEmpty()) {
          List<BlockPos> tRen = new ArrayList<>(this.ren);
 
          for (BlockPos p : tRen) {
             this.dr(p);
          }
       }
-
    }
 
    private void dr(BlockPos p) {
       int[] rgb = this.c(mc.theWorld.getBlockState(p).getBlock());
       if (rgb[0] + rgb[1] + rgb[2] != 0) {
-         Utils.HUD.re(p, (new Color(rgb[0], rgb[1], rgb[2])).getRGB(), true);
+         Utils.HUD.renderBlockOutlines(p, (new Color(rgb[0], rgb[1], rgb[2])).getRGB(), true);
       }
-
    }
 
    private int[] c(Block b) {
@@ -123,7 +121,7 @@ public class Xray extends Module {
          blue = 135;
       }
 
-      return new int[] { red, green, blue };
+      return new int[]{red, green, blue};
    }
 
 }

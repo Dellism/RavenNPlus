@@ -1,28 +1,17 @@
 package ravenNPlus.client.utils;
 
 import com.sun.javafx.geom.Vec3d;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.client.gui.*;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.settings.GameSettings;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.item.*;
-import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import ravenNPlus.client.module.modules.combat.AntiBot;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.network.play.client.C07PacketPlayerDigging;
+import net.minecraft.network.play.client.C0APacketAnimation;
 import ravenNPlus.client.module.Module;
 import ravenNPlus.client.module.modules.combat.LeftClicker;
+import ravenNPlus.client.module.modules.combat.NewAntiBot;
 import ravenNPlus.client.module.setting.impl.DoubleSliderSetting;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.Minecraft;
@@ -41,9 +30,18 @@ import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.client.gui.*;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.item.*;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -54,8 +52,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -71,24 +67,32 @@ public class Utils {
    public static final String md = "Mode: ";
    public static final String by = "Bypass: ";
    public static final String th = "Theme: ";
+   public static final String te = "Test: ";
+   public static final String so = "Sort: ";
+   public static final String co = "Color: ";
    public static float prevSwingProgress;
    public static float swingProgress;
    private static int swingProgressInt;
    private static boolean isSwingInProgress;
 
-   public static class Player {
+    public static class Player {
       static boolean isPlayerInRANGE = false;
 
+      public static void dropAllItems() {
+         Minecraft.getMinecraft().thePlayer.sendQueue.getNetworkManager().sendPacket(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.DROP_ALL_ITEMS, new BlockPos(-1, -1, -1), EnumFacing.DOWN));
+      }
+
+      public static void startDestroyBlock(int x, int y, int z, EnumFacing facing) {
+         Minecraft.getMinecraft().thePlayer.sendQueue.getNetworkManager().sendPacket(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.START_DESTROY_BLOCK, new BlockPos(x, y, z), facing));
+      }
+
       public static Vec3d interpolateEntity(Entity entity, float time) {
-         return new Vec3d(entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * time, entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * time, entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * time);
+         return new Vec3d(entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * time, entity.lastTickPosY +
+                 (entity.posY - entity.lastTickPosY) * time, entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * time);
       }
 
       public static Vec3d getInterpolatedAmount(Entity entity, double x, double y, double z) {
          return new Vec3d((entity.posX - entity.lastTickPosX) * x, (entity.posY - entity.lastTickPosY) * y, (entity.posZ - entity.lastTickPosZ) * z);
-      }
-
-      public static Vec3d getInterpolatedAmount(Entity entity, Vec3d vec) {
-         return getInterpolatedAmount(entity, vec.x, vec.y, vec.z);
       }
 
       public static Vec3d getInterpolatedAmount(Entity entity, float partialTicks) {
@@ -96,19 +100,23 @@ public class Utils {
       }
 
       public static Vec3d getInterpolatedRenderPos(Entity player, float renderPartialTicks) {
-         Vec3d b = new Vec3d(Client.getRenderPosX(),Client.getRenderPosX(),Client.getRenderPosZ());;
-         getInterpolatedAmount(player, renderPartialTicks).add( b );
+         Vec3d b = new Vec3d(Client.getRenderPosX(), Client.getRenderPosX(), Client.getRenderPosZ());
+         ;
+         getInterpolatedAmount(player, renderPartialTicks).add(b);
          return b;
       }
 
-      private double getProjectileGravity(Item item) {
-         if(item instanceof ItemBow)
+      public static double getProjectileGravity(Item item) {
+         //  if (item instanceof ItemSnowball)
+         //      return 0.5;
+
+         if (item instanceof ItemBow)
             return 0.05;
 
-         if(item instanceof ItemPotion)
+         if (item instanceof ItemPotion)
             return 0.4;
 
-         if(item instanceof ItemFishingRod)
+         if (item instanceof ItemFishingRod)
             return 0.15;
 
          return 0.03;
@@ -123,11 +131,11 @@ public class Utils {
       }
 
       public static void fakeJump(boolean playerMoveInputJump) {
-         if(playerMoveInputJump)
+         if (playerMoveInputJump)
             mc.thePlayer.movementInput.jump = true;
 
          mc.thePlayer.isAirBorne = true;
-         mc.thePlayer.triggerAchievement(StatList.jumpStat);
+         mc.thePlayer.addStat(StatList.jumpStat, 1);
       }
 
       public float getSwingProgress(float partialTickTime) {
@@ -149,39 +157,6 @@ public class Utils {
                  (player.isPotionActive(Potion.digSlowdown) ? 8 + player.getActivePotionEffect(Potion.digSlowdown).getAmplifier() * 2 : 6);
       }
 
-
-      public static void updateSwingProgress() {
-         final EntityPlayerSP player = mc.thePlayer;
-         if (player == null) {
-            return;
-         }
-
-         prevSwingProgress = swingProgress;
-
-         int max = getArmSwingAnimationEnd(player);
-         if (swingProgressInt >= max) {
-            swingProgressInt = 0;
-            isSwingInProgress = false;
-         }
-
-         if (mc.gameSettings.keyBindAttack.isKeyDown() &&
-                 mc.objectMouseOver != null &&
-                 mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-            if (!isSwingInProgress || swingProgressInt >= max >> 1 || swingProgressInt < 0) {
-               isSwingInProgress = true;
-               swingProgressInt = -1;
-            }
-         }
-
-         if (isSwingInProgress) {
-            ++swingProgressInt;
-         } else {
-            swingProgressInt = 0;
-         }
-
-         swingProgress = (float) swingProgressInt / (float) max;
-      }
-
       public static void isPlayerInRange(double dis) {
          getClosestPlayer(dis);
       }
@@ -197,7 +172,7 @@ public class Utils {
             Entity en = (Entity) entities.next();
             if (en instanceof EntityPlayer && en != mc.thePlayer) {
                EntityPlayer pl = (EntityPlayer) en;
-               if (mc.thePlayer.getDistanceToEntity(pl) < dis && !AntiBot.isBot(pl)) {
+               if (mc.thePlayer.getDistanceToEntity(pl) < dis && !NewAntiBot.isBot(pl)) {
                   dis = mc.thePlayer.getDistanceToEntity(pl);
                   cplayer = pl;
                }
@@ -208,47 +183,47 @@ public class Utils {
       }
 
       public static void place(BlockPos blockPos, EnumFacing facing, boolean mustHoldBlock) {
-         if(facing == EnumFacing.UP)
+         if (facing == EnumFacing.UP)
             blockPos = blockPos.add(0, -1, 0);
-         else if(facing == EnumFacing.NORTH)
+         else if (facing == EnumFacing.NORTH)
             blockPos = blockPos.add(0, 0, 1);
-         else if(facing == EnumFacing.EAST)
+         else if (facing == EnumFacing.EAST)
             blockPos = blockPos.add(-1, 0, 0);
-         else if(facing == EnumFacing.SOUTH)
+         else if (facing == EnumFacing.SOUTH)
             blockPos = blockPos.add(0, 0, -1);
-         else if(facing == EnumFacing.WEST)
+         else if (facing == EnumFacing.WEST)
             blockPos = blockPos.add(1, 0, 0);
 
          EntityPlayerSP player = mc.thePlayer;
 
-         if(mustHoldBlock)
-            if(!InvUtils.isPlayerHoldingBlock()) return;
+         if (mustHoldBlock)
+            if (!InvUtils.isPlayerHoldingBlock()) return;
 
          mc.playerController.onPlayerRightClick(player, mc.theWorld, player.getHeldItem(), blockPos, facing, new Vec3(0.5, 0.5, 0.5));
          double x = blockPos.getX() + 0.25 - player.posX;
          double z = blockPos.getZ() + 0.25 - player.posZ;
          double y = blockPos.getY() + 0.25 - player.posY;
          double distance = MathHelper.sqrt_double(x * x + z * z);
-         float yaw = (float) (Math.atan2(z, x)*180 / Math.PI - 90);
-         float pitch = (float) - (Math.atan2(y, distance)*180 / Math.PI);
+         float yaw = (float) (Math.atan2(z, x) * 180 / Math.PI - 90);
+         float pitch = (float) -(Math.atan2(y, distance) * 180 / Math.PI);
          mc.thePlayer.sendQueue.addToSendQueue(new C03PacketPlayer.C06PacketPlayerPosLook(player.posX, player.posY, player.posZ, yaw, pitch, player.onGround));
       }
 
       public static void sendMessageToSelf(String message) {
          if (isPlayerInGame()) {
-            String m = Utils.Client.reformat("&7[&d"+ ravenNPlus.client.main.Client.name+"&7]&r " + message);
+            String m = Utils.Client.reformat("&7[&d" + ravenNPlus.client.main.Client.name + "&7]&r " + message);
             mc.thePlayer.addChatMessage(new ChatComponentText(m));
          }
       }
 
       public static void sendClearMessageToSelf() {
          if (isPlayerInGame()) {
-            mc.thePlayer.addChatMessage(new ChatComponentText(null));
+            sendMessageToSelf(null);
          }
       }
 
       public static boolean isPlayerInWater() {
-         if(!Utils.Player.isPlayerInGame()) return false;
+         if (!isPlayerInGame()) return false;
          return mc.thePlayer.isInWater();
       }
 
@@ -272,19 +247,29 @@ public class Utils {
          return mc.currentScreen instanceof GuiIngameMenu;
       }
 
+      public static boolean isPlayerInGui(GuiScreen guiScreen) {
+         if (guiScreen == null) return false;
+
+         return mc.currentScreen == guiScreen;
+      }
+
       public static boolean isMoving() {
          return mc.thePlayer.moveForward != 0.0F || mc.thePlayer.moveStrafing != 0.0F;
       }
 
-      public static void aim(Entity en, float pitchOffset, boolean packet, boolean silent) {
-         if (en != null) {
-            float[] t = getTargetRotations(en);
+      public static boolean isMovingForward() {
+         return mc.thePlayer.moveForward != 0.0F || mc.gameSettings.keyBindForward.isPressed() || mc.gameSettings.keyBindForward.isKeyDown();
+      }
+
+      public static void aim(Entity entity, float pitchOffset, boolean packet, boolean silent) {
+         if (entity != null) {
+            float[] t = getTargetRotations(entity);
             if (t != null) {
                float yaw = t[0];
                float pitch = t[1] + 4.0F + pitchOffset;
-               if(packet) {
+               if (packet) {
                   mc.getNetHandler().addToSendQueue(new C05PacketPlayerLook(yaw, pitch, mc.thePlayer.onGround));
-               } else if(!silent) {
+               } else if (!silent) {
                   mc.thePlayer.rotationYaw = yaw;
                   mc.thePlayer.rotationPitch = pitch;
                } else {
@@ -308,6 +293,21 @@ public class Utils {
       public static boolean fov(Entity entity, float fov) {
          fov = (float) ((double) fov * 0.5D);
          double v = ((double) (mc.thePlayer.rotationYaw - fovToEntity(entity)) % 360.0D + 540.0D) % 360.0D - 180.0D;
+         return v > 0.0D && v < (double) fov || (double) (-fov) < v && v < 0.0D;
+      }
+
+      public static boolean fov(Entity entity, float fov, boolean draw) {
+         fov = (float) ((double) fov * 0.5D);
+         double v = ((double) (mc.thePlayer.rotationYaw - fovToEntity(entity)) % 360.0D + 540.0D) % 360.0D - 180.0D;
+
+         if (draw) {
+            ScaledResolution x = new ScaledResolution(mc);
+            float width = x.getScaledWidth() / 2;
+            float height = x.getScaledHeight() / 2;
+
+            RenderUtils.drawCircle(width + fov, height + fov, 10, 70, 360);
+         }
+
          return v > 0.0D && v < (double) fov || (double) (-fov) < v && v < 0.0D;
       }
 
@@ -363,7 +363,8 @@ public class Utils {
             double dist = MathHelper.sqrt_double(diffX * diffX + diffZ * diffZ);
             float yaw = (float) (Math.atan2(diffZ, diffX) * 180.0D / 3.141592653589793D) - 90.0F;
             float pitch = (float) (-(Math.atan2(diffY, dist) * 180.0D / 3.141592653589793D));
-            return new float[]{mc.thePlayer.rotationYaw + MathHelper.wrapAngleTo180_float(yaw - mc.thePlayer.rotationYaw), mc.thePlayer.rotationPitch + MathHelper.wrapAngleTo180_float(pitch - mc.thePlayer.rotationPitch)};
+            return new float[]{mc.thePlayer.rotationYaw + MathHelper.wrapAngleTo180_float(yaw - mc.thePlayer.rotationYaw),
+                    mc.thePlayer.rotationPitch + MathHelper.wrapAngleTo180_float(pitch - mc.thePlayer.rotationPitch)};
          }
       }
 
@@ -374,7 +375,7 @@ public class Utils {
          }
       }
 
-      public static void bop(double s) {
+      public static void bop(double speed) {
          double forward = mc.thePlayer.movementInput.moveForward;
          double strafe = mc.thePlayer.movementInput.moveStrafe;
          float yaw = mc.thePlayer.rotationYaw;
@@ -400,8 +401,8 @@ public class Utils {
             double rad = Math.toRadians(yaw + 90.0F);
             double sin = Math.sin(rad);
             double cos = Math.cos(rad);
-            mc.thePlayer.motionX = forward * s * cos + strafe * s * sin;
-            mc.thePlayer.motionZ = forward * s * sin - strafe * s * cos;
+            mc.thePlayer.motionX = forward * speed * cos + strafe * speed * sin;
+            mc.thePlayer.motionZ = forward * speed * sin - strafe * speed * cos;
          }
       }
 
@@ -446,11 +447,23 @@ public class Utils {
 
       public static void swing() {
          EntityPlayerSP p = mc.thePlayer;
-         int armSwingEnd = p.isPotionActive(Potion.digSpeed) ? 6 - (1 + p.getActivePotionEffect(Potion.digSpeed).getAmplifier()) : (p.isPotionActive(Potion.digSlowdown) ? 6 + (1 + p.getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2 : 6);
+         int armSwingEnd = p.isPotionActive(Potion.digSpeed) ? 6 - (1 + p.getActivePotionEffect(Potion.digSpeed).getAmplifier()) :
+                 (p.isPotionActive(Potion.digSlowdown) ? 6 + (1 + p.getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2 : 6);
          if (!p.isSwingInProgress || p.swingProgressInt >= armSwingEnd / 2 || p.swingProgressInt < 0) {
             p.swingProgressInt = -1;
             p.isSwingInProgress = true;
          }
+      }
+
+      public static void legitSwing() {
+         EntityPlayerSP p = mc.thePlayer;
+         int armSwingEnd = p.isPotionActive(Potion.digSpeed) ? 6 - (1 + p.getActivePotionEffect(Potion.digSpeed).getAmplifier()) :
+                 (p.isPotionActive(Potion.digSlowdown) ? 6 + (1 + p.getActivePotionEffect(Potion.digSlowdown).getAmplifier()) * 2 : 6);
+         if (!p.isSwingInProgress || p.swingProgressInt >= armSwingEnd / 2 || p.swingProgressInt < 0) {
+            p.swingProgressInt = -1;
+            p.isSwingInProgress = true;
+         }
+         mc.getNetHandler().addToSendQueue(new C0APacketAnimation());
       }
 
       public static void FastSwing(double digSpeed) {
@@ -469,24 +482,6 @@ public class Utils {
          }
       }
 
-      public static void addMotion(int motionX, int motionY, int motionZ) {
-         mc.thePlayer.motionX += motionX;
-         mc.thePlayer.motionY += motionY;
-         mc.thePlayer.motionZ += motionZ;
-      }
-
-      public static void addMotionX(int motionX) {
-         mc.thePlayer.motionX += motionX;
-      }
-
-      public static void addMotionY(int motionY) {
-         mc.thePlayer.motionY += motionY;
-      }
-
-      public static void addMotionZ(int motionZ) {
-         mc.thePlayer.motionZ += motionZ;
-      }
-
       public static void jump(int height) {
          mc.thePlayer.motionY += height;
          mc.thePlayer.jump();
@@ -497,7 +492,7 @@ public class Utils {
             return 0;
          } else {
             ItemStack itemStack = mc.thePlayer.inventory.getStackInSlot(slot);
-            if(itemStack.getItem() instanceof ItemBlock) {
+            if (itemStack.getItem() instanceof ItemBlock) {
                return itemStack.stackSize;
             } else {
                return 0;
@@ -507,10 +502,6 @@ public class Utils {
 
       public static boolean isInLiquid() {
          return mc.thePlayer.isInWater() || mc.thePlayer.isInLava();
-      }
-
-      public static boolean canCrit() {
-         return !Utils.Player.isInLiquid() && mc.thePlayer.onGround && mc.thePlayer.isSwingInProgress;
       }
 
    }
@@ -525,21 +516,21 @@ public class Utils {
          MinecraftForge.EVENT_BUS.post(m);
 
          ByteBuffer buttons = ObfuscationReflectionHelper.getPrivateValue(Mouse.class, null, "buttons");
-         buttons.put(mouseButton, (byte)(held ? 1 : 0));
+         buttons.put(mouseButton, (byte) (held ? 1 : 0));
          ObfuscationReflectionHelper.setPrivateValue(Mouse.class, null, buttons, "buttons");
       }
 
       public static List<NetworkPlayerInfo> getPlayers() {
          List<NetworkPlayerInfo> e = new ArrayList<>();
          List<NetworkPlayerInfo> a = new ArrayList<>();
-         try{
+         try {
             e.addAll(mc.getNetHandler().getPlayerInfoMap());
-         } catch (NullPointerException r){
+         } catch (NullPointerException r) {
             return e;
          }
 
-         for(NetworkPlayerInfo s : e){
-            if(!a.contains(s)){
+         for (NetworkPlayerInfo s : e) {
+            if (!a.contains(s)) {
                a.add(s);
             }
          }
@@ -547,79 +538,20 @@ public class Utils {
          return a;
       }
 
-      public static boolean isCorrectEntity(Object o, boolean ignoreFriends) {
-         boolean condition = false;
-         if(o instanceof EntityPlayer)
-            condition = false;
-         return condition;
-      }
+      static int howMuchPlayersIngameInt = 0;
+      public static int howMuchPlayersIngame() {
+         for (Entity en : mc.theWorld.getLoadedEntityList())
+            if (en instanceof EntityPlayer && !NewAntiBot.isBot(en))
+               howMuchPlayersIngameInt++;
 
-      public static EntityLivingBase searchEntityByIdRaw(UUID ID) {
-         EntityLivingBase newEntity = null;
-         for(Object o : Minecraft.getMinecraft().theWorld.loadedEntityList) {
-            if(isCorrectEntity(o, false)) {
-               EntityLivingBase en = (EntityLivingBase)o;
-               if(!(o instanceof EntityPlayerSP) && !en.isDead) {
-                  if(newEntity == null && en.getUniqueID().equals(ID)) {
-                     newEntity = en;
-                  }
-               }
-            }
-         }
-
-         return newEntity;
-      }
-
-      public static EntityLivingBase searchEntityByNameRaw(String name) {
-         EntityLivingBase newEntity = null;
-         for(Object o : Minecraft.getMinecraft().theWorld.loadedEntityList) {
-            if(isCorrectEntity(o, false)) {
-               EntityLivingBase en = (EntityLivingBase)o;
-               if(!(o instanceof EntityPlayerSP) && !en.isDead) {
-                  if(newEntity == null && en.getCommandSenderEntity().equals(name)) {
-                     newEntity = en;
-                  }
-               }
-            }
-         }
-
-         return newEntity;
-      }
-
-      public static EntityLivingBase searchEntityByName(String name) {
-         EntityLivingBase newEntity = null;
-         for(Object o : Minecraft.getMinecraft().theWorld.loadedEntityList) {
-            if(isCorrectEntity(o, false)) {
-               EntityLivingBase en = (EntityLivingBase)o;
-               if(!(o instanceof EntityPlayerSP) && !en.isDead && Minecraft.getMinecraft().thePlayer.canEntityBeSeen(en)) {
-                  if(newEntity == null && en.getCommandSenderEntity().equals(name)) {
-                     newEntity = en;
-                  }
-               }
-            }
-         }
-
-         return newEntity;
+         return howMuchPlayersIngameInt;
       }
 
       public static boolean othersExist() {
-         for(Entity wut : mc.theWorld.getLoadedEntityList()){
-            if(wut instanceof EntityPlayer) return  true;
-         }
+         for (Entity wut : mc.theWorld.getLoadedEntityList())
+            if (wut instanceof EntityPlayer) return true;
 
          return false;
-      }
-
-      public static void correctSliders(SliderSetting c, SliderSetting d) {
-         if (c.getValue() > d.getValue()) {
-            double p = c.getValue();
-            c.setValue(d.getValue());
-            d.setValue(p);
-         }
-      }
-
-      public static double ranModuleVal(SliderSetting a, SliderSetting b, Random r) {
-         return a.getValue() == b.getValue() ? a.getValue() : a.getValue() + r.nextDouble() * (b.getValue() - a.getValue());
       }
 
       public static double ranModuleVal(DoubleSliderSetting a, Random r) {
@@ -627,18 +559,11 @@ public class Utils {
       }
 
       public static boolean isHyp() {
-         if(!Player.isPlayerInGame()) return false;
-         try {
-            return !mc.isSingleplayer() && mc.getCurrentServerData().serverIP.toLowerCase().contains("hypixel.net");
-         } catch (Exception ee) {
-            ee.printStackTrace();
-            return false;
-         }
+          return isServerIP("hypixel.net");
       }
 
       public static boolean isServerIP(String ip) {
-         if(!Player.isPlayerInGame()) return false;
-         if(mc.isSingleplayer()) return false;
+         if (!Player.isPlayerInGame() || mc.isSingleplayer()) return false;
 
          try {
             return !mc.isSingleplayer() && mc.getCurrentServerData().serverIP.toLowerCase().contains(ip);
@@ -646,17 +571,6 @@ public class Utils {
             ee.printStackTrace();
             return false;
          }
-      }
-
-      public static String getServerIP() {
-         if(mc.isSingleplayer()) return "Not in Server";
-         return mc.getCurrentServerData().serverIP.toLowerCase();
-      }
-
-      public static void resetTimer() {
-         try {
-            getTimer().timerSpeed = 1.0F;
-         } catch (NullPointerException ignored) {}
       }
 
       public static void zoom(float value) {
@@ -670,62 +584,45 @@ public class Utils {
          }
       }
 
+      public static net.minecraft.client.network.NetworkPlayerInfo getNetworkPlayerInfo(String username) {
+         return ObfuscationReflectionHelper.getPrivateValue(NetworkPlayerInfo.class, Minecraft.getMinecraft().getNetHandler().getPlayerInfo(username), "getLocationSkin", "func_110311_f");
+      }
+
+      public static float timer_default = 1.0F;
+      public static float timer_best = 2.0F;
+      public static float timer_max = 5.0F;
+
+      public static void resetTimer() {
+         try {
+            getTimer().timerSpeed = timer_default;
+         } catch (NullPointerException ignored) {
+         }
+      }
+
       public static net.minecraft.util.Timer getTimer() {
          return ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "timer", "field_71428_T");
       }
 
-      public static net.minecraft.client.renderer.entity.RenderManager getRenderManager() {
-         return ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "getRenderManager", "func_175598_ae");
-      }
-
-      public static net.minecraft.client.renderer.RenderGlobal getRenderGlobal() {
-         return ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "renderGlobal", "field_178169_a");
-      }
+       public static EntityPlayerSP getPlayer() {
+           return ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "thePlayer", "field_70475_c");
+       }
 
       public static double getRenderPosX() {
-         double x = ReflectionHelper.getPrivateValue(RenderManager.class, mc.getRenderManager(), "renderPosX");
-         return x;
+          return ReflectionHelper.getPrivateValue(RenderManager.class, mc.getRenderManager(), "renderPosX");
       }
 
       public static double getRenderPosY() {
-         double x = ReflectionHelper.getPrivateValue(RenderManager.class, mc.getRenderManager(), "renderPosY");
-         return x;
+          return ReflectionHelper.getPrivateValue(RenderManager.class, mc.getRenderManager(), "renderPosY");
       }
 
       public static double getRenderPosZ() {
-         double x =ReflectionHelper.getPrivateValue(RenderManager.class, mc.getRenderManager(), "renderPosZ");
-         return x;
+          return ReflectionHelper.getPrivateValue(RenderManager.class, mc.getRenderManager(), "renderPosZ");
       }
 
-      public static void clearInvPotionEffects(InventoryEffectRenderer guiScreen) {
-         boolean playerHasPotionEffects = ObfuscationReflectionHelper.getPrivateValue(InventoryEffectRenderer.class, guiScreen, "field_147045_u");
-
-         if (!playerHasPotionEffects) return;
-
-         int guiLeftPx = (guiScreen.width - 176) / 2;
-         ObfuscationReflectionHelper.setPrivateValue(GuiContainer.class, (GuiContainer) guiScreen, guiLeftPx, "field_147003_i", "guiLeft");
-         ObfuscationReflectionHelper.setPrivateValue(InventoryEffectRenderer.class, (InventoryEffectRenderer) guiScreen, false, "field_147045_u");
-      }
-
-      @SubscribeEvent
-      public void openMainMenu(GuiOpenEvent event) {
-         if (mc.currentScreen instanceof GuiMainMenu) {
-            GuiMainMenu mainMenu = (GuiMainMenu) mc.currentScreen;
-            Field field = ReflectionHelper.findField(GuiMainMenu.class, ObfuscationReflectionHelper.remapFieldNames(GuiMainMenu.class.getName(), "TITLE_PANORAMA_PATHS", "field_73978_o"));
-            try {
-               Field modifier = Field.class.getDeclaredField("modifiers");
-               modifier.setAccessible(true);
-               modifier.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-               field.set(mainMenu, "aaa");
-            } catch (Exception e) {
-               e.printStackTrace();
-            }
-         }
-      }
 
       private static int[][][] getMatrix() {
          int[][][] matrix = new int[0][][];
-         if (matrix == null) {
+         if (matrix != null) {
             matrix = ObfuscationReflectionHelper.getPrivateValue(EntityMinecart.class, null, "field_70500_g");
          }
          return matrix;
@@ -741,11 +638,11 @@ public class Utils {
 
       public static int rainbowDraw(long speed, long... delay) {
          long time = System.currentTimeMillis() + (delay.length > 0 ? delay[0] : 0L);
-         return Color.getHSBColor((float)(time % (15000L / speed)) / (15000.0F / (float)speed), 1.0F, 1.0F).getRGB();
+         return Color.getHSBColor((float) (time % (15000L / speed)) / (15000.0F / (float) speed), 1.0F, 1.0F).getRGB();
       }
 
       public static int astolfoColorsDraw(int yOffset, int yTotal, float speed) {
-         float hue = (float) (System.currentTimeMillis() % (int)speed) + ((yTotal - yOffset) * 9);
+         float hue = (float) (System.currentTimeMillis() % (int) speed) + ((yTotal - yOffset) * 9);
          while (hue > speed) {
             hue -= speed;
          }
@@ -759,38 +656,6 @@ public class Utils {
 
       public static int astolfoColorsDraw(int yOffset, int yTotal) {
          return astolfoColorsDraw(yOffset, yTotal, 2900F);
-      }
-
-      public static int kopamedColoursDraw(int yOffset, int yTotal){
-         float speed = 6428;
-         float hue;
-         try {
-            hue = (float)(System.currentTimeMillis() % (int)speed) + ((yTotal - yOffset) / (yOffset / yTotal));
-         } catch (ArithmeticException divisionByZero) {
-            hue = (float)(System.currentTimeMillis() % (int)speed) + ((yTotal - yOffset) / ((yOffset / yTotal + 1) + 1));
-         }
-
-         while (hue > speed) {
-            hue -= speed;
-         }
-         hue /= speed;
-         if (hue > 2) {
-            hue = 2F - (hue - 2f);
-         }
-         hue += 2F;
-
-         float current = (System.currentTimeMillis()% speed) + ((yOffset + yTotal) * 9);
-
-         while (current > speed) {
-            current -= speed;
-         }
-         current /= speed;
-         if (current > 2) {
-            current = 2F - (current - 2f);
-         }
-         current += 2F;
-
-         return Color.HSBtoRGB((current / (current - yTotal)) + current, 1f, 1F);
       }
 
       public static boolean openWebpage(String url) {
@@ -836,7 +701,7 @@ public class Utils {
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(selection, selection);
             return true;
-         } catch (Exception fuck){
+         } catch (Exception fuck) {
             fuck.printStackTrace();
             return false;
          }
@@ -844,10 +709,6 @@ public class Utils {
 
       public static boolean currentScreenMinecraft() {
          return mc.currentScreen == null;
-      }
-
-      public static int serverResponseTime() {
-         return mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID()).getResponseTime();
       }
 
       public static List<String> getPlayersFromScoreboard() {
@@ -907,16 +768,7 @@ public class Utils {
          }
       }
 
-      public static int indexOf(String key, String[] wut){
-         for(int o = 0; o < wut.length; o++) {
-            if(wut[o].equals(key)) return o;
-         }
-
-         return -1;
-      }
-
-      public static long getSystemTime()
-      {
+      public static long getSystemTime() {
          return Sys.getTime() * 1000L / Sys.getTimerResolution();
       }
 
@@ -926,10 +778,10 @@ public class Utils {
 
       public static double round(double n, int d) {
          if (d == 0) {
-            return (double)Math.round(n);
+            return (double) Math.round(n);
          } else {
             double p = Math.pow(10.0D, d);
-            return (double)Math.round(n * p) / p;
+            return (double) Math.round(n * p) / p;
          }
       }
 
@@ -950,35 +802,47 @@ public class Utils {
          return s.substring(0, 1).toUpperCase() + s.substring(1);
       }
 
+       public static String getOnlyTime() {
+           DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH : mm : ss");
+           LocalDateTime now = LocalDateTime.now();
+           return dtf.format(now);
+       }
+
+       public static String getOnlyDate() {
+           DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+           LocalDateTime now = LocalDateTime.now();
+           return dtf.format(now);
+       }
+
       public static String getDate() {
          DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
          LocalDateTime now = LocalDateTime.now();
          return dtf.format(now);
       }
 
-      public static String joinStringList(String[] wtf, String okwaht){
+      public static String joinStringList(String[] wtf, String okwaht) {
          if (wtf == null)
-            return "";
-         if(wtf.length <= 1)
-            return "";
+            return "Error: Text cant be empty";
+         if (wtf.length <= 1)
+            return "Error: Text length to small";
 
          StringBuilder finalString = new StringBuilder(wtf[0]);
 
-         for (int i = 1; i < wtf.length; i++){
+         for (int i = 1; i < wtf.length; i++) {
             finalString.append(okwaht).append(wtf[i]);
          }
 
          return finalString.toString();
       }
 
-      public static ArrayList<String> toArrayList(String[] fakeList){
+      public static ArrayList<String> toArrayList(String[] fakeList) {
          return new ArrayList<>(Arrays.asList(fakeList));
       }
 
-      public static List<String> StringListToList(String[] whytho){
-         List<String> howTohackNasaWorking2021NoScamDotCom = new ArrayList<>();
-         Collections.addAll(howTohackNasaWorking2021NoScamDotCom, whytho);
-         return howTohackNasaWorking2021NoScamDotCom;
+      public static List<String> StringListToList(String[] whytho) {
+         List<String> l = new ArrayList<>();
+         Collections.addAll(l, whytho);
+         return l;
       }
 
       public static JsonObject getStringAsJson(String text) {
@@ -986,11 +850,11 @@ public class Utils {
       }
 
       public static String randomChoice(String[] strings) {
-         return  strings[rand.nextInt(strings.length)];
+         return strings[rand.nextInt(strings.length)];
       }
 
       public static int randomInt(double inputMin, double v) {
-         return (int)(Math.random() * (v - inputMin) + inputMin);
+         return (int) (Math.random() * (v - inputMin) + inputMin);
       }
 
       public Object getValue() {
@@ -1002,7 +866,8 @@ public class Utils {
    public static class URLS {
 
       public static final String base_url = "https://api.paste.ee/v1/pastes/";
-      public static final String base_paste = "{\"description\":"+ ravenNPlus.client.main.Client.name+" Config\",\"expiration\":\"never\",\"sections\":[{\"name\":\"TitleGoesHere\",\"syntax\":\"text\",\"contents\":\"BodyGoesHere\"}]}";
+      public static final String base_paste = "{\"description\":" + ravenNPlus.client.main.Client.name + "" +
+              "Config\",\"expiration\":\"never\",\"sections\":[{\"name\":\"TitleGoesHere\",\"syntax\":\"text\",\"contents\":\"BodyGoesHere\"}]}";
       public static String hypixelApiKey = "";
       public static String pasteApiKey = "";
 
@@ -1017,7 +882,7 @@ public class Utils {
 
          try {
             URL url = new URL(_url);
-            con = (HttpURLConnection)url.openConnection();
+            con = (HttpURLConnection) url.openConnection();
             r = getTextFromConnection(con);
          } catch (IOException ignored) {
          } finally {
@@ -1040,7 +905,7 @@ public class Utils {
                   StringBuilder stringBuilder = new StringBuilder();
 
                   String input;
-                  while((input = bufferedReader.readLine()) != null) {
+                  while ((input = bufferedReader.readLine()) != null) {
                      stringBuilder.append(input);
                   }
 
@@ -1053,105 +918,17 @@ public class Utils {
                }
 
                return result;
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
          }
 
          return "";
       }
 
-      public static boolean isLink(String string){
+      public static boolean isLink(String string) {
          return string.startsWith("http") && string.contains(".") && string.contains("://");
       }
 
-      public static boolean isPasteeLink(String link){
-         return isLink(link) && link.contains("paste.ee");
-      }
-
-      public static String makeRawPasteePaste(String arg) {
-         // https://api.paste.ee/v1/pastes/<id>
-         // https://paste.ee/p/XZKFL
-
-         StringBuilder rawLink = new StringBuilder();
-         rawLink.append(base_url);
-         rawLink.append(arg.split("/")[arg.split("/").length - 1]);
-
-         return rawLink.toString();
-      }
-
-      public static String createPaste(String name, String content){
-         try {
-            HttpURLConnection request = (HttpURLConnection)(new URL(base_url)).openConnection();
-            request.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            request.setRequestProperty("X-Auth-Token", pasteApiKey);
-            request.setRequestMethod("POST");
-            request.setDoOutput(true);
-            request.connect();
-            OutputStream outputStream = request.getOutputStream();
-            Throwable occuredErrors = null;
-            String payload = base_paste.replace("TitleGoesHere", name).replace("BodyGoesHere", content).replace("\\", "");
-
-            try {
-               // sending data
-               outputStream.write(payload.getBytes(StandardCharsets.UTF_8));
-               outputStream.flush();
-            } catch (Throwable microsoftMoment) {
-               occuredErrors = microsoftMoment;
-               throw microsoftMoment;
-            } finally {
-               if (outputStream != null) {
-                  if (occuredErrors != null) {
-                     try {
-                        outputStream.close();
-                     } catch (Throwable var48) {
-                        occuredErrors.addSuppressed(var48);
-                     }
-                  } else {
-                     outputStream.close();
-                  }
-               }
-
-            }
-
-            request.disconnect();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(request.getInputStream()));
-            JsonParser parser = new JsonParser();
-            JsonObject json = (JsonObject) parser.parse(bufferedReader.readLine());
-            return json.get("link").toString().replace("\"", "");
-         } catch (Exception var51) {
-         }
-
-         return "";
-      }
-
-      public static List<String> getConfigFromPastee(String link) {
-         try {
-            HttpURLConnection request = (HttpURLConnection)(new URL(link)).openConnection();
-            request.setRequestProperty("X-Auth-Token", pasteApiKey);
-            request.setRequestMethod("GET");
-            request.setDoOutput(true);
-            request.connect();
-
-            List<String> finall = new ArrayList<>();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(request.getInputStream()));
-            JsonParser parser = new JsonParser();
-            JsonObject json = (JsonObject) parser.parse(bufferedReader.readLine());
-
-            JsonObject json2 = json.getAsJsonObject("paste");
-            finall.add(true + "");
-            JsonObject json3 = (JsonObject)  json2.getAsJsonArray("sections").get(0);
-            finall.add(json3.get("name") + "");
-            finall.add(json3.get("contents") + "");
-
-            request.disconnect();
-            return finall;
-         } catch (Exception var51) {
-            var51.printStackTrace();
-         }
-         List<String> e = new ArrayList<>();
-         e.add("false");
-
-         return e;
-      }
    }
 
    public static class Profiles {
@@ -1188,41 +965,41 @@ public class Utils {
                return s;
             }
 
-            switch(dm) {
-            case OVERALL:
-               s[0] = getValueAsInt(d, "wins");
-               s[1] = getValueAsInt(d, "losses");
-               s[2] = getValueAsInt(d, "current_winstreak");
-               break;
-            case BRIDGE:
-               s[0] = getValueAsInt(d, "bridge_duel_wins");
-               s[1] = getValueAsInt(d, "bridge_duel_losses");
-               s[2] = getValueAsInt(d, "current_winstreak_mode_bridge_duel");
-               break;
-            case UHC:
-               s[0] = getValueAsInt(d, "uhc_duel_wins");
-               s[1] = getValueAsInt(d, "uhc_duel_losses");
-               s[2] = getValueAsInt(d, "current_winstreak_mode_uhc_duel");
-               break;
-            case SKYWARS:
-               s[0] = getValueAsInt(d, "sw_duel_wins");
-               s[1] = getValueAsInt(d, "sw_duel_losses");
-               s[2] = getValueAsInt(d, "current_winstreak_mode_sw_duel");
-               break;
-            case CLASSIC:
-               s[0] = getValueAsInt(d, "classic_duel_wins");
-               s[1] = getValueAsInt(d, "classic_duel_losses");
-               s[2] = getValueAsInt(d, "current_winstreak_mode_classic_duel");
-               break;
-            case SUMO:
-               s[0] = getValueAsInt(d, "sumo_duel_wins");
-               s[1] = getValueAsInt(d, "sumo_duel_losses");
-               s[2] = getValueAsInt(d, "current_winstreak_mode_sumo_duel");
-               break;
-            case OP:
-               s[0] = getValueAsInt(d, "op_duel_wins");
-               s[1] = getValueAsInt(d, "op_duel_losses");
-               s[2] = getValueAsInt(d, "current_winstreak_mode_op_duel");
+            switch (dm) {
+               case OVERALL:
+                  s[0] = getValueAsInt(d, "wins");
+                  s[1] = getValueAsInt(d, "losses");
+                  s[2] = getValueAsInt(d, "current_winstreak");
+                  break;
+               case BRIDGE:
+                  s[0] = getValueAsInt(d, "bridge_duel_wins");
+                  s[1] = getValueAsInt(d, "bridge_duel_losses");
+                  s[2] = getValueAsInt(d, "current_winstreak_mode_bridge_duel");
+                  break;
+               case UHC:
+                  s[0] = getValueAsInt(d, "uhc_duel_wins");
+                  s[1] = getValueAsInt(d, "uhc_duel_losses");
+                  s[2] = getValueAsInt(d, "current_winstreak_mode_uhc_duel");
+                  break;
+               case SKYWARS:
+                  s[0] = getValueAsInt(d, "sw_duel_wins");
+                  s[1] = getValueAsInt(d, "sw_duel_losses");
+                  s[2] = getValueAsInt(d, "current_winstreak_mode_sw_duel");
+                  break;
+               case CLASSIC:
+                  s[0] = getValueAsInt(d, "classic_duel_wins");
+                  s[1] = getValueAsInt(d, "classic_duel_losses");
+                  s[2] = getValueAsInt(d, "current_winstreak_mode_classic_duel");
+                  break;
+               case SUMO:
+                  s[0] = getValueAsInt(d, "sumo_duel_wins");
+                  s[1] = getValueAsInt(d, "sumo_duel_losses");
+                  s[2] = getValueAsInt(d, "current_winstreak_mode_sumo_duel");
+                  break;
+               case OP:
+                  s[0] = getValueAsInt(d, "op_duel_wins");
+                  s[1] = getValueAsInt(d, "op_duel_losses");
+                  s[2] = getValueAsInt(d, "current_winstreak_mode_op_duel");
             }
 
             return s;
@@ -1251,30 +1028,26 @@ public class Utils {
    public static class HUD {
 
       public static FontRenderer fontRender = Minecraft.getMinecraft().fontRendererObj;
-      public static ScaledResolution sc = new ScaledResolution(Minecraft.getMinecraft());
-      public static int scHeigt = sc.getScaledHeight();
-      public static int scWidth = sc.getScaledWidth();
-
       public static final int rc = -1089466352;
       private static final double p2 = 6.283185307179586D;
       private static final Minecraft mc = Minecraft.getMinecraft();
       public static boolean ring_c = false;
 
-      public static void re(BlockPos bp, int color, boolean shade) {
+      public static void renderBlockOutlines(BlockPos bp, int color, boolean shade) {
          if (bp != null) {
-            double x = (double)bp.getX() - mc.getRenderManager().viewerPosX;
-            double y = (double)bp.getY() - mc.getRenderManager().viewerPosY;
-            double z = (double)bp.getZ() - mc.getRenderManager().viewerPosZ;
+            double x = (double) bp.getX() - mc.getRenderManager().viewerPosX;
+            double y = (double) bp.getY() - mc.getRenderManager().viewerPosY;
+            double z = (double) bp.getZ() - mc.getRenderManager().viewerPosZ;
             GL11.glBlendFunc(770, 771);
             GL11.glEnable(3042);
             GL11.glLineWidth(2.0F);
             GL11.glDisable(3553);
             GL11.glDisable(2929);
             GL11.glDepthMask(false);
-            float a = (float)(color >> 24 & 255) / 255.0F;
-            float r = (float)(color >> 16 & 255) / 255.0F;
-            float g = (float)(color >> 8 & 255) / 255.0F;
-            float b = (float)(color & 255) / 255.0F;
+            float a = (float) (color >> 24 & 255) / 255.0F;
+            float r = (float) (color >> 16 & 255) / 255.0F;
+            float g = (float) (color >> 8 & 255) / 255.0F;
+            float b = (float) (color & 255) / 255.0F;
             GL11.glColor4d(r, g, b, a);
             RenderGlobal.drawSelectionBoundingBox(new AxisAlignedBB(x, y, z, x + 1.0D, y + 1.0D, z + 1.0D));
             if (shade) {
@@ -1288,8 +1061,8 @@ public class Utils {
          }
       }
 
-      public static void drawCircleAroundEntity(Entity e, double shift, double expand, float lineWidth, int sides, int color, boolean damage) {
-         if (e instanceof EntityPlayer && damage && ((EntityPlayer)e).hurtTime != 0) {
+      public static void drawCircleAroundEntity(Entity e, double expand, float lineWidth, int sides, int color, boolean damage) {
+         if (e instanceof EntityPlayer && damage && ((EntityPlayer) e).hurtTime != 0) {
             color = Color.RED.getRGB();
          }
 
@@ -1297,7 +1070,100 @@ public class Utils {
          double y = e.lastTickPosY + (e.posY - e.lastTickPosY) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosY;
          double z = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosZ;
 
-         d3p(x, y, z, 0.699999988079071D+expand, sides, lineWidth, color, color == 0);
+         d3p(x, y, z, 0.699999988079071D + expand, sides, lineWidth, color, color == 0);
+      }
+
+      public static void drawBoxAroundItem(EntityItem item, int type, double expand, int color) {
+         if (item instanceof EntityItem) {
+            double x = item.lastTickPosX + (item.posX - item.lastTickPosX) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosX;
+            double y = item.lastTickPosY + (item.posY - item.lastTickPosY) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosY;
+            double z = item.lastTickPosZ + (item.posZ - item.lastTickPosZ) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosZ;
+            float d = (float) expand / 40.0F;
+
+            GlStateManager.pushMatrix();
+            if (type == 3) {
+               GL11.glTranslated(x, y - 0.2D, z);
+               GL11.glRotated(-mc.getRenderManager().playerViewY, 0.0D, 1.0D, 0.0D);
+               GlStateManager.disableDepth();
+               GL11.glScalef(0.03F + d, 0.03F + d, 0.03F + d);
+               int outline = Color.black.getRGB();
+               net.minecraft.client.gui.Gui.drawRect(-20, -1, -26, 75, outline);
+               net.minecraft.client.gui.Gui.drawRect(20, -1, 26, 75, outline);
+               net.minecraft.client.gui.Gui.drawRect(-20, -1, 21, 5, outline);
+               net.minecraft.client.gui.Gui.drawRect(-20, 70, 21, 75, outline);
+               if (color != 0) {
+                  net.minecraft.client.gui.Gui.drawRect(-21, 0, -25, 74, color);
+                  net.minecraft.client.gui.Gui.drawRect(21, 0, 25, 74, color);
+                  net.minecraft.client.gui.Gui.drawRect(-21, 0, 24, 4, color);
+                  net.minecraft.client.gui.Gui.drawRect(-21, 71, 25, 74, color);
+               } else {
+                  int st = Utils.Client.rainbowDraw(2L, 0L);
+                  int en = Utils.Client.rainbowDraw(2L, 1000L);
+                  dGR(-21, 0, -25, 74, st, en);
+                  dGR(21, 0, 25, 74, st, en);
+                  net.minecraft.client.gui.Gui.drawRect(-21, 0, 21, 4, en);
+                  net.minecraft.client.gui.Gui.drawRect(-21, 71, 21, 74, st);
+               }
+
+               GlStateManager.enableDepth();
+            } else {
+               int i;
+               if (type == 6) {
+                  d3p(x, y + 0.000, z, 0.699999988079071D, 45, 1.5F, color, color == 0);
+               } else {
+                  if (color == 0) {
+                     color = Utils.Client.rainbowDraw(2L, 0L);
+                  }
+
+                  float a = (float) (color >> 24 & 255) / 255.0F;
+                  float r = (float) (color >> 16 & 255) / 255.0F;
+                  float g = (float) (color >> 8 & 255) / 255.0F;
+                  float b = (float) (color & 255) / 255.0F;
+                  if (type == 5) {
+                     GL11.glTranslated(x, y - 0.2D, z);
+                     GL11.glRotated(-mc.getRenderManager().playerViewY, 0.0D, 1.0D, 0.0D);
+                     GlStateManager.disableDepth();
+                     GL11.glScalef(0.03F + d, 0.03F, 0.03F + d);
+                     int base = 1;
+                     d2p(0.0D, 95.0D, 10, 3, Color.black.getRGB());
+
+                     for (i = 0; i < 6; ++i) {
+                        d2p(0.0D, 95 + (10 - i), 3, 4, Color.black.getRGB());
+                     }
+
+                     for (i = 0; i < 7; ++i) {
+                        d2p(0.0D, 95 + (10 - i), 2, 4, color);
+                     }
+
+                     d2p(0.0D, 95.0D, 8, 3, color);
+                     GlStateManager.enableDepth();
+                  } else {
+                     AxisAlignedBB bbox = item.getEntityBoundingBox().expand(0.1D + expand, 0.1D + expand, 0.1D + expand);
+                     AxisAlignedBB axis = new AxisAlignedBB(bbox.minX - item.posX + x, bbox.minY - item.posY + y,
+                             bbox.minZ - item.posZ + z, bbox.maxX - item.posX + x, bbox.maxY - item.posY + y, bbox.maxZ - item.posZ + z);
+                     GL11.glBlendFunc(770, 771);
+                     GL11.glEnable(3042);
+                     GL11.glDisable(3553);
+                     GL11.glDisable(2929);
+                     GL11.glDepthMask(false);
+                     GL11.glLineWidth(2.0F);
+                     GL11.glColor4f(r, g, b, a);
+                     if (type == 1) {
+                        RenderGlobal.drawSelectionBoundingBox(axis);
+                     } else if (type == 2) {
+                        dbb(axis, r, g, b);
+                     }
+
+                     GL11.glEnable(3553);
+                     GL11.glEnable(2929);
+                     GL11.glDepthMask(true);
+                     GL11.glDisable(3042);
+                  }
+               }
+            }
+
+            GlStateManager.popMatrix();
+         }
       }
 
       public static void drawBoxAroundEntity(Entity e, int type, double expand, double shift, int color, boolean damage) {
@@ -1305,8 +1171,8 @@ public class Utils {
             double x = e.lastTickPosX + (e.posX - e.lastTickPosX) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosX;
             double y = e.lastTickPosY + (e.posY - e.lastTickPosY) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosY;
             double z = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosZ;
-            float d = (float)expand / 40.0F;
-            if (e instanceof EntityPlayer && damage && ((EntityPlayer)e).hurtTime != 0) {
+            float d = (float) expand / 40.0F;
+            if (e instanceof EntityPlayer && damage && ((EntityPlayer) e).hurtTime != 0) {
                color = Color.RED.getRGB();
             }
 
@@ -1339,31 +1205,31 @@ public class Utils {
             } else {
                int i;
                if (type == 4) {
-                  EntityLivingBase en = (EntityLivingBase)e;
+                  EntityLivingBase en = (EntityLivingBase) e;
                   double r = en.getHealth() / en.getMaxHealth();
-                  int b = (int)(74.0D * r);
+                  int b = (int) (74.0D * r);
                   int hc = r < 0.3D ? Color.red.getRGB() : (r < 0.5D ? Color.orange.getRGB() : (r < 0.7D ? Color.yellow.getRGB() : Color.green.getRGB()));
                   GL11.glTranslated(x, y - 0.2D, z);
                   GL11.glRotated(-mc.getRenderManager().playerViewY, 0.0D, 1.0D, 0.0D);
                   GlStateManager.disableDepth();
                   GL11.glScalef(0.03F + d, 0.03F + d, 0.03F + d);
-                  i = (int)(21.0D + shift * 2.0D);
+                  i = (int) (21.0D + shift * 2.0D);
                   net.minecraft.client.gui.Gui.drawRect(i, -1, i + 5, 75, Color.black.getRGB());
                   net.minecraft.client.gui.Gui.drawRect(i + 1, b, i + 4, 74, Color.darkGray.getRGB());
                   net.minecraft.client.gui.Gui.drawRect(i + 1, 0, i + 4, b, hc);
                   GlStateManager.enableDepth();
 
                } else if (type == 6) {
-                  d3p(x, y+0.000, z, 0.699999988079071D, 45, 1.5F, color, color == 0);
+                  d3p(x, y + 0.000, z, 0.699999988079071D, 45, 1.5F, color, color == 0);
                } else {
                   if (color == 0) {
                      color = Utils.Client.rainbowDraw(2L, 0L);
                   }
 
-                  float a = (float)(color >> 24 & 255) / 255.0F;
-                  float r = (float)(color >> 16 & 255) / 255.0F;
-                  float g = (float)(color >> 8 & 255) / 255.0F;
-                  float b = (float)(color & 255) / 255.0F;
+                  float a = (float) (color >> 24 & 255) / 255.0F;
+                  float r = (float) (color >> 16 & 255) / 255.0F;
+                  float g = (float) (color >> 8 & 255) / 255.0F;
+                  float b = (float) (color & 255) / 255.0F;
                   if (type == 5) {
                      GL11.glTranslated(x, y - 0.2D, z);
                      GL11.glRotated(-mc.getRenderManager().playerViewY, 0.0D, 1.0D, 0.0D);
@@ -1372,11 +1238,11 @@ public class Utils {
                      int base = 1;
                      d2p(0.0D, 95.0D, 10, 3, Color.black.getRGB());
 
-                     for(i = 0; i < 6; ++i) {
+                     for (i = 0; i < 6; ++i) {
                         d2p(0.0D, 95 + (10 - i), 3, 4, Color.black.getRGB());
                      }
 
-                     for(i = 0; i < 7; ++i) {
+                     for (i = 0; i < 7; ++i) {
                         d2p(0.0D, 95 + (10 - i), 2, 4, color);
                      }
 
@@ -1384,7 +1250,8 @@ public class Utils {
                      GlStateManager.enableDepth();
                   } else {
                      AxisAlignedBB bbox = e.getEntityBoundingBox().expand(0.1D + expand, 0.1D + expand, 0.1D + expand);
-                     AxisAlignedBB axis = new AxisAlignedBB(bbox.minX - e.posX + x, bbox.minY - e.posY + y, bbox.minZ - e.posZ + z, bbox.maxX - e.posX + x, bbox.maxY - e.posY + y, bbox.maxZ - e.posZ + z);
+                     AxisAlignedBB axis = new AxisAlignedBB(bbox.minX - e.posX + x, bbox.minY - e.posY + y,
+                             bbox.minZ - e.posZ + z, bbox.maxX - e.posX + x, bbox.maxY - e.posY + y, bbox.maxZ - e.posZ + z);
                      GL11.glBlendFunc(770, 771);
                      GL11.glEnable(3042);
                      GL11.glDisable(3553);
@@ -1476,15 +1343,15 @@ public class Utils {
          ts.draw();
       }
 
-      public static void dtl(Entity e, int color, float lw) {
+      public static void drawTracerLine(Entity e, int color, float lw) {
          if (e != null) {
             double x = e.lastTickPosX + (e.posX - e.lastTickPosX) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosX;
-            double y = (double)e.getEyeHeight() + e.lastTickPosY + (e.posY - e.lastTickPosY) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosY;
+            double y = (double) e.getEyeHeight() + e.lastTickPosY + (e.posY - e.lastTickPosY) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosY;
             double z = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosZ;
-            float a = (float)(color >> 24 & 255) / 255.0F;
-            float r = (float)(color >> 16 & 255) / 255.0F;
-            float g = (float)(color >> 8 & 255) / 255.0F;
-            float b = (float)(color & 255) / 255.0F;
+            float a = (float) (color >> 24 & 255) / 255.0F;
+            float r = (float) (color >> 16 & 255) / 255.0F;
+            float g = (float) (color >> 8 & 255) / 255.0F;
+            float b = (float) (color & 255) / 255.0F;
             GL11.glPushMatrix();
             GL11.glEnable(3042);
             GL11.glEnable(2848);
@@ -1507,6 +1374,44 @@ public class Utils {
          }
       }
 
+       public static void drawLine(AxisAlignedBB e, int color, float lw) {
+           if (e != null) {
+               /*
+                double x = e.lastTickPosX + (e.posX - e.lastTickPosX) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosX;
+                double y = (double) e.getEyeHeight() + e.lastTickPosY + (e.posY - e.lastTickPosY) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosY;
+                double z = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosZ;
+                */
+
+
+               double x = e.minX + (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosX;
+               double y = e.minZ + (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosY;
+               double z = e.minZ + (double) Utils.Client.getTimer().renderPartialTicks - mc.getRenderManager().viewerPosZ;
+               float a = (float) (color >> 24 & 255) / 255.0F;
+               float r = (float) (color >> 16 & 255) / 255.0F;
+               float g = (float) (color >> 8 & 255) / 255.0F;
+               float b = (float) (color & 255) / 255.0F;
+               GL11.glPushMatrix();
+               GL11.glEnable(3042);
+               GL11.glEnable(2848);
+               GL11.glDisable(2929);
+               GL11.glDisable(3553);
+               GL11.glBlendFunc(770, 771);
+               GL11.glEnable(3042);
+               GL11.glLineWidth(lw);
+               GL11.glColor4f(r, g, b, a);
+               GL11.glBegin(2);
+               GL11.glVertex3d(0.0D, mc.thePlayer.getEyeHeight(), 0.0D);
+               GL11.glVertex3d(x, y, z);
+               GL11.glEnd();
+               GL11.glDisable(3042);
+               GL11.glEnable(3553);
+               GL11.glEnable(2929);
+               GL11.glDisable(2848);
+               GL11.glDisable(3042);
+               GL11.glPopMatrix();
+           }
+       }
+
       public static void dGR(int left, int top, int right, int bottom, int startColor, int endColor) {
          int j;
          if (left < right) {
@@ -1521,14 +1426,14 @@ public class Utils {
             bottom = j;
          }
 
-         float f = (float)(startColor >> 24 & 255) / 255.0F;
-         float f1 = (float)(startColor >> 16 & 255) / 255.0F;
-         float f2 = (float)(startColor >> 8 & 255) / 255.0F;
-         float f3 = (float)(startColor & 255) / 255.0F;
-         float f4 = (float)(endColor >> 24 & 255) / 255.0F;
-         float f5 = (float)(endColor >> 16 & 255) / 255.0F;
-         float f6 = (float)(endColor >> 8 & 255) / 255.0F;
-         float f7 = (float)(endColor & 255) / 255.0F;
+         float f = (float) (startColor >> 24 & 255) / 255.0F;
+         float f1 = (float) (startColor >> 16 & 255) / 255.0F;
+         float f2 = (float) (startColor >> 8 & 255) / 255.0F;
+         float f3 = (float) (startColor & 255) / 255.0F;
+         float f4 = (float) (endColor >> 24 & 255) / 255.0F;
+         float f5 = (float) (endColor >> 16 & 255) / 255.0F;
+         float f6 = (float) (endColor >> 8 & 255) / 255.0F;
+         float f7 = (float) (endColor & 255) / 255.0F;
          GlStateManager.disableTexture2D();
          GlStateManager.enableBlend();
          GlStateManager.disableAlpha();
@@ -1558,15 +1463,15 @@ public class Utils {
          int l = 0;
          long colourControl = 0L;
 
-         for(int i = 0; i < text.length(); ++i) {
+         for (int i = 0; i < text.length(); ++i) {
             char c = text.charAt(i);
             if (c == lineSplit) {
                ++l;
                leftOffset = bX;
                topOffset += fontRenderer.FONT_HEIGHT + 5;
-               colourControl = shift * (long)l;
+               colourControl = shift * (long) l;
             } else {
-               fontRenderer.drawString(String.valueOf(c), (float)leftOffset, (float)topOffset, Utils.Client.astolfoColorsDraw((int)colourParam1, (int)colourControl), rect);
+               fontRenderer.drawString(String.valueOf(c), (float) leftOffset, (float) topOffset, Utils.Client.astolfoColorsDraw((int) colourParam1, (int) colourControl), rect);
                leftOffset += fontRenderer.getCharWidth(c);
                if (c != ' ') {
                   colourControl -= 90L;
@@ -1576,25 +1481,25 @@ public class Utils {
       }
 
       public static PositionMode getPostitionMode(int marginX, int marginY, double height, double width) {
-         int halfHeight = (int)(height / 4);
+         int halfHeight = (int) (height / 4);
          int halfWidth = (int) width;
          PositionMode positionMode = null;
          // up left
 
-         if(marginY < halfHeight) {
-            if(marginX < halfWidth) {
+         if (marginY < halfHeight) {
+            if (marginX < halfWidth) {
                positionMode = PositionMode.UPLEFT;
             }
-            if(marginX > halfWidth) {
+            if (marginX > halfWidth) {
                positionMode = PositionMode.UPRIGHT;
             }
          }
 
-         if(marginY > halfHeight) {
-            if(marginX < halfWidth) {
+         if (marginY > halfHeight) {
+            if (marginX < halfWidth) {
                positionMode = PositionMode.DOWNLEFT;
             }
-            if(marginX > halfWidth) {
+            if (marginX > halfWidth) {
                positionMode = PositionMode.DOWNRIGHT;
             }
          }
@@ -1603,10 +1508,10 @@ public class Utils {
       }
 
       public static void d2p(double x, double y, int radius, int sides, int color) {
-         float a = (float)(color >> 24 & 255) / 255.0F;
-         float r = (float)(color >> 16 & 255) / 255.0F;
-         float g = (float)(color >> 8 & 255) / 255.0F;
-         float b = (float)(color & 255) / 255.0F;
+         float a = (float) (color >> 24 & 255) / 255.0F;
+         float r = (float) (color >> 16 & 255) / 255.0F;
+         float g = (float) (color >> 8 & 255) / 255.0F;
+         float b = (float) (color & 255) / 255.0F;
          Tessellator tessellator = Tessellator.getInstance();
          WorldRenderer worldrenderer = tessellator.getWorldRenderer();
          GlStateManager.enableBlend();
@@ -1615,9 +1520,9 @@ public class Utils {
          GlStateManager.color(r, g, b, a);
          worldrenderer.begin(6, DefaultVertexFormats.POSITION);
 
-         for(int i = 0; i < sides; ++i) {
-            double angle = 6.283185307179586D * (double)i / (double)sides + Math.toRadians(180.0D);
-            worldrenderer.pos(x + Math.sin(angle) * (double)radius, y + Math.cos(angle) * (double)radius, 0.0D).endVertex();
+         for (int i = 0; i < sides; ++i) {
+            double angle = 6.283185307179586D * (double) i / (double) sides + Math.toRadians(180.0D);
+            worldrenderer.pos(x + Math.sin(angle) * (double) radius, y + Math.cos(angle) * (double) radius, 0.0D).endVertex();
          }
 
          tessellator.draw();
@@ -1626,10 +1531,10 @@ public class Utils {
       }
 
       public static void d3p(double x, double y, double z, double radius, int sides, float lineWidth, int color, boolean chroma) {
-         float a = (float)(color >> 24 & 255) / 255.0F;
-         float r = (float)(color >> 16 & 255) / 255.0F;
-         float g = (float)(color >> 8 & 255) / 255.0F;
-         float b = (float)(color & 255) / 255.0F;
+         float a = (float) (color >> 24 & 255) / 255.0F;
+         float r = (float) (color >> 16 & 255) / 255.0F;
+         float g = (float) (color >> 8 & 255) / 255.0F;
+         float b = (float) (color & 255) / 255.0F;
          mc.entityRenderer.disableLightmap();
          GL11.glDisable(3553);
          GL11.glEnable(3042);
@@ -1644,10 +1549,10 @@ public class Utils {
 
          GL11.glBegin(1);
          long d = 0L;
-         long ed = 15000L / (long)sides;
+         long ed = 15000L / (long) sides;
          long hed = ed / 2L;
 
-         for(int i = 0; i < sides * 2; ++i) {
+         for (int i = 0; i < sides * 2; ++i) {
             if (chroma) {
                if (i % 2 != 0) {
                   if (i == 47) {
@@ -1658,13 +1563,13 @@ public class Utils {
                }
 
                int c = Utils.Client.rainbowDraw(2L, d);
-               float r2 = (float)(c >> 16 & 255) / 255.0F;
-               float g2 = (float)(c >> 8 & 255) / 255.0F;
-               float b2 = (float)(c & 255) / 255.0F;
+               float r2 = (float) (c >> 16 & 255) / 255.0F;
+               float g2 = (float) (c >> 8 & 255) / 255.0F;
+               float b2 = (float) (c & 255) / 255.0F;
                GL11.glColor3f(r2, g2, b2);
             }
 
-            double angle = 6.283185307179586D * (double)i / (double)sides + Math.toRadians(180.0D);
+            double angle = 6.283185307179586D * (double) i / (double) sides + Math.toRadians(180.0D);
             GL11.glVertex3d(x + Math.cos(angle) * radius, y, z + Math.sin(angle) * radius);
          }
 
@@ -1678,14 +1583,15 @@ public class Utils {
          mc.entityRenderer.enableLightmap();
       }
 
-      public enum PositionMode { UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT }
+      public enum PositionMode {UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT}
    }
 
    public static class Modes {
-      public enum ClickEvents { RENDER, TICK }
-      public enum BridgeMode { GODBRIDGE, MOONWALK, BREEZILY, NORMAL }
-      public enum ClickTimings { RavenNPlus, SKID }
-      public enum SprintResetTimings { PRE, POST }
+      public enum ClickEvents {RENDER, TICK}
+
+      public enum ClickTimings {RavenNPlus, SKID}
+
+      public enum SprintResetTimings {PRE, POST}
    }
 
    public static class FriendUtils {
@@ -1697,9 +1603,9 @@ public class Utils {
 
       public static boolean addFriend(String name) {
          boolean found = false;
-         for (Entity entity:mc.theWorld.getLoadedEntityList()) {
+         for (Entity entity : mc.theWorld.getLoadedEntityList()) {
             if (entity.getName().equalsIgnoreCase(name) || entity.getCustomNameTag().equalsIgnoreCase(name)) {
-               if(!isAFriend(entity)) {
+               if (!isAFriend(entity)) {
                   addFriend(entity);
                   found = true;
                }
@@ -1724,10 +1630,10 @@ public class Utils {
       }
 
       public static boolean removeFriend(Entity entityPlayer) {
-         try{
+         try {
             friends.remove(entityPlayer);
-         } catch (Exception eeeeee){
-            eeeeee.printStackTrace();
+         } catch (Exception e) {
+            e.printStackTrace();
             return false;
          }
          return true;
@@ -1742,22 +1648,24 @@ public class Utils {
       }
 
       public static boolean isAFriend(Entity entity) {
-         if(entity == mc.thePlayer) return true;
+         if (entity == mc.thePlayer) return true;
 
          for (Entity en : friends) {
             if (en.equals(entity))
                return true;
-         } try {
+         }
+         try {
             EntityPlayer en = (EntityPlayer) entity;
-            if(ravenNPlus.client.main.Client.debugger){
+            if (ravenNPlus.client.main.Client.debugger) {
                Utils.Player.sendMessageToSelf("unformatted / " + en.getDisplayName().getUnformattedText().replace("§", "%"));
 
                Utils.Player.sendMessageToSelf("substring entity / " + en.getDisplayName().getUnformattedText().substring(0, 2));
                Utils.Player.sendMessageToSelf("substring player / " + mc.thePlayer.getDisplayName().getUnformattedText().substring(0, 2));
             }
-            if(mc.thePlayer.isOnSameTeam((EntityLivingBase) entity) || mc.thePlayer.getDisplayName().getUnformattedText().startsWith(en.getDisplayName().getUnformattedText().substring(0, 2))) return true;
+            if (mc.thePlayer.isOnSameTeam((EntityLivingBase) entity) || mc.thePlayer.getDisplayName().getUnformattedText().startsWith(en.getDisplayName().getUnformattedText().substring(0, 2)))
+               return true;
          } catch (Exception ex) {
-            if(ravenNPlus.client.main.Client.debugger) {
+            if (ravenNPlus.client.main.Client.debugger) {
                Utils.Player.sendMessageToSelf(ex.getMessage());
             }
          }

@@ -12,6 +12,7 @@ public class KeyStrokeRenderer {
    private final Minecraft mc = Minecraft.getMinecraft();
    private final KeyStrokeKeyRenderer[] b = new KeyStrokeKeyRenderer[4];
    private final KeyStrokeMouse[] c = new KeyStrokeMouse[2];
+   public static String excuseMe = "#";
 
    public KeyStrokeRenderer() {
       this.b[0] = new KeyStrokeKeyRenderer(this.mc.gameSettings.keyBindForward, 26, 2);
@@ -32,13 +33,11 @@ public class KeyStrokeRenderer {
             }
          }
 
-      } else if (this.mc.inGameHasFocus && !this.mc.gameSettings.showDebugInfo) {
+      } else if (mc.inGameHasFocus && !this.mc.gameSettings.showDebugInfo)
          this.renderKeystrokes();
-      }
    }
 
    public void renderKeystrokes() {
-      KeyStroke f = KeyStrokeMod.getKeyStroke();
       if (KeyStroke.enabled) {
          int x = KeyStroke.x;
          int y = KeyStroke.y;
@@ -72,7 +71,7 @@ public class KeyStrokeRenderer {
    }
 
    private int getColor(int index) {
-      return index == 6 ? Color.getHSBColor((float)(System.currentTimeMillis() % 3750L) / 3750.0F, 1.0F, 1.0F).getRGB() : a[index];
+      return index == 6 ? Color.getHSBColor((float) (System.currentTimeMillis() % 3750L) / 3750.0F, 1.0F, 1.0F).getRGB() : a[index];
    }
 
    private void drawMovementKeys(int x, int y, int textColor) {

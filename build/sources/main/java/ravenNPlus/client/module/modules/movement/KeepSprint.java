@@ -1,11 +1,10 @@
 package ravenNPlus.client.module.modules.movement;
 
-import ravenNPlus.client.main.Client;
 import ravenNPlus.client.module.*;
+import ravenNPlus.client.main.Client;
 import ravenNPlus.client.module.modules.combat.Reach;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
 import ravenNPlus.client.module.setting.impl.TickSetting;
-import net.minecraft.entity.Entity;
+import ravenNPlus.client.module.setting.impl.SliderSetting;
 
 public class KeepSprint extends Module {
 
@@ -18,7 +17,7 @@ public class KeepSprint extends Module {
       this.addSetting(c = new TickSetting("Only reduce reach hits", false));
    }
 
-   public static void sl(Entity en) {
+   public static void sl(net.minecraft.entity.Entity en) {
       double dist;
       Module reach = Client.moduleManager.getModuleByClazz(Reach.class);
       if (c.isToggled() && reach != null && reach.isEnabled() && !mc.thePlayer.capabilities.isCreativeMode) {

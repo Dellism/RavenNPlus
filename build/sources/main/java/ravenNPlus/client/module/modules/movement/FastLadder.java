@@ -1,12 +1,11 @@
 package ravenNPlus.client.module.modules.movement;
 
-import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
-import ravenNPlus.client.module.setting.impl.TickSetting;
 import ravenNPlus.client.utils.Timer;
-import ravenNPlus.client.utils.Utils;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import ravenNPlus.client.module.Module;
+import ravenNPlus.client.module.setting.impl.TickSetting;
+import ravenNPlus.client.module.setting.impl.SliderSetting;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class FastLadder extends Module {
 
@@ -23,19 +22,19 @@ public class FastLadder extends Module {
 
     @SubscribeEvent
     public void r(TickEvent.PlayerTickEvent e) {
-        if(!delayToggle.isToggled()) {
-            if(auto.isToggled()) {
+        if (!delayToggle.isToggled()) {
+            if (auto.isToggled()) {
                 void_pl23F9(e);
             } else {
-                if(mc.gameSettings.keyBindForward.isKeyDown()) {
+                if (mc.gameSettings.keyBindForward.isKeyDown()) {
                     void_pl23F9(e);
                 }
             }
-        } else if(delayToggle.isToggled() && Timer.hasTimeElapsed((long) delay.getValue() * 100L, true)) {
-            if(auto.isToggled()) {
+        } else if (delayToggle.isToggled() && Timer.hasTimeElapsed(delay.getValueToLong() * 100L, true)) {
+            if (auto.isToggled()) {
                 void_pl23F9(e);
             } else {
-                if(mc.gameSettings.keyBindForward.isKeyDown()) {
+                if (mc.gameSettings.keyBindForward.isKeyDown()) {
                     void_pl23F9(e);
                 }
             }
@@ -43,16 +42,15 @@ public class FastLadder extends Module {
     }
 
     private void void_pl23F9(TickEvent.PlayerTickEvent e) {
-        if(!Utils.Player.isPlayerInGame()) return;
-        if(!mc.thePlayer.isOnLadder()) return;
+        if (!this.inGame()) return;
+        if (!this.player().isOnLadder()) return;
 
-        if(e.phase != TickEvent.Phase.END) {
-            if(!mc.thePlayer.isRiding() && !mc.thePlayer.isDead && mc.thePlayer.isOnLadder()) {
-                mc.thePlayer.motionY = 0.169 + speed.getValue();
+        if (e.phase != TickEvent.Phase.END) {
+            if (!this.player().isRiding() && !this.player().isDead && this.player().isOnLadder()) {
+                this.player().motionY = 0.169 + speed.getValue();
             }
         }
 
     }
-
 
 }

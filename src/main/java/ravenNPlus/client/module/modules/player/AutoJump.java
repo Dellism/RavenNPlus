@@ -2,29 +2,30 @@ package ravenNPlus.client.module.modules.player;
 
 import ravenNPlus.client.module.Module;
 import ravenNPlus.client.module.setting.impl.TickSetting;
-import ravenNPlus.client.utils.Utils;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 public class AutoJump extends Module {
-   public static TickSetting b;
+
+   public static TickSetting cancelWhenShifting;
    private boolean c = false;
 
    public AutoJump() {
       super("AutoJump", ModuleCategory.player, "Automatically Jumps");
-      this.addSetting(b = new TickSetting("Cancel when shifting", true));
+      this.addSetting(cancelWhenShifting = new TickSetting("Cancel when shifting", true));
    }
 
+   @Override
    public void onDisable() {
       this.ju(this.c = false);
    }
 
    @SubscribeEvent
    public void p(PlayerTickEvent e) {
-      if (Utils.Player.isPlayerInGame()) {
-         if (mc.thePlayer.onGround && (!b.isToggled() || !mc.thePlayer.isSneaking())) {
-            if (mc.theWorld.getCollidingBoundingBoxes(mc.thePlayer, mc.thePlayer.getEntityBoundingBox().offset(mc.thePlayer.motionX / 3.0D, -1.0D, mc.thePlayer.motionZ / 3.0D)).isEmpty()) {
+      if (this.inGame()) {
+         if (this.onGround() && (!cancelWhenShifting.isToggled() || !this.isSneaking())) {
+            if (mc.theWorld.getCollidingBoundingBoxes(this.player(), this.player().getEntityBoundingBox().offset(this.player().motionX / 3.0D, -1.0D, this.player().motionZ / 3.0D)).isEmpty()) {
                this.ju(this.c = true);
             } else if (this.c) {
                this.ju(this.c = false);
@@ -32,7 +33,6 @@ public class AutoJump extends Module {
          } else if (this.c) {
             this.ju(this.c = false);
          }
-
       }
    }
 

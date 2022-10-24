@@ -3,14 +3,15 @@ package ravenNPlus.client.config;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.client.Minecraft;
 import ravenNPlus.client.main.Client;
 import ravenNPlus.client.module.*;
-import net.minecraft.client.Minecraft;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -24,7 +25,7 @@ public class ConfigManager {
     private Config config;
 
     public ConfigManager() {
-        if(!configDirectory.isDirectory()){
+        if(!configDirectory.isDirectory()) {
             configDirectory.mkdirs();
         }
 
@@ -61,14 +62,14 @@ public class ConfigManager {
     /**
      * Parses through all the files in the cfg dir and creates a new config class for each one
      */
-    public void discoverConfigs(){
+    public void discoverConfigs() {
         configs.clear();
         if(configDirectory.listFiles() == null || !(Objects.requireNonNull(configDirectory.listFiles()).length > 0))
             return;  // nothing to discover if there are no files in the directory
 
-        for(File file : Objects.requireNonNull(configDirectory.listFiles())){
-            if(file.getName().endsWith(".RavenNPlus")){
-                if(!isOutdated(file)){
+        for(File file : Objects.requireNonNull(configDirectory.listFiles())) {
+            if(file.getName().endsWith(".RavenNPlus")) {
+                if(!isOutdated(file)) {
                     configs.add(new Config(
                             new File(file.getPath())
                     ));
@@ -77,21 +78,21 @@ public class ConfigManager {
         }
     }
 
-    public Config getConfig(){
+    public Config getConfig() {
         return config;
     }
 
     public void save() {
         JsonObject data = new JsonObject();
         data.addProperty("version", Client.versionManager.getClientVersion().getVersion());
-        data.addProperty("author", Minecraft.getMinecraft().thePlayer.getName());
+        data.addProperty("author", Minecraft.getMinecraft().getSession().getUsername().toLowerCase(Locale.ENGLISH));
         data.addProperty("notes", "");
         data.addProperty("intendedServer", "");
         data.addProperty("usedFor", 0);
         data.addProperty("lastEditTime", System.currentTimeMillis());
 
         JsonObject modules = new JsonObject();
-        for(Module module : Client.moduleManager.getModules()){
+        for(Module module : Client.moduleManager.getModules()) {
             modules.add(module.getName(), module.getConfigAsJson());
         }
         data.add("modules", modules);
@@ -99,12 +100,12 @@ public class ConfigManager {
         config.save(data);
     }
 
-    public void setConfig(Config config){
+    public void setConfig(Config config) {
         this.config = config;
         JsonObject data = config.getData().get("modules").getAsJsonObject();
         List<Module> knownModules = new ArrayList<>(Client.moduleManager.getModules());
-        for(Module module : knownModules){
-            if(data.has(module.getName())){
+        for(Module module : knownModules) {
+            if(data.has(module.getName())) {
                 module.applyConfigFromJson(
                         data.get(module.getName()).getAsJsonObject()
                 );
@@ -141,7 +142,7 @@ public class ConfigManager {
 
     public void deleteConfig(Config config) {
         config.file.delete();
-        if(config.getName().equals(this.config.getName())){
+        if(config.getName().equals(this.config.getName())) {
             discoverConfigs();
             if(this.configs.size() < 2) {
                 this.resetConfig();

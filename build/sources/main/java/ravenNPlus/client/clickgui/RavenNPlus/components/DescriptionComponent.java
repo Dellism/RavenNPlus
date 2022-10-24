@@ -1,16 +1,18 @@
 package ravenNPlus.client.clickgui.RavenNPlus.components;
 
-import ravenNPlus.client.clickgui.RavenNPlus.Component;
-import ravenNPlus.client.module.setting.impl.DescriptionSetting;
 import net.minecraft.client.Minecraft;
+import ravenNPlus.client.clickgui.RavenNPlus.Component;
+import ravenNPlus.client.utils.ColorUtil;
+import ravenNPlus.client.module.setting.impl.DescriptionSetting;
 import org.lwjgl.opengl.GL11;
-import java.awt.*;
 
 public class DescriptionComponent implements Component {
-   private final int c = (new Color(226, 83, 47)).getRGB();
+
+   private final int c = ColorUtil.color_descComponent1 ;
    private final DescriptionSetting desc;
    private final ModuleComponent p;
    private int o;
+
    public DescriptionComponent(DescriptionSetting desc, ModuleComponent b, int o) {
       this.desc = desc;
       this.p = b;
@@ -18,6 +20,7 @@ public class DescriptionComponent implements Component {
       int y = b.category.getY() + b.o;
       this.o = o;
    }
+
    public void draw() {
       GL11.glPushMatrix();
       GL11.glScaled(0.5D, 0.5D, 0.5D);
@@ -29,28 +32,31 @@ public class DescriptionComponent implements Component {
               true);
       GL11.glPopMatrix();
    }
-   @Override
-   public void update(int mousePosX, int mousePosY) {
-   }
-   @Override
-   public void mouseDown(int x, int y, int b) {
-   }
-   @Override
-   public void mouseReleased(int x, int y, int m) {
 
-   }
    @Override
-   public void keyTyped(char t, int k) {
-   }
+   public void update(int mousePosX, int mousePosY) {  }
+
+   @Override
+   public void mouseDown(int x, int y, int b) {  }
+
+   @Override
+   public void mouseReleased(int x, int y, int m) {  }
+
+   @Override
+   public void keyTyped(char t, int k) {  }
+
    public void setComponentStartAt(int n) {
       this.o = n;
    }
+
    @Override
    public int getHeight() {
       return 0;
    }
+
    @Override
    public int getY() {
       return (this.p.category.getY() + this.o + 4) * 2;
    }
+
 }

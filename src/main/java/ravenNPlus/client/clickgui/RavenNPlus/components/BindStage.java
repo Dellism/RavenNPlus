@@ -1,2 +1,8 @@
 package ravenNPlus.client.clickgui.RavenNPlus.components;
-public class BindStage { public static String bind = " Bind ", binding = " Key "; }
+
+public class BindStage {
+
+    public static String bind = " Bind ";
+    public static String binding = " Key ";
+
+}

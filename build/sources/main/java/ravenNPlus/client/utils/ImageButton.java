@@ -29,8 +29,10 @@ public class ImageButton {
             RenderUtils.draw2DImage(this.image, this.x-this.ani, this.y-this.ani, this.width+this.ani*2, this.height+this.ani*2, c);
 
             double descWidth = mc.fontRendererObj.getStringWidth(description);
-            Gui.drawRect((int) (this.x -descWidth/2), this.y+this.height+10, (int) (this.x+this.width+descWidth/2), this.y+this.height+10+mc.fontRendererObj.FONT_HEIGHT, Integer.MIN_VALUE);
-            mc.fontRendererObj.drawString(description, this.x+this.width/2-this.mc.fontRendererObj.getStringWidth(this.description)/2, this.y+this.height+11, Color.white.getRGB());
+            Gui.drawRect(this.x - (int)descWidth/2, this.y+this.height+10, this.x+this.width+(int) descWidth/2,
+                    this.y+this.height+10+mc.fontRendererObj.FONT_HEIGHT, Integer.MIN_VALUE);
+            mc.fontRendererObj.drawString(this.description, this.x+this.width/2-this.mc.fontRendererObj.getStringWidth(this.description)/2,
+                    this.y+this.height+11, Color.white.getRGB());
         } else {
             RenderUtils.draw2DImage(this.image, this.x, this.y, this.width, this.height, c);
         }
@@ -54,7 +56,7 @@ public class ImageButton {
         }
     }
 
-    protected boolean isHovered(int mouseX, int mouseY) {
+    public boolean isHovered(int mouseX, int mouseY) {
         return RenderUtils.isHovered(this.x, this.y, this.x+this.width, this.y+this.height, mouseX, mouseY);
     }
 

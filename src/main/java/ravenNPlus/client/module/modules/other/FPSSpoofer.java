@@ -3,9 +3,9 @@ package ravenNPlus.client.module.modules.other;
 import ravenNPlus.client.module.Module;
 import ravenNPlus.client.module.setting.impl.DoubleSliderSetting;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.lang.reflect.Field;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -27,25 +27,23 @@ public class FPSSpoofer extends Module {
         return fpsField != null;
     }
 
-    public void onEnable(){
+    public void onEnable() {
         ticksPassed = 0;
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event){
-        if(event.phase == TickEvent.Phase.START){
-            //if(ticksPassed % 20 == 0) {
-                guiUpdate();
+    public void onTick(TickEvent.ClientTickEvent event) {
+        if (event.phase == TickEvent.Phase.START) {
+            guiUpdate();
 
-                try {
-                    int fpsN = ThreadLocalRandom.current().nextInt((int)fps.getInputMin(), (int)fps.getInputMax() + 1);
-                    fpsField.set(mc, fpsN);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                    this.disable();
-                }
-                ticksPassed = 0;
-           // }
+            try {
+                int fpsN = ThreadLocalRandom.current().nextInt((int) fps.getInputMin(), (int) fps.getInputMax() + 1);
+                fpsField.set(mc, fpsN);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                this.disable();
+            }
+            ticksPassed = 0;
             ticksPassed++;
         }
     }

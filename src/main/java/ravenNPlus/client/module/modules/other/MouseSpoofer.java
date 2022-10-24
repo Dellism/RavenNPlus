@@ -1,54 +1,48 @@
 package ravenNPlus.client.module.modules.other;
 
+import ravenNPlus.client.utils.Timer;
 import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.setting.impl.DescriptionSetting;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
 import ravenNPlus.client.utils.MouseManager;
-import ravenNPlus.client.utils.Utils;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import ravenNPlus.client.module.setting.impl.ModeSetting;
+import ravenNPlus.client.module.setting.impl.SliderSetting;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class MouseSpoofer extends Module {
 
-   public static SliderSetting mode;
-   public static DescriptionSetting modeMode;
+   public static ModeSetting mode;
+   public static SliderSetting delay;
 
    public MouseSpoofer() {
       super("MouseSpoof", ModuleCategory.other, "Spoofs your CPS");
-      this.addSetting(mode = new SliderSetting("Mode", 1, 1, 3, 1));
-      this.addSetting(modeMode = new DescriptionSetting(Utils.md +""));
+      this.addSetting(mode = new ModeSetting("Mode", MouseSpoofer.modes.Both));
+      this.addSetting(delay = new SliderSetting("Delay", 2, 0, 50, 1));
    }
 
    @SubscribeEvent
-   public void ef(TickEvent.RenderTickEvent e) {
+   public void e(TickEvent.RenderTickEvent e) {
+      if (!this.inGame()) return;
 
-      if (mode.getValue() == 1) {
-         MouseManager.addRightClick();
+      if (Timer.hasTimeElapsed(delay.getValueToLong(), true)) {
+
+         if (mode.getMode() == MouseSpoofer.modes.Right) {
+            MouseManager.addRightClick();
+         }
+
+         if (mode.getMode() == MouseSpoofer.modes.Left) {
+            MouseManager.addLeftClick();
+         }
+
+         if (mode.getMode() == MouseSpoofer.modes.Both) {
+            MouseManager.addRightClick();
+            MouseManager.addLeftClick();
+         }
+
       }
-
-      if(mode.getValue() == 2) {
-         MouseManager.addLeftClick();
-      }
-
-      if(mode.getValue() == 3) {
-         MouseManager.addRightClick();
-         MouseManager.addLeftClick();
-      }
-
    }
 
-   public void guiUpdate() {
-      switch ((int) mode.getValue()) {
-         case 1:
-            modeMode.setDesc(Utils.md + "Right");
-            break;
-         case 2:
-            modeMode.setDesc(Utils.md + "Left");
-            break;
-         case 3:
-            modeMode.setDesc(Utils.md + "Both");
-            break;
-      }
+   public enum modes {
+      Right, Left, Both
    }
 
 }

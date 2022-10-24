@@ -26,7 +26,6 @@ public class CommandManager {
         this.addCommand(new Cname());
         this.addCommand(new Debug());
         this.addCommand(new Duels());
-        this.addCommand(new Fakechat());
         this.addCommand(new Nick());
         this.addCommand(new Ping());
         this.addCommand(new Uwu());

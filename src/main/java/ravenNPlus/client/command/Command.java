@@ -1,8 +1,5 @@
 package ravenNPlus.client.command;
 
-import ravenNPlus.client.clickgui.RavenNPlus.CommandPrompt;
-import ravenNPlus.client.main.Client;
-
 public abstract class Command {
 
     private final int minArgs, maxArgs;
@@ -29,11 +26,11 @@ public abstract class Command {
     public String[] getAliases() { return this.alias; }
 
     public void incorrectArgs() {
-        CommandPrompt.print("Incorrect arguments! Run help " + this.getName() + " for usage info");
+        ravenNPlus.client.clickgui.RavenNPlus.CommandPrompt.print("Incorrect arguments! Run help " + this.getName() + " for usage info");
     }
 
     public static void addChatMessage(String message) {
-        net.minecraft.client.Minecraft.getMinecraft().thePlayer.addChatMessage(new net.minecraft.util.ChatComponentText("["+ Client.name+"] : " + message));
+        net.minecraft.client.Minecraft.getMinecraft().thePlayer.addChatMessage(new net.minecraft.util.ChatComponentText("["+ ravenNPlus.client.main.Client.name+"] : " + message));
     }
 
     public static void addChatMessage() {

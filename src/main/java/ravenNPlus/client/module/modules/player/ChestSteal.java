@@ -1,15 +1,15 @@
 package ravenNPlus.client.module.modules.player;
 
+import ravenNPlus.client.utils.CoolDown;
+import ravenNPlus.client.module.Module;
+import ravenNPlus.client.module.setting.impl.TickSetting;
+import ravenNPlus.client.module.setting.impl.DoubleSliderSetting;
+import net.minecraft.inventory.ContainerChest;
+import net.minecraft.client.gui.inventory.GuiChest;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.setting.impl.DoubleSliderSetting;
-import ravenNPlus.client.module.setting.impl.TickSetting;
-import ravenNPlus.client.utils.CoolDown;
-import ravenNPlus.client.utils.Utils;
-import net.minecraft.inventory.ContainerChest;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class ChestSteal extends Module {
 
@@ -30,34 +30,43 @@ public class ChestSteal extends Module {
 
     @SubscribeEvent
     public void openChest(TickEvent.RenderTickEvent e) {
-        if(!Utils.Player.isPlayerInGame())
+        if (!this.inGame())
             return;
 
-        if(mc.thePlayer.openContainer instanceof ContainerChest) {
-
-            if(!inChest) {
-                ContainerChest chest = (ContainerChest) mc.thePlayer.openContainer;
-                delayTimer.setCooldown((long) ThreadLocalRandom.current().nextDouble(firstDelay.getInputMin(), firstDelay.getInputMax()+0.01));
+        if (mc.currentScreen instanceof GuiChest) {
+            if (!inChest) {
+                ContainerChest chest = (ContainerChest) this.player().openContainer;
+                delayTimer.setCooldown((long) ThreadLocalRandom.current().nextDouble(firstDelay.getInputMin(), firstDelay.getInputMax() + 0.01));
                 delayTimer.start();
                 generatePath(chest);
                 inChest = true;
             }
 
-            if(inChest && !sortedSlots.isEmpty()) {
-                if(delayTimer.hasFinished()) {
-                    mc.playerController.windowClick(mc.thePlayer.openContainer.windowId, sortedSlots.get(0).s, 0, 1, mc.thePlayer);
+            if (inChest && !sortedSlots.isEmpty()) {
+                if (delayTimer.hasFinished()) {
+
+                    if (ignoreTrash.isToggled()) {
+                        if (sortedSlots.toString().startsWith("Egg")) return;
+                        if (sortedSlots.toString().startsWith("Raw")) return;
+                        if (sortedSlots.toString().contains("Flint")) return;
+                        if (sortedSlots.toString().contains("Wooden")) return;
+                        if (sortedSlots.toString().equals("Bow")) return;
+                        if (sortedSlots.toString().equals("Snow")) return;
+                    }
+
+                    mc.playerController.windowClick(this.player().openContainer.windowId, sortedSlots.get(0).s, 0, 1, this.player());
                     delayTimer.setCooldown((long) ThreadLocalRandom.current().nextDouble(delay.getInputMin(), delay.getInputMax() + 0.01));
                     delayTimer.start();
                     sortedSlots.remove(0);
                 }
             }
 
-            if(sortedSlots.isEmpty() && autoClose.isToggled()) {
-                if(closeTimer.firstFinish()) {
-                    mc.thePlayer.closeScreen();
+            if (sortedSlots.isEmpty() && autoClose.isToggled()) {
+                if (closeTimer.firstFinish()) {
+                    this.player().closeScreen();
                     inChest = false;
                 } else {
-                    closeTimer.setCooldown((long) ThreadLocalRandom.current().nextDouble(closeDelay.getInputMin(), closeDelay.getInputMax()+0.01));
+                    closeTimer.setCooldown((long) ThreadLocalRandom.current().nextDouble(closeDelay.getInputMin(), closeDelay.getInputMax() + 0.01));
                     closeTimer.start();
                 }
             }
@@ -69,8 +78,8 @@ public class ChestSteal extends Module {
 
     public void generatePath(ContainerChest chest) {
         ArrayList<Slot> slots = new ArrayList<Slot>();
-        for(int i = 0;i < chest.getLowerChestInventory().getSizeInventory(); i++) {
-            if(chest.getInventory().get(i) != null) {
+        for (int i = 0; i < chest.getLowerChestInventory().getSizeInventory(); i++) {
+            if (chest.getInventory().get(i) != null) {
                 slots.add(new Slot(i));
             }
         }
@@ -90,8 +99,8 @@ public class ChestSteal extends Module {
         Slot[] out = new Slot[in.length];
         Slot current = in[ThreadLocalRandom.current().nextInt(0, in.length)];
         for (int i = 0; i < in.length; i++) {
-            if (i == in.length -1) {
-                out[in.length -1] = Arrays.stream(in).filter(p -> !p.visited).findAny().orElseGet(null);
+            if (i == in.length - 1) {
+                out[in.length - 1] = Arrays.stream(in).filter(p -> !p.visited).findAny().orElseGet(null);
                 break;
             }
 
@@ -116,7 +125,7 @@ public class ChestSteal extends Module {
         }
 
         public double getDistance(Slot s) {
-            return Math.abs(this.x-s.x) + Math.abs(this.y - s.y);
+            return Math.abs(this.x - s.x) + Math.abs(this.y - s.y);
         }
 
         public void visit() {

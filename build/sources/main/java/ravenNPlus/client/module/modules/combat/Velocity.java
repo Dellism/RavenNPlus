@@ -1,13 +1,11 @@
 package ravenNPlus.client.module.modules.combat;
 
 import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.setting.impl.ComboSetting;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
+import ravenNPlus.client.module.setting.impl.ModeSetting;
 import ravenNPlus.client.module.setting.impl.TickSetting;
-import ravenNPlus.client.utils.Utils;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.entity.player.EntityPlayer;
+import ravenNPlus.client.module.setting.impl.SliderSetting;
 import net.minecraft.item.*;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -15,17 +13,9 @@ import org.lwjgl.input.Keyboard;
 
 public class Velocity extends Module {
 
-   public static SliderSetting a;
-   public static SliderSetting b;
-   public static SliderSetting c;
-   public static SliderSetting ap;
-   public static SliderSetting bp;
-   public static SliderSetting cp;
-   public static SliderSetting dt;
-   public static TickSetting d;
-   public static TickSetting e;
-   public static TickSetting f;
-   public static ComboSetting g;
+   public static SliderSetting a, b, c, ap, bp, cp, dt;
+   public static TickSetting d, e, f;
+   public static ModeSetting g;
    public Mode mode;
 
    public Velocity() {
@@ -37,7 +27,7 @@ public class Velocity extends Module {
       this.addSetting(d = new TickSetting("Only while targeting", false));
       this.addSetting(e = new TickSetting("Disable while holding S", false));
       this.addSetting(f = new TickSetting("Different Velocity for projectiles", false));
-      this.addSetting(g = new ComboSetting("Projectiles Mode", this.mode));
+      this.addSetting(g = new ModeSetting("Projectiles Mode", this.mode));
       this.addSetting(ap = new SliderSetting("Horizontal projectiles", 90.0, -100.0, 100.0, 1.0));
       this.addSetting(bp = new SliderSetting("Vertical projectiles", 100.0, -100.0, 100.0, 1.0));
       this.addSetting(cp = new SliderSetting("Chance projectiles", 100.0, 0.0, 100.0, 1.0));
@@ -46,25 +36,25 @@ public class Velocity extends Module {
 
    @SubscribeEvent
    public void onLivingUpdate(Event fe) {
-      if(!(fe instanceof LivingEvent)) return;
+      if (!(fe instanceof LivingEvent)) return;
 
-      if(Utils.Player.isPlayerInGame() && mc.thePlayer.maxHurtTime > 0 && mc.thePlayer.hurtTime == mc.thePlayer.maxHurtTime) {
-         if(d.isToggled() && (mc.objectMouseOver == null || mc.objectMouseOver.entityHit == null))
+      if (this.inGame() && this.player().maxHurtTime > 0 && this.player().hurtTime == this.player().maxHurtTime) {
+         if (d.isToggled() && (mc.objectMouseOver == null || mc.objectMouseOver.entityHit == null))
             return;
 
-         if(e.isToggled() && Keyboard.isKeyDown(mc.gameSettings.keyBindBack.getKeyCode()))
+         if (e.isToggled() && Keyboard.isKeyDown(mc.gameSettings.keyBindBack.getKeyCode()))
             return;
 
-         if(mc.thePlayer.getLastAttacker() instanceof EntityPlayer) {
-            EntityPlayer attacker = (EntityPlayer)mc.thePlayer.getLastAttacker();
+         if (this.player().getLastAttacker() instanceof EntityPlayer) {
+            EntityPlayer attacker = (EntityPlayer) this.player().getLastAttacker();
             Item item = attacker.getCurrentEquippedItem() != null ? attacker.getCurrentEquippedItem().getItem() : null;
-            if((item instanceof ItemEgg || item instanceof ItemBow || item instanceof ItemSnow || item instanceof ItemFishingRod) && this.mode == Mode.ItemHeld) {
-               this.valorant();
+            if ((item instanceof ItemEgg || item instanceof ItemBow || item instanceof ItemSnow || item instanceof ItemFishingRod) && this.mode == Mode.ItemHeld) {
+               this.x();
                return;
             }
 
-            if((double)attacker.getDistanceToEntity(mc.thePlayer) > dt.getValue()) {
-               this.valorant();
+            if ((double) attacker.getDistanceToEntity(this.player()) > dt.getValue()) {
+               this.x();
                return;
             }
          }
@@ -76,22 +66,18 @@ public class Velocity extends Module {
             }
          }
 
-         EntityPlayerSP playerSP;
          if (a.getValue() != 100.0) {
-            playerSP = mc.thePlayer;
-            playerSP.motionX *= a.getValue() / 100.0;
-            playerSP = mc.thePlayer;
-            playerSP.motionZ *= a.getValue() / 100.0;
+            this.player().motionX *= a.getValue() / 100.0;
+            this.player().motionZ *= a.getValue() / 100.0;
          }
 
          if (b.getValue() != 100.0) {
-            playerSP = mc.thePlayer;
-            playerSP.motionY *= b.getValue() / 100.0;
+            this.player().motionY *= b.getValue() / 100.0;
          }
       }
    }
 
-   public void valorant() {
+   public void x() {
       if (cp.getValue() != 100.0) {
          double ch = Math.random();
          if (ch >= cp.getValue() / 100.0) {
@@ -99,20 +85,18 @@ public class Velocity extends Module {
          }
       }
 
-      EntityPlayerSP playerSP;
       if (ap.getValue() != 100.0) {
-         playerSP = mc.thePlayer;
-         playerSP.motionX *= ap.getValue() / 100.0;
-         playerSP = mc.thePlayer;
-         playerSP.motionZ *= ap.getValue() / 100.0;
+         this.player().motionX *= ap.getValue() / 100.0;
+         this.player().motionZ *= ap.getValue() / 100.0;
       }
 
       if (bp.getValue() != 100.0) {
-         playerSP = mc.thePlayer;
-         playerSP.motionY *= bp.getValue() / 100.0;
+         this.player().motionY *= bp.getValue() / 100.0;
       }
    }
 
-   public enum Mode { Distance, ItemHeld }
+   public enum Mode {
+      Distance, ItemHeld
+   }
 
 }

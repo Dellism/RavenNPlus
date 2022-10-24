@@ -2,45 +2,42 @@ package ravenNPlus.client.module.modules.minigames;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import ravenNPlus.client.module.setting.impl.ModeSetting;
+import ravenNPlus.client.utils.Utils;
 import ravenNPlus.client.main.Client;
 import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.setting.impl.ComboSetting;
-import ravenNPlus.client.module.setting.impl.TickSetting;
-import ravenNPlus.client.utils.Utils;
-import ravenNPlus.client.utils.profile.PlayerProfile;
 import ravenNPlus.client.utils.profile.UUID;
+import ravenNPlus.client.utils.profile.PlayerProfile;
+import ravenNPlus.client.module.setting.impl.TickSetting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.scoreboard.ScorePlayerTeam;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 public class DuelsStats extends Module {
-   public static ComboSetting selectedGameMode;
+   public static ModeSetting selectedGameMode;
    public static TickSetting sendIgnOnJoin;
    public static String playerNick = "";
    private final List<String> queue = new ArrayList<>();
 
    public DuelsStats() {
       super("Duels Stats", ModuleCategory.minigame, "Shows duel stats");
-
-      this.addSetting(selectedGameMode = new ComboSetting("Stats for mode:", Utils.Profiles.DuelsStatsMode.OVERALL));
-      this.addSetting(sendIgnOnJoin = new TickSetting("Send ign on join", false));
+      this.addSetting(selectedGameMode = new ModeSetting("Stats for mode:", Utils.Profiles.DuelsStatsMode.OVERALL));
+      this.addSetting(sendIgnOnJoin = new TickSetting("Send IGN on join", false));
    }
 
    public void onEnable() {
-      if (mc.thePlayer != null) {
+      if (this.player() != null) {
       } else {
          this.disable();
       }
-
    }
 
    public void onDisable() {
@@ -51,27 +48,24 @@ public class DuelsStats extends Module {
       if (!this.isDuel()) return;
 
       // Thanks to https://github.com/Scherso for the code from https://github.com/Scherso/Seraph
-
       for (ScorePlayerTeam team : Minecraft.getMinecraft().theWorld.getScoreboard().getTeams()) {
          for (String playerName : team.getMembershipCollection()) {
             if (!queue.contains(playerName) && team.getColorPrefix().equals("§7§k") && !playerName.equalsIgnoreCase(Minecraft.getMinecraft().thePlayer.getDisplayNameString())) {
                this.queue.add(playerName);
                Client.getExecutor().execute(() -> {
                   String id = getPlayerUUID(playerName);
-                  if(!id.isEmpty()){
-                     if(sendIgnOnJoin.isToggled())
+                  if (!id.isEmpty()) {
+                     if (sendIgnOnJoin.isToggled())
                         Utils.Player.sendMessageToSelf("&eOpponent found: " + "&3" + playerName);
                      getAndDisplayStatsForPlayer(id, playerName);
                   }
                });
-
             }
          }
       }
    }
 
    private void getAndDisplayStatsForPlayer(String uuid, String playerName) {
-
       if (Utils.URLS.hypixelApiKey.isEmpty()) {
          Utils.Player.sendMessageToSelf("&cAPI Key is empty!");
       } else {
@@ -80,7 +74,7 @@ public class DuelsStats extends Module {
             PlayerProfile playerProfile = new PlayerProfile(new UUID(uuid), (Utils.Profiles.DuelsStatsMode) selectedGameMode.getMode());
             playerProfile.populateStats();
 
-            if(!playerProfile.isPlayer)return;
+            if (!playerProfile.isPlayer) return;
 
             if (playerProfile.nicked) {
                Utils.Player.sendMessageToSelf("&3" + playerName + " " + "&eis nicked!");
@@ -91,7 +85,7 @@ public class DuelsStats extends Module {
                Utils.Player.sendMessageToSelf("&eOpponent found: " + "&3" + playerProfile.inGameName);
             }
 
-            double wlr = playerProfile.losses != 0 ? Utils.Java.round((double)playerProfile.wins / (double)playerProfile.losses, 2) : (double)playerProfile.wins;
+            double wlr = playerProfile.losses != 0 ? Utils.Java.round((double) playerProfile.wins / (double) playerProfile.losses, 2) : (double) playerProfile.wins;
             Utils.Player.sendMessageToSelf("&7&m-------------------------");
             if (dm != Utils.Profiles.DuelsStatsMode.OVERALL) {
                Utils.Player.sendMessageToSelf("&e" + Utils.md + "&3" + dm.name());
@@ -104,7 +98,6 @@ public class DuelsStats extends Module {
             Utils.Player.sendMessageToSelf("&eWS: &3" + playerProfile.winStreak);
 
             Utils.Player.sendMessageToSelf("&7&m-------------------------");
-
          });
       }
    }
@@ -145,4 +138,5 @@ public class DuelsStats extends Module {
 
       return playerUUID;
    }
+
 }

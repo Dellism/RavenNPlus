@@ -1,35 +1,35 @@
 package ravenNPlus.client.module.modules.minigames.sumo;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import ravenNPlus.client.utils.Utils;
+import ravenNPlus.client.main.Client;
+import ravenNPlus.client.module.Module;
+import ravenNPlus.client.utils.profile.UUID;
+import ravenNPlus.client.utils.profile.PlayerProfile;
+import ravenNPlus.client.module.setting.impl.SliderSetting;
+import ravenNPlus.client.utils.Utils.Profiles.DuelsStatsMode;
+import net.minecraft.client.Minecraft;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import java.util.List;
+import java.util.ArrayList;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import ravenNPlus.client.main.Client;
-import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
-import ravenNPlus.client.utils.Utils;
-import ravenNPlus.client.utils.Utils.Profiles.DuelsStatsMode;
-import ravenNPlus.client.utils.profile.PlayerProfile;
-import ravenNPlus.client.utils.profile.UUID;
-import net.minecraft.client.Minecraft;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 
 public class SumoStats extends Module {
+
     public SliderSetting ws, wlr;
     private final List<String> queue = new ArrayList<>();
 
     public SumoStats() {
-        super("Sumo Stats", ModuleCategory.minigame, "");
-        this.addSetting(ws = new SliderSetting("wlr", 2, 0, 10, 0.1));
-        this.addSetting(ws = new SliderSetting("ws", 4, 0, 30, 1));
+        super("Sumo Stats", ModuleCategory.minigame, "Shows sumo stats");
+        this.addSetting(wlr = new SliderSetting("WLR", 2, 0, 10, 0.1));
+        this.addSetting(ws = new SliderSetting("WS", 4, 0, 30, 1));
     }
 
     public void onEnable() {
@@ -37,7 +37,6 @@ public class SumoStats extends Module {
         } else {
             this.disable();
         }
-
     }
 
     public void onDisable() {
@@ -48,25 +47,22 @@ public class SumoStats extends Module {
         if (!this.isDuel()) return;
 
         // Thanks to https://github.com/Scherso for the code from https://github.com/Scherso/Seraph
-
         for (ScorePlayerTeam team : Minecraft.getMinecraft().theWorld.getScoreboard().getTeams()) {
             for (String playerName : team.getMembershipCollection()) {
                 if (!queue.contains(playerName) && team.getColorPrefix().equals("§7§k") && !playerName.equalsIgnoreCase(Minecraft.getMinecraft().thePlayer.getDisplayNameString())) {
                     this.queue.add(playerName);
                     Client.getExecutor().execute(() -> {
                         String id = getPlayerUUID(playerName);
-                        if(!id.isEmpty()){
+                        if (!id.isEmpty()) {
                             getAndDisplayStatsForPlayer(id, playerName);
                         }
                     });
-
                 }
             }
         }
     }
 
     private void getAndDisplayStatsForPlayer(String uuid, String playerName) {
-
         if (Utils.URLS.hypixelApiKey.isEmpty()) {
             Utils.Player.sendMessageToSelf("&cAPI Key is empty!");
         } else {
@@ -75,14 +71,14 @@ public class SumoStats extends Module {
                 PlayerProfile playerProfile = new PlayerProfile(new UUID(uuid), (Utils.Profiles.DuelsStatsMode) DuelsStatsMode.SUMO);
                 playerProfile.populateStats();
 
-                if(!playerProfile.isPlayer)return;
+                if (!playerProfile.isPlayer) return;
 
                 if (playerProfile.nicked) {
                     Utils.Player.sendMessageToSelf("&3" + playerName + " " + "&eis nicked!");
                     return;
                 }
 
-                double wlr = playerProfile.losses != 0 ? Utils.Java.round((double)playerProfile.wins / (double)playerProfile.losses, 2) : (double)playerProfile.wins;
+                double wlr = playerProfile.losses != 0 ? Utils.Java.round((double) playerProfile.wins / (double) playerProfile.losses, 2) : (double) playerProfile.wins;
                 Utils.Player.sendMessageToSelf("&7&m-------------------------");
                 if (dm != Utils.Profiles.DuelsStatsMode.OVERALL) {
                     Utils.Player.sendMessageToSelf("&e" + Utils.md + "&3" + dm.name());
@@ -94,7 +90,7 @@ public class SumoStats extends Module {
                 Utils.Player.sendMessageToSelf("&eWLR: &3" + wlr);
                 Utils.Player.sendMessageToSelf("&eWS: &3" + playerProfile.winStreak);
                 Utils.Player.sendMessageToSelf("&7&m-------------------------");
-                if(wlr > this.wlr.getValue() || playerProfile.winStreak > this.ws.getValue()) {
+                if (wlr > this.wlr.getValue() || playerProfile.winStreak > this.ws.getValue()) {
                     SumoBot sb = (SumoBot) Client.moduleManager.getModuleByName("Sumo Bot");
                     sb.reQueue();
                 }

@@ -1,21 +1,19 @@
 package ravenNPlus.client.module.modules.minigames;
 
 import com.google.gson.JsonObject;
+import ravenNPlus.client.utils.Utils;
 import ravenNPlus.client.main.Client;
 import ravenNPlus.client.module.Module;
 import ravenNPlus.client.module.setting.impl.SliderSetting;
-import ravenNPlus.client.utils.Utils;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import java.util.HashMap;
-
-import static ravenNPlus.client.utils.Utils.Java.round;
 
 public class BedwarsOverlay extends Module {
 
@@ -36,16 +34,16 @@ public class BedwarsOverlay extends Module {
         this.addSetting(margin = new SliderSetting("Margin", 4, 0, 100, 1));
         this.addSetting(marginTextX = new SliderSetting("Margin Text X", 21, 0, 100, 1));
         this.addSetting(marginTextY = new SliderSetting("Margin Text Y", 8, 0, 100, 1));
-        mainTextColour  = 0xffFEC5E5;
+        mainTextColour = 0xffFEC5E5;
         backgroundColour = 0x903c3f41;
         errorColour = 0xffff0033;
     }
 
     @SubscribeEvent
     public void onChatMessageRecieved(ClientChatReceivedEvent event) {
-        if(Utils.Player.isPlayerInGame()) {
-            if(Utils.Java.str(event.message.getUnformattedText()).startsWith("Sending you to")) {
-                if(mc.isSingleplayer()) {
+        if (this.inGame()) {
+            if (Utils.Java.str(event.message.getUnformattedText()).startsWith("Sending you to")) {
+                if (mc.isSingleplayer()) {
                     playerStats.clear();
                     render = true;
                 }
@@ -57,10 +55,10 @@ public class BedwarsOverlay extends Module {
 
     @SubscribeEvent
     public void onRender(TickEvent.RenderTickEvent e) {
-        if(!Utils.Player.isPlayerInGame()) return;
-        if(!active) return;
+        if (!this.inGame()) return;
+        if (!active) return;
 
-        if (!mc.inGameHasFocus || mc.gameSettings.showDebugInfo) {
+        if (!this.inFocus() || mc.gameSettings.showDebugInfo) {
             return;
         }
 
@@ -70,11 +68,11 @@ public class BedwarsOverlay extends Module {
         drawMain(sr, fr);
         linesDrawn++;
 
-        if(drawError(sr, fr)) {
+        if (drawError(sr, fr)) {
             linesDrawn++;
         }
 
-        for(NetworkPlayerInfo player : Utils.Client.getPlayers()){
+        for (NetworkPlayerInfo player : Utils.Client.getPlayers()) {
             drawStats(player, fr);
         }
         overlayHeight = margin.getValue() * 2 + fr.FONT_HEIGHT * linesDrawn + marginTextY.getValue() * --linesDrawn;
@@ -85,41 +83,41 @@ public class BedwarsOverlay extends Module {
     private void drawStats(NetworkPlayerInfo player, FontRenderer fr) {
         String name = player.getGameProfile().getName();
         String UUID = player.getGameProfile().getId().toString();
-        if (Utils.URLS.hypixelApiKey.isEmpty()){
-            fr.drawString(name, statStart.get(StatType.NAME), (int)textY, 0xff05C3DD);
+        if (Utils.URLS.hypixelApiKey.isEmpty()) {
+            fr.drawString(name, statStart.get(StatType.NAME), (int) textY, 0xff05C3DD);
             textY += fr.FONT_HEIGHT + marginTextY.getValue();
             linesDrawn++;
         } else {
             double bbblr, wlr, fkdr;
-            if(!playerStats.containsKey(UUID)){
+            if (!playerStats.containsKey(UUID)) {
                 Client.getExecutor().execute(() -> getBedwarsStats(UUID));
-                playerStats.put(UUID, new int[] {-16});
+                playerStats.put(UUID, new int[]{-16});
                 return;
             }
 
             int[] stats = playerStats.get(UUID);
 
-            if(stats.length == 1 && stats[0] == -16){
+            if (stats.length == 1 && stats[0] == -16) {
                 return;
             }
 
-            bbblr = stats[4] != 0 ? round((double)stats[3] / (double)stats[4], 2) : stats[3];
-            fkdr = stats[6] != 0 ? round((double)stats[5] / (double)stats[6], 2) : stats[5];
-            wlr = stats[8] != 0 ? round((double)stats[7] / (double)stats[8], 2) : stats[7];
-            fr.drawString(stats[0] + "", statStart.get(StatType.LEVEL), (int)textY, getStarColour(stats[0]));
-            fr.drawString(name, statStart.get(StatType.NAME), (int)textY, Colours.WHITE);
-            if(stats[1] == 0) {
-                fr.drawString("  -", statStart.get(StatType.NICKED), (int)textY, Colours.GREY);
+            bbblr = stats[4] != 0 ? ravenNPlus.client.utils.Utils.Java.round((double) stats[3] / (double) stats[4], 2) : stats[3];
+            fkdr = stats[6] != 0 ? ravenNPlus.client.utils.Utils.Java.round((double) stats[5] / (double) stats[6], 2) : stats[5];
+            wlr = stats[8] != 0 ? ravenNPlus.client.utils.Utils.Java.round((double) stats[7] / (double) stats[8], 2) : stats[7];
+            fr.drawString(stats[0] + "", statStart.get(StatType.LEVEL), (int) textY, getStarColour(stats[0]));
+            fr.drawString(name, statStart.get(StatType.NAME), (int) textY, Colours.WHITE);
+            if (stats[1] == 0) {
+                fr.drawString("  -", statStart.get(StatType.NICKED), (int) textY, Colours.GREY);
             } else {
-                fr.drawString("  +", statStart.get(StatType.NICKED), (int)textY, Colours.RED);
+                fr.drawString("  +", statStart.get(StatType.NICKED), (int) textY, Colours.RED);
             }
-            fr.drawString(stats[2] + "", statStart.get(StatType.WS), (int)textY, getWSColour(stats[2]));
+            fr.drawString(stats[2] + "", statStart.get(StatType.WS), (int) textY, getWSColour(stats[2]));
 
-            fr.drawString(bbblr + "", statStart.get(StatType.BBBLR), (int)textY, getBBBLRColour(bbblr));
-            fr.drawString(fkdr + "", statStart.get(StatType.FKDR), (int)textY, getFKDRColour(fkdr));
-            fr.drawString(wlr + "", statStart.get(StatType.WLR), (int)textY, getWLRColour(wlr));
-            fr.drawString(stats[6] + "", statStart.get(StatType.FINALS), (int)textY, getFinalColour(stats[6]));
-            fr.drawString(stats[7] + "", statStart.get(StatType.WINS), (int)textY, getFinalColour(stats[7]));
+            fr.drawString(bbblr + "", statStart.get(StatType.BBBLR), (int) textY, getBBBLRColour(bbblr));
+            fr.drawString(fkdr + "", statStart.get(StatType.FKDR), (int) textY, getFKDRColour(fkdr));
+            fr.drawString(wlr + "", statStart.get(StatType.WLR), (int) textY, getWLRColour(wlr));
+            fr.drawString(stats[6] + "", statStart.get(StatType.FINALS), (int) textY, getFinalColour(stats[6]));
+            fr.drawString(stats[7] + "", statStart.get(StatType.WINS), (int) textY, getFinalColour(stats[7]));
 
             textY += marginTextY.getValue() + fr.FONT_HEIGHT;
             linesDrawn++;
@@ -128,15 +126,15 @@ public class BedwarsOverlay extends Module {
 
     private int getTreatColour(String bad) {
         //"&4VERY HIGH", "&cHIGH", "&6MODERATE", "&aLOW", "&2VERY LOW"
-        if(bad.equalsIgnoreCase("very high")) {
+        if (bad.equalsIgnoreCase("very high")) {
             return Colours.RED;
-        } else if(bad.equalsIgnoreCase("high")) {
+        } else if (bad.equalsIgnoreCase("high")) {
             return Colours.ORANGE;
-        }else if(bad.equalsIgnoreCase("moderate")) {
+        } else if (bad.equalsIgnoreCase("moderate")) {
             return Colours.YELLOW;
-        }else if(bad.equalsIgnoreCase("LOW")) {
+        } else if (bad.equalsIgnoreCase("LOW")) {
             return Colours.GREEN;
-        }else if(bad.equalsIgnoreCase("very low")) {
+        } else if (bad.equalsIgnoreCase("very low")) {
             return Colours.GREY;
         }
 
@@ -144,21 +142,21 @@ public class BedwarsOverlay extends Module {
     }
 
     private int getFinalColour(int stat) {
-        if(stat < 50){
+        if (stat < 50) {
             return Colours.GREY;
-        } else if(stat < 100) {
+        } else if (stat < 100) {
             return Colours.WHITE;
-        } else if(stat < 150) {
+        } else if (stat < 150) {
             return Colours.GREEN;
-        } else if(stat < 200) {
+        } else if (stat < 200) {
             return Colours.AQUA;
-        } else if(stat < 500) {
+        } else if (stat < 500) {
             return Colours.YELLOW;
-        } else if(stat < 1000) {
+        } else if (stat < 1000) {
             return Colours.ORANGE;
-        } else if(stat < 5000) {
+        } else if (stat < 5000) {
             return Colours.RED;
-        } else if(stat >= 5000) {
+        } else if (stat >= 5000) {
             return Colours.PURPLE;
         }
 
@@ -166,21 +164,21 @@ public class BedwarsOverlay extends Module {
     }
 
     private int getFKDRColour(double stat) {
-        if(stat < 0.31){
+        if (stat < 0.31) {
             return Colours.GREY;
-        } else if(stat < 0.51) {
+        } else if (stat < 0.51) {
             return Colours.WHITE;
-        } else if(stat < 1) {
+        } else if (stat < 1) {
             return Colours.GREEN;
-        } else if(stat < 1.5) {
+        } else if (stat < 1.5) {
             return Colours.AQUA;
-        } else if(stat < 2.5) {
+        } else if (stat < 2.5) {
             return Colours.YELLOW;
-        } else if(stat < 4) {
+        } else if (stat < 4) {
             return Colours.ORANGE;
-        } else if(stat < 10) {
+        } else if (stat < 10) {
             return Colours.RED;
-        } else if(stat >= 20) {
+        } else if (stat >= 20) {
             return Colours.PURPLE;
         }
 
@@ -188,21 +186,21 @@ public class BedwarsOverlay extends Module {
     }
 
     private int getBBBLRColour(double stat) {
-        if(stat < 0.31){
+        if (stat < 0.31) {
             return Colours.GREY;
-        } else if(stat < 0.51) {
+        } else if (stat < 0.51) {
             return Colours.WHITE;
-        } else if(stat < 1) {
+        } else if (stat < 1) {
             return Colours.GREEN;
-        } else if(stat < 1.5) {
+        } else if (stat < 1.5) {
             return Colours.AQUA;
-        } else if(stat < 2.5) {
+        } else if (stat < 2.5) {
             return Colours.YELLOW;
-        } else if(stat < 4) {
+        } else if (stat < 4) {
             return Colours.ORANGE;
-        } else if(stat < 10) {
+        } else if (stat < 10) {
             return Colours.RED;
-        } else if(stat >= 20) {
+        } else if (stat >= 20) {
             return Colours.PURPLE;
         }
 
@@ -210,21 +208,21 @@ public class BedwarsOverlay extends Module {
     }
 
     private int getWLRColour(double stat) {
-        if(stat < 0.51){
+        if (stat < 0.51) {
             return Colours.GREY;
-        } else if(stat < 1.01) {
+        } else if (stat < 1.01) {
             return Colours.WHITE;
-        } else if(stat < 1.5) {
+        } else if (stat < 1.5) {
             return Colours.GREEN;
-        } else if(stat < 2) {
+        } else if (stat < 2) {
             return Colours.AQUA;
-        } else if(stat < 4) {
+        } else if (stat < 4) {
             return Colours.YELLOW;
-        } else if(stat < 8) {
+        } else if (stat < 8) {
             return Colours.ORANGE;
-        } else if(stat < 15) {
+        } else if (stat < 15) {
             return Colours.RED;
-        } else if(stat >= 15) {
+        } else if (stat >= 15) {
             return Colours.PURPLE;
         }
 
@@ -232,21 +230,21 @@ public class BedwarsOverlay extends Module {
     }
 
     private int getWSColour(int stat) {
-        if(stat < 5){
+        if (stat < 5) {
             return Colours.GREY;
-        } else if(stat < 10) {
+        } else if (stat < 10) {
             return Colours.WHITE;
-        } else if(stat < 15) {
+        } else if (stat < 15) {
             return Colours.GREEN;
-        } else if(stat < 20) {
+        } else if (stat < 20) {
             return Colours.AQUA;
-        } else if(stat < 30) {
+        } else if (stat < 30) {
             return Colours.YELLOW;
-        } else if(stat < 50) {
+        } else if (stat < 50) {
             return Colours.ORANGE;
-        } else if(stat < 100) {
+        } else if (stat < 100) {
             return Colours.RED;
-        } else if(stat >= 100) {
+        } else if (stat >= 100) {
             return Colours.PURPLE;
         }
 
@@ -295,14 +293,14 @@ public class BedwarsOverlay extends Module {
     private boolean drawError(ScaledResolution sr, FontRenderer fr) {
         String noApiKey = "API key is not set!";
         String noPlayers = "No players in lobby!";
-        if(Utils.URLS.hypixelApiKey.isEmpty()){
-            if(render)
-                fr.drawString(noApiKey, (int)(overlayWidth + overlayX.getValue() - overlayWidth/2 - fr.getStringWidth(noApiKey)/2), (int)textY, errorColour);
+        if (Utils.URLS.hypixelApiKey.isEmpty()) {
+            if (render)
+                fr.drawString(noApiKey, (int) (overlayWidth + overlayX.getValue() - overlayWidth / 2 - fr.getStringWidth(noApiKey) / 2), (int) textY, errorColour);
             textY += fr.FONT_HEIGHT + marginTextY.getValue();
             return true;
-        } else if(!Utils.Client.othersExist()){
-            if(render)
-                fr.drawString(noPlayers, (int)(overlayWidth + overlayX.getValue() - overlayWidth/2 - fr.getStringWidth(noPlayers)/2), (int)textY, errorColour);
+        } else if (!Utils.Client.othersExist()) {
+            if (render)
+                fr.drawString(noPlayers, (int) (overlayWidth + overlayX.getValue() - overlayWidth / 2 - fr.getStringWidth(noPlayers) / 2), (int) textY, errorColour);
             textY += fr.FONT_HEIGHT + marginTextY.getValue();
             return true;
         }
@@ -311,40 +309,40 @@ public class BedwarsOverlay extends Module {
     }
 
     private void drawMain(ScaledResolution sr, FontRenderer fr) {
-        if(render)
-            Gui.drawRect((int)overlayX.getValue(), (int)overlayY.getValue(), (int)(overlayWidth + overlayX.getValue()), (int)(overlayHeight + overlayY.getValue()), backgroundColour);
+        if (render)
+            Gui.drawRect((int) overlayX.getValue(), (int) overlayY.getValue(), (int) (overlayWidth + overlayX.getValue()), (int) (overlayHeight + overlayY.getValue()), backgroundColour);
 
         double textX = margin.getValue() + overlayX.getValue();
         textY = margin.getValue() + overlayY.getValue();
         int stringWidth = 0;
-        for(StatType statType : StatType.values()) {
-            fr.drawString(statType + "", (int)textX, (int)textY, mainTextColour);
-            statStart.put(statType, (int)textX);
+        for (StatType statType : StatType.values()) {
+            fr.drawString(statType + "", (int) textX, (int) textY, mainTextColour);
+            statStart.put(statType, (int) textX);
             stringWidth = fr.getStringWidth(statType + "");
             textX += stringWidth + marginTextX.getValue();
         }
 
         textY += marginTextY.getValue() + fr.FONT_HEIGHT;
-        if(render)
+        if (render)
             overlayWidth = textX + margin.getValue() - (marginTextX.getValue()) - overlayX.getValue();
     }
 
-    public static int getStarColour(int stat){
-        if(stat < 20){
+    public static int getStarColour(int stat) {
+        if (stat < 20) {
             return Colours.GREY;
-        } else if(stat < 50) {
+        } else if (stat < 50) {
             return Colours.WHITE;
-        } else if(stat < 150) {
+        } else if (stat < 150) {
             return Colours.GREEN;
-        } else if(stat < 200) {
+        } else if (stat < 200) {
             return Colours.AQUA;
-        } else if(stat < 400) {
+        } else if (stat < 400) {
             return Colours.YELLOW;
-        } else if(stat < 500) {
+        } else if (stat < 500) {
             return Colours.ORANGE;
-        } else if(stat < 1000) {
+        } else if (stat < 1000) {
             return Colours.RED;
-        } else if(stat >= 1000) {
+        } else if (stat >= 1000) {
             return Colours.PURPLE;
         }
 

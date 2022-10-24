@@ -1,11 +1,11 @@
 package ravenNPlus.client.clickgui.RavenNPlus.components;
 
-import ravenNPlus.client.clickgui.RavenNPlus.Component;
 import ravenNPlus.client.module.modules.client.GuiClick;
+import ravenNPlus.client.clickgui.RavenNPlus.Component;
+import ravenNPlus.client.utils.ColorUtil;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
-import java.awt.*;
+import org.lwjgl.input.Keyboard;
 
 public class BindComponent implements Component {
 
@@ -36,7 +36,6 @@ public class BindComponent implements Component {
 
     @Override
     public void update(int mousePosX, int mousePosY) {
-        boolean h = this.i(mousePosX, mousePosY);
         this.y = this.p.category.getY() + this.o;
         this.x = this.p.category.getX();
     }
@@ -66,7 +65,6 @@ public class BindComponent implements Component {
 
                 this.isBinding = false;
             }
-
         }
     }
 
@@ -82,7 +80,7 @@ public class BindComponent implements Component {
     public int getHeight() { return 16; }
 
     private void dr(String s) {
-        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(s, (float)((this.p.category.getX() + 4) * 2), (float)((this.p.category.getY() + this.o + 3) * 2), Color.HSBtoRGB((float)(System.currentTimeMillis() % 3750L) / 3750.0F, 0.8F, 0.8F));
+        Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(s, (float)((this.p.category.getX() + 4) * 2), (float)((this.p.category.getY() + this.o + 3) * 2), ColorUtil.color_bindComponent);
     }
 
     @Override

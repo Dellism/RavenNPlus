@@ -1,19 +1,19 @@
 package ravenNPlus.client.utils.version;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 
 public class VersionManager {
 
     private final String versionFilePath = "/assets/a/version";
     private final String branchFilePath = "/assets/a/branch";
-    private final String versionUrl = "https://raw.githubusercontent.com/Kopamed/Raven-bPLUS/main/src/main/resources/assets/keystrokes/version";
-    private final String branchUrl = "https://raw.githubusercontent.com/Kopamed/Raven-bPLUS/main/src/main/resources/assets/keystrokes/branch";
+    private final String versionUrl = "https://raw.githubusercontent.com/SleepyFishYT/RavenNPlus/main/src/main/resources/assets/a/version";
+    private final String branchUrl = "https://raw.githubusercontent.com/SleepyFishYT/RavenNPlus/main/src/main/resources/assets/a/branch";
 
     private Version latestVersion;
     private Version clientVersion;
@@ -37,8 +37,6 @@ public class VersionManager {
             bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
             scanner = new Scanner(bufferedReader);
             version = scanner.nextLine();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

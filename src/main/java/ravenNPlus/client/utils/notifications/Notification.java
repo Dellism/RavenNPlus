@@ -1,14 +1,14 @@
 package ravenNPlus.client.utils.notifications;
 
-import java.awt.Color;
 import ravenNPlus.client.clickgui.RavenNPlus.ClickGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import java.awt.Color;
 
 public class Notification {
 
@@ -62,14 +62,11 @@ public class Notification {
 
         if (type == Type.INFO) {
             color1 = new Color(0, 26, 169);
-        }
-        else if (type == Type.WARNING) {
+        } else if (type == Type.WARNING) {
             color1 = new Color(204, 193, 0);
-        }
-        else if (type == Type.OTHER) {
+        } else if (type == Type.OTHER) {
             color1 = new Color(125, 40, 255);
-        }
-        else {
+        } else {
             color1 = new Color(204, 0, 18);
             int i = Math.max(0, Math.min(255, (int) (Math.sin(time / 100.0) * 255.0 / 2 + 127.5)));
             color = new Color(i, 0, 0, 220);
@@ -84,29 +81,25 @@ public class Notification {
 
         offset += Math.floor(Math.max(titleWidth, messageWidth) - (1F));
 
+        int m = 0;
         if (Minecraft.getMinecraft().currentScreen instanceof ClickGui) {
-            drawRect(scaledWidth - offset, scaledHeight - 22 - height, scaledWidth, scaledHeight - 22, color.getRGB());
-            drawRect(scaledWidth - offset, scaledHeight - 22 - height, scaledWidth - offset + 4, scaledHeight - 22, color1.getRGB());
+            //m = 0;
 
-            fontRenderer.drawString(title, (int) (scaledWidth - offset + 8), scaledHeight - 20 - height, -1);
+            drawRect(scaledWidth - offset, scaledHeight - 22 - m - height, scaledWidth, scaledHeight - 22 - m, color.getRGB());
+            drawRect(scaledWidth - offset, scaledHeight - 22 - m - height, scaledWidth - offset + 4, scaledHeight - 22 - m, color1.getRGB());
+            fontRenderer.drawString(title, (int) (scaledWidth - offset + 8), scaledHeight - 22 - m - height, -1);
+            drawRect((int) (scaledWidth - offset + 8), scaledHeight - 39 - m, (int) (scaledWidth - offset + 8) + titleWidth, scaledHeight - 39 + 1, new Color(-1).getRGB()); //underline
+            fontRenderer.drawString(messsage, (int) (scaledWidth - offset + 8), scaledHeight - 33 - m, -1);
 
-            int xBegin = (int) (scaledWidth - offset + 8);
-            int yBegin = scaledHeight - 39;
-            int xEnd = xBegin + titleWidth;
-            int yEnd = yBegin + 1;
-            drawRect(xBegin, yBegin, xEnd, yEnd, new Color(-1).getRGB());
-            fontRenderer.drawString(messsage, (int) (scaledWidth - offset + 8), scaledHeight - 33, -1);
         } else {
-            drawRect(scaledWidth - offset, scaledHeight - 5 - height, scaledWidth, scaledHeight - 5, color.getRGB());
-            drawRect(scaledWidth - offset, scaledHeight - 5 - height, scaledWidth - offset + 4, scaledHeight - 5, color1.getRGB());
+            //m = scaledHeight-45;
 
-            fontRenderer.drawString(title, (int) (scaledWidth - offset + 8), scaledHeight - 2 - height, -1);
-            int xBegin = (int) (scaledWidth - offset + 8);
-            int yBegin = scaledHeight - 22;
-            int xEnd = xBegin + titleWidth;
-            int yEnd = yBegin + 1;
-            drawRect(xBegin, yBegin, xEnd, yEnd, new Color(-1).getRGB());
-            fontRenderer.drawString(messsage, (int) (scaledWidth - offset + 8), scaledHeight - 15, -1);
+            drawRect(scaledWidth - offset, scaledHeight - 5 - m - height, scaledWidth, scaledHeight - 5 - m, color.getRGB());
+            drawRect(scaledWidth - offset, scaledHeight - 5 - m - height, scaledWidth - offset + 4, scaledHeight - 5 - m, color1.getRGB());
+            fontRenderer.drawString(title, (int) (scaledWidth - offset + 8), scaledHeight - 2 - m - height, -1);
+            drawRect((int) (scaledWidth - offset + 8), scaledHeight - 22 - m, (int) (scaledWidth - offset + 8) + titleWidth, scaledHeight - 22 - m + 1, new Color(-1).getRGB()); //underline
+            fontRenderer.drawString(messsage, (int) (scaledWidth - offset + 8), scaledHeight - 15 - m, -1);
+
         }
     }
 

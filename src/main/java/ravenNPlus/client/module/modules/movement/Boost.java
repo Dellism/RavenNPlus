@@ -1,16 +1,15 @@
 package ravenNPlus.client.module.modules.movement;
 
+import ravenNPlus.client.utils.Utils;
 import ravenNPlus.client.main.Client;
 import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.setting.impl.DescriptionSetting;
 import ravenNPlus.client.module.setting.impl.SliderSetting;
-import ravenNPlus.client.utils.Utils;
+import ravenNPlus.client.module.setting.impl.DescriptionSetting;
 
 public class Boost extends Module {
 
    public static DescriptionSetting c;
-   public static SliderSetting a;
-   public static SliderSetting b;
+   public static SliderSetting a, b;
    private int i = 0;
    private boolean t = false;
 
@@ -45,11 +44,11 @@ public class Boost extends Module {
 
    public void update() {
       if (this.i == 0) {
-         this.i = mc.thePlayer.ticksExisted;
+         this.i = this.player().ticksExisted;
       }
 
-      Utils.Client.getTimer().timerSpeed = (float)a.getValue();
-      if ((double)this.i == (double)mc.thePlayer.ticksExisted - b.getValue()) {
+      Utils.Client.getTimer().timerSpeed = (float) a.getValue();
+      if ((double) this.i == (double) this.player().ticksExisted - b.getValue()) {
          Utils.Client.resetTimer();
          this.disable();
       }

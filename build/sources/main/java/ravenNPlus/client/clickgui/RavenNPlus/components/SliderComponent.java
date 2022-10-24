@@ -1,17 +1,17 @@
 package ravenNPlus.client.clickgui.RavenNPlus.components;
 
+import ravenNPlus.client.utils.ColorUtil;
+import ravenNPlus.client.utils.RoundedUtils;
 import ravenNPlus.client.clickgui.RavenNPlus.Component;
-import ravenNPlus.client.module.modules.client.ModSettings;
 import ravenNPlus.client.module.setting.impl.SliderSetting;
+import ravenNPlus.client.module.modules.client.ModSettings;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
-import ravenNPlus.client.utils.RoundedUtils;
-
-import java.awt.*;
-import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.math.BigDecimal;
 
 public class SliderComponent implements Component {
+
    private final SliderSetting v;
    private final ModuleComponent p;
    private int o;
@@ -20,6 +20,7 @@ public class SliderComponent implements Component {
    private boolean d = false;
    private double w;
    private final int msl = 84;
+
    public SliderComponent(SliderSetting v, ModuleComponent b, int o) {
       this.v = v;
       this.p = b;
@@ -37,19 +38,19 @@ public class SliderComponent implements Component {
          x = -12302777;
 
       if(!ModSettings.slider_color_c.isToggled())
-         c = Color.getHSBColor((float) (System.currentTimeMillis() % 11000L) / 11000.0F, 0.75F, 0.9F).getRGB();
+         c = ColorUtil.color_sliderComponent1;
       else
          c = ModSettings.slider_finalColor2.getRGB();
 
-      if(ModSettings.slider_mode.getValue() == 1) {
+      if(ModSettings.slider_mode.getMode() == ModSettings.slider_modes.Normal) {
          net.minecraft.client.gui.Gui.drawRect(this.p.category.getX() + 4, this.p.category.getY() + this.o + 11, this.p.category.getX() + 4 + this.p.category.getWidth() - 8, this.p.category.getY() + this.o + 15, x);
       }
       else
-      if(ModSettings.slider_mode.getValue() == 2) {
+      if(ModSettings.slider_mode.getMode() == ModSettings.slider_modes.Round) {
          RoundedUtils.drawRoundedOutline(this.p.category.getX() + 4, this.p.category.getY() + this.o + 11, this.p.category.getX() + 4 + this.p.category.getWidth() - 8, this.p.category.getY() + this.o + 15, (float) ModSettings.slider_widthRad.getValue(), 1, x);
       }
       else
-      if(ModSettings.slider_mode.getValue() == 3) {
+      if(ModSettings.slider_mode.getMode() == ModSettings.slider_modes.Outlines) {
          RoundedUtils.drawBorderedRect((float) (this.p.category.getX() + 4), (float) (this.p.category.getY() + this.o + 11), (float) (this.p.category.getX() + 4 + this.p.category.getWidth() - 8), (float) (this.p.category.getY() + this.o + 15), 1, x);
       } else
          net.minecraft.client.gui.Gui.drawRect(0, 0, 0 , 0, 0);
@@ -60,22 +61,22 @@ public class SliderComponent implements Component {
          r = l + 84;
       }
 
-      if(ModSettings.slider_mode.getValue() == 1) {
+      if(ModSettings.slider_mode.getMode() == ModSettings.slider_modes.Normal) {
          net.minecraft.client.gui.Gui.drawRect(l, this.p.category.getY() + this.o + 11, r, this.p.category.getY() + this.o + 15, c);
       }
       else
-      if(ModSettings.slider_mode.getValue() == 2) {
+      if(ModSettings.slider_mode.getMode() == ModSettings.slider_modes.Round) {
          RoundedUtils.drawRoundedOutline(l, this.p.category.getY() + this.o + 11, r, this.p.category.getY() + this.o + 15, (float) ModSettings.slider_widthRad.getValue(), 1, c);
       }
       else
-      if(ModSettings.slider_mode.getValue() == 3) {
+      if(ModSettings.slider_mode.getMode() == ModSettings.slider_modes.Outlines) {
          RoundedUtils.drawBorderedRect((float) l, (float) (this.p.category.getY() + this.o + 11), (float) r, (float) (this.p.category.getY() + this.o + 15), 2, c);
       } else
          net.minecraft.client.gui.Gui.drawRect(1, 1, 1 , 1, 1);
 
       GL11.glPushMatrix();
       GL11.glScaled(0.5D, 0.5D, 0.5D);
-      Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(this.v.getName() + ": " + this.v.getValue(), (float)((int)((float)(this.p.category.getX() + 4+ ModSettings.slider_name_Xoff.getValue()) * 2.0F)), (float)((int)((float)(this.p.category.getY() + this.o + 3+ ModSettings.slider_name_Yoff.getValue()) * 2.0F)), -1);
+      Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(this.v.getName() + ": " + this.v.getValue(), (float)((int)((float)(this.p.category.getX() + 4+ ModSettings.slider_name_Xoff.getValue()) * 2.0F)), (float)((int)((float)(this.p.category.getY() + this.o + 3+ ModSettings.slider_name_Yoff.getValue()) * 2.0F)), ColorUtil.color_white1);
       GL11.glPopMatrix();
    }
    public void setComponentStartAt(int n) {

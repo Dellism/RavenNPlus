@@ -1,11 +1,11 @@
 package ravenNPlus.client.module.modules.player;
 
-import ravenNPlus.client.main.Client;
 import ravenNPlus.client.module.*;
+import ravenNPlus.client.main.Client;
 import ravenNPlus.client.module.modules.movement.Fly;
-import ravenNPlus.client.module.setting.impl.DescriptionSetting;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
 import ravenNPlus.client.module.setting.impl.TickSetting;
+import ravenNPlus.client.module.setting.impl.SliderSetting;
+import ravenNPlus.client.module.setting.impl.DescriptionSetting;
 
 public class FallSpeed extends Module {
 
@@ -21,7 +21,7 @@ public class FallSpeed extends Module {
    }
 
    public void update() {
-      if ((double)mc.thePlayer.fallDistance >= 2.5D) {
+      if ((double) this.player().fallDistance >= 2.5D) {
          Module fly = Client.moduleManager.getModuleByClazz(Fly.class);
          Module noFall = Client.moduleManager.getModuleByClazz(NoFall.class);
 
@@ -29,17 +29,17 @@ public class FallSpeed extends Module {
             return;
          }
 
-         if (mc.thePlayer.capabilities.isCreativeMode || mc.thePlayer.capabilities.isFlying) {
+         if (this.player().capabilities.isCreativeMode || this.player().capabilities.isFlying) {
             return;
          }
 
-         if (mc.thePlayer.isOnLadder() || mc.thePlayer.isInWater() || mc.thePlayer.isInLava()) {
+         if (this.player().isOnLadder() || this.player().isInWater() || this.player().isInLava()) {
             return;
          }
 
-         mc.thePlayer.motionY = -motion.getValue();
+         this.player().motionY = -motion.getValue();
          if (disXZMotion.isToggled()) {
-            mc.thePlayer.motionX = mc.thePlayer.motionZ = 0.0D;
+            this.player().motionX = this.player().motionZ = 0.0D;
          }
       }
    }

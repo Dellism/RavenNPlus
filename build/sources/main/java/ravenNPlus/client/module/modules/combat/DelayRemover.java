@@ -1,11 +1,10 @@
 package ravenNPlus.client.module.modules.combat;
 
 import ravenNPlus.client.module.Module;
-import ravenNPlus.client.utils.Utils;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import java.lang.reflect.Field;
 
 public class DelayRemover extends Module {
@@ -14,7 +13,6 @@ public class DelayRemover extends Module {
 
    public DelayRemover() {
       super("Delay Remover", ModuleCategory.combat, "Gives you 1.7 hitreg");
-      withEnabled(true);
       this.leftClickCounterField = ReflectionHelper.findField(Minecraft.class, "field_71429_W", "leftClickCounter");
       if (this.leftClickCounterField != null) this.leftClickCounterField.setAccessible(true);
    }
@@ -26,8 +24,8 @@ public class DelayRemover extends Module {
 
    @SubscribeEvent
    public void playerTickEvent(PlayerTickEvent event) {
-      if (Utils.Player.isPlayerInGame() && this.leftClickCounterField != null) {
-         if (!mc.inGameHasFocus || mc.thePlayer.capabilities.isCreativeMode) {
+      if (this.inGame() && this.leftClickCounterField != null) {
+         if (!this.inFocus() || mc.thePlayer.capabilities.isCreativeMode) {
             return;
          }
 

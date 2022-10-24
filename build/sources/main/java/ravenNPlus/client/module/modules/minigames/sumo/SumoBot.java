@@ -1,21 +1,21 @@
 package ravenNPlus.client.module.modules.minigames.sumo;
 
-import java.io.IOException;
-
-import ravenNPlus.client.main.Client;
-import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.modules.combat.AimAssist;
-import ravenNPlus.client.module.modules.combat.STap;
-import ravenNPlus.client.module.modules.render.AntiShuffle;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
-import ravenNPlus.client.utils.CoolDown;
+import ravenNPlus.client.module.setting.impl.TickSetting;
 import ravenNPlus.client.utils.Utils;
+import ravenNPlus.client.main.Client;
+import ravenNPlus.client.utils.CoolDown;
+import ravenNPlus.client.module.Module;
+import ravenNPlus.client.module.modules.combat.STap;
+import ravenNPlus.client.module.setting.impl.SliderSetting;
+import ravenNPlus.client.module.modules.combat.AimAssist;
+import ravenNPlus.client.module.modules.render.AntiShuffle;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import java.io.IOException;
 
-public class SumoBot extends Module{
+public class SumoBot extends Module {
 
     private State state = State.HUB;
     private STap sTap;
@@ -27,8 +27,8 @@ public class SumoBot extends Module{
     private final SliderSetting autoClickerTrigger;
 
     public SumoBot() {
-        super("Sumo Bot", ModuleCategory.minigame, "");
-        this.addSetting(autoClickerTrigger = new SliderSetting("Autoclicker Distance",4.5, 1, 5, 0.1));
+        super("Sumo Bot", ModuleCategory.minigame, "A bot for Hypixel sumo");
+        this.addSetting(autoClickerTrigger = new SliderSetting("Autoclicker Distance", 4.5, 1, 5, 0.1));
     }
 
     public void onEnable() {
@@ -40,10 +40,10 @@ public class SumoBot extends Module{
     }
 
     private void matchStart() {
-        state =  State.INGAME;
+        state = State.INGAME;
         sTap.setToggled(true);
         aimAssist.setToggled(true);
-        mc.thePlayer.inventory.currentItem = 4;
+        this.player().inventory.currentItem = 4;
         slotTimer.setCooldown(2300);
         slotTimer.start();
         KeyBinding.setKeyBindState(mc.gameSettings.keyBindForward.getKeyCode(), true);
@@ -52,45 +52,47 @@ public class SumoBot extends Module{
     private void matchEnd() {
         timer.setCooldown(2300);
         timer.start();
-        state = State.GAMEEND;
+        state = State.GAME_END;
         sTap.setToggled(false);
         leftClicker.setToggled(false);
         aimAssist.setToggled(false);
-        mc.thePlayer.inventory.currentItem = 4;
+        this.player().inventory.currentItem = 4;
         KeyBinding.onTick(mc.gameSettings.keyBindUseItem.getKeyCode());
         KeyBinding.setKeyBindState(mc.gameSettings.keyBindForward.getKeyCode(), false);
     }
 
     @SubscribeEvent
     public void event(TickEvent.RenderTickEvent e) {
-        if(!Utils.Player.isPlayerInGame())
+        if (!this.inGame())
             return;
-        //Utils.Player.sendMessageToSelf(state.toString());
-        if(slotTimer.firstFinish()) {
-            mc.thePlayer.inventory.currentItem = 4;
+
+        if (slotTimer.firstFinish()) {
+            this.player().inventory.currentItem = 4;
         }
-        if(rcTimer.firstFinish() && state == State.GAMEEND) {
+
+        if (rcTimer.firstFinish() && state == State.GAME_END) {
             KeyBinding.onTick(mc.gameSettings.keyBindUseItem.getKeyCode());
             rcTimer.setCooldown(1900);
             rcTimer.start();
         }
-        if(state == State.QUEUE) {
+
+        if (state == State.QUEUE) {
             for (String s : Utils.Client.getPlayersFromScoreboard()) {
-                if(s.contains("Opponent")) {
+                if (s.contains("Opponent")) {
                     matchStart();
                 }
             }
-        } else if(state == State.GAMEEND) {
-            if(timer.hasFinished()) {
+        } else if (state == State.GAME_END) {
+            if (timer.hasFinished()) {
                 state = State.QUEUE;
                 rcTimer.setCooldown(1900);
                 rcTimer.start();
                 KeyBinding.onTick(mc.gameSettings.keyBindUseItem.getKeyCode());
             }
-        } else if(state == State.HUB) {
-            if(timer.hasFinished()) {
+        } else if (state == State.HUB) {
+            if (timer.hasFinished()) {
                 if (timer.firstFinish()) {
-                    mc.thePlayer.sendChatMessage("/play duels_sumo_duel");
+                    this.player().sendChatMessage("/play duels_sumo_duel");
                     state = State.QUEUE;
                 }
                 timer.setCooldown(1500);
@@ -101,13 +103,13 @@ public class SumoBot extends Module{
 
     @SubscribeEvent
     public void event2(TickEvent.RenderTickEvent e) {
-        if(state == State.INGAME) {
-            if(leftClicker.isEnabled()) {
-                if(Utils.Player.getClosestPlayer(autoClickerTrigger.getValue()) == null) {
+        if (state == State.INGAME) {
+            if (leftClicker.isEnabled()) {
+                if (Utils.Player.getClosestPlayer(autoClickerTrigger.getValue()) == null) {
                     leftClicker.disable();
                 }
             } else {
-                if(Utils.Player.getClosestPlayer(autoClickerTrigger.getValue()) != null) {
+                if (Utils.Player.getClosestPlayer(autoClickerTrigger.getValue()) != null) {
                     leftClicker.enable();
                 }
             }
@@ -116,18 +118,18 @@ public class SumoBot extends Module{
 
     @SubscribeEvent
     public void onChat(ClientChatReceivedEvent e) throws IOException {
-        if(AntiShuffle.getUnformattedTextForChat(e.message.getFormattedText()).contains("WINNER") || AntiShuffle.getUnformattedTextForChat(e.message.getFormattedText()).contains("DRAW")) {
+        if (AntiShuffle.getUnformattedTextForChat(e.message.getFormattedText()).contains("WINNER") || AntiShuffle.getUnformattedTextForChat(e.message.getFormattedText()).contains("DRAW")) {
             matchEnd();
         }
     }
 
     public void reQueue() {
-        mc.thePlayer.sendChatMessage("/hub");
+        this.player().sendChatMessage("/hub");
         state = State.HUB;
     }
 
     public enum State {
-        INGAME, HUB, QUEUE, GAMEEND
+        INGAME, HUB, QUEUE, GAME_END
     }
 
 }

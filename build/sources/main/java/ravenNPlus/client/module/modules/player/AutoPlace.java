@@ -1,18 +1,18 @@
 package ravenNPlus.client.module.modules.player;
 
-import ravenNPlus.client.main.Client;
 import ravenNPlus.client.module.*;
-import ravenNPlus.client.module.setting.impl.DescriptionSetting;
-import ravenNPlus.client.module.setting.impl.SliderSetting;
-import ravenNPlus.client.module.setting.impl.TickSetting;
 import ravenNPlus.client.utils.Utils;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
+import ravenNPlus.client.main.Client;
+import ravenNPlus.client.module.setting.impl.TickSetting;
+import ravenNPlus.client.module.setting.impl.SliderSetting;
+import ravenNPlus.client.module.setting.impl.DescriptionSetting;
 import net.minecraft.init.Blocks;
+import net.minecraft.block.Block;
+import net.minecraft.util.BlockPos;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
@@ -22,12 +22,9 @@ import org.lwjgl.input.Mouse;
 public class AutoPlace extends Module {
 
    public static DescriptionSetting ds;
-   public static TickSetting hold;
-   public static TickSetting b;
-   public static SliderSetting delay;
-   public static SliderSetting mode;
+   public static TickSetting hold, b;
+   public static SliderSetting mode, delay;
    private double lfd = 0.0D;
-   private final int d = 25;
    private long l = 0L;
    private int f = 0;
    private MovingObjectPosition lm = null;
@@ -58,25 +55,25 @@ public class AutoPlace extends Module {
    }
 
    public void update() {
-      if(mode.getValue() == 2) {
+      if (mode.getValue() == 2) {
          Module fastPlace = Client.moduleManager.getModuleByClazz(FastPlace.class);
-         if (hold.isToggled() && Mouse.isButtonDown(1) && !mc.thePlayer.capabilities.isFlying && fastPlace != null && !fastPlace.isEnabled()) {
-            ItemStack i = mc.thePlayer.getHeldItem();
+         if (hold.isToggled() && Mouse.isButtonDown(1) && !this.player().capabilities.isFlying && fastPlace != null && !fastPlace.isEnabled()) {
+            ItemStack i = this.player().getHeldItem();
             if (i == null || !(i.getItem() instanceof ItemBlock)) {
                return;
             }
 
-            this.rd(mc.thePlayer.motionY > 0.0D ? 1 : 1000);
+            this.rd(this.player().motionY > 0.0D ? 1 : 1000);
          }
       }
    }
 
    @SubscribeEvent
    public void bh(DrawBlockHighlightEvent ev) {
-      if(mode.getValue() == 2) {
-         if (Utils.Player.isPlayerInGame()) {
-            if (mc.currentScreen == null && !mc.thePlayer.capabilities.isFlying) {
-               ItemStack i = mc.thePlayer.getHeldItem();
+      if (mode.getValue() == 2) {
+         if (this.inGame()) {
+            if (mc.currentScreen == null && !this.player().capabilities.isFlying) {
+               ItemStack i = this.player().getHeldItem();
                if (i != null && i.getItem() instanceof ItemBlock) {
                   MovingObjectPosition m = mc.objectMouseOver;
                   if (m != null && m.typeOfHit == MovingObjectType.BLOCK && m.sideHit != EnumFacing.UP && m.sideHit != EnumFacing.DOWN) {
@@ -92,9 +89,9 @@ public class AutoPlace extends Module {
                                  long n = System.currentTimeMillis();
                                  if (n - this.l >= 25L) {
                                     this.l = n;
-                                    if (mc.playerController.onPlayerRightClick(mc.thePlayer, mc.theWorld, i, pos, m.sideHit, m.hitVec)) {
+                                    if (mc.playerController.onPlayerRightClick(this.player(), mc.theWorld, i, pos, m.sideHit, m.hitVec)) {
                                        Utils.Client.setMouseButtonState(1, true);
-                                       mc.thePlayer.swingItem();
+                                       Utils.Player.legitSwing();
                                        mc.getItemRenderer().resetEquippedProgress();
                                        Utils.Client.setMouseButtonState(1, false);
                                        this.lp = pos;
@@ -117,7 +114,8 @@ public class AutoPlace extends Module {
          if (FastPlace.rightClickDelayTimerField != null) {
             FastPlace.rightClickDelayTimerField.set(mc, i);
          }
-      } catch (IllegalAccessException | IndexOutOfBoundsException ignored) {}
+      } catch (IllegalAccessException | IndexOutOfBoundsException ignored) {
+      }
    }
 
    private void rv() {

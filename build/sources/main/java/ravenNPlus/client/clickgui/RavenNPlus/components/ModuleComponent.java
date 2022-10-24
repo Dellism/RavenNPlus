@@ -1,22 +1,26 @@
 package ravenNPlus.client.clickgui.RavenNPlus.components;
 
-import ravenNPlus.client.clickgui.RavenNPlus.Component;
-import ravenNPlus.client.module.modules.client.GuiClick;
-import ravenNPlus.client.module.setting.Setting;
-import ravenNPlus.client.module.setting.impl.*;
-import ravenNPlus.client.utils.Utils;
 import ravenNPlus.client.module.*;
-import net.minecraft.client.gui.ScaledResolution;
+import ravenNPlus.client.utils.Utils;
+import ravenNPlus.client.utils.ColorUtil;
+import ravenNPlus.client.utils.FontUtils;
+import ravenNPlus.client.module.setting.impl.*;
+import ravenNPlus.client.module.setting.Setting;
+import ravenNPlus.client.utils.animations.Animate;
+import ravenNPlus.client.module.modules.client.GuiClick;
+import ravenNPlus.client.clickgui.RavenNPlus.Component;
+import ravenNPlus.client.module.modules.client.ModSettings;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
+import java.awt.*;
 import java.util.ArrayList;
-import java.awt.Color;
 import org.lwjgl.opengl.GL11;
 
 public class ModuleComponent implements Component {
 
-   private final int c1 = (new Color(0, 85, 255)).getRGB();
-   private final int c2 = (new Color(154, 2, 255)).getRGB();
-   private final int c3 = (new Color(175, 143, 233) ).getRGB();
+   private final int c1 = ColorUtil.color_moduleComponent1;
+   private final int c2 = ColorUtil.color_moduleComponent2;
+   private final int c3 = ColorUtil.color_moduleComponent3;
    public Module mod;
    private static int sf;
    public CategoryComponent category;
@@ -24,6 +28,7 @@ public class ModuleComponent implements Component {
    private final ArrayList<Component> settings;
    public boolean po;
    public String desc;
+   public Animate ani = new Animate();
 
    public ModuleComponent(Module mod, CategoryComponent p, int o, String desc) {
       this.mod = mod;
@@ -34,6 +39,9 @@ public class ModuleComponent implements Component {
       this.po = false;
       this.category.scrollheight = 0;
       int y = o + 12;
+
+      this.mod.addSetting(mod.showinArrayList);
+
       if (!mod.getSettings().isEmpty()) {
          for (Setting v : mod.getSettings()) {
             if (v instanceof SliderSetting) {
@@ -56,8 +64,8 @@ public class ModuleComponent implements Component {
                RangeSliderComponent s = new RangeSliderComponent(n, this, y);
                this.settings.add(s);
                y += 16;
-            } else if (v instanceof ComboSetting) {
-               ComboSetting n = (ComboSetting) v;
+            } else if (v instanceof ModeSetting) {
+               ModeSetting n = (ModeSetting) v;
                ModeComponent s = new ModeComponent(n, this, y);
                this.settings.add(s);
                y += 12;
@@ -110,16 +118,18 @@ public class ModuleComponent implements Component {
       float g = 0.0F;
       float b = 0.0F;
       if (GuiClick.guiTheme.getValue() == 1.0D) {
-         a = (float)(h >> 14 & 255) / 255.0F;
-         r = (float)(h >> 5 & 255) / 255.0F;
-         g = (float)(h >> 5 & 255) / 2155.0F;
-         b = (float)(h & 255);
+         a = (float) (h >> 14 & 255) / 255.0F;
+         r = (float) (h >> 5 & 255) / 255.0F;
+         g = (float) (h >> 5 & 255) / 2155.0F;
+         b = (float) (h & 255);
       } else if (GuiClick.guiTheme.getValue() == 2.0D) {
-         a = (float)(h >> 14 & 255) / 255.0F;
-         r = (float)(h >> 5 & 255) / 2155.0F;
-         g = (float)(h >> 5 & 255) / 255.0F;
-         b = (float)(h & 255);
-      } else if (GuiClick.guiTheme.getValue() == 3.0D) { } else if (GuiClick.guiTheme.getValue() == 4.0D) { }
+         a = (float) (h >> 14 & 255) / 255.0F;
+         r = (float) (h >> 5 & 255) / 2155.0F;
+         g = (float) (h >> 5 & 255) / 255.0F;
+         b = (float) (h & 255);
+      } else if (GuiClick.guiTheme.getValue() == 3.0D) {
+      } else if (GuiClick.guiTheme.getValue() == 4.0D) {
+      }
       GL11.glColor4f(r, g, b, a);
    }
 
@@ -139,57 +149,82 @@ public class ModuleComponent implements Component {
    }
 
    public void draw() {
-      ScaledResolution sr =  new ScaledResolution(Minecraft.getMinecraft());
+      ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
       sf = sr.getScaleFactor();
-      v((float)this.category.getX(), (float)(this.category.getY() + this.o), (float)(this.category.getX() + this.category.getWidth()), (float)(this.category.getY() + 15 + this.o), this.mod.isEnabled() ? this.c2 : -12829381, this.mod.isEnabled() ? this.c2 : -12302777);
+      v((float) this.category.getX(), (float) (this.category.getY() + this.o), (float) (this.category.getX() + this.category.getWidth()), (float) (this.category.getY() + 15 + this.o),
+              this.mod.isEnabled() ? this.c2 : ColorUtil.color_moduleComponent5, this.mod.isEnabled() ? this.c2 : ColorUtil.color_moduleComponent4);
       GL11.glPushMatrix();
       int button_rgb;
-      switch((int) GuiClick.guiTheme.getValue()) {
+      switch ((int) GuiClick.guiTheme.getValue()) {
+
          case 6: //vape
             if (this.mod.isEnabled()) {
                button_rgb = Utils.Client.rainbowDraw(2L, 900L);
             } else if (this.mod.canBeEnabled()) {
-               button_rgb = new Color(104,103,104).getRGB();
+               button_rgb = ColorUtil.color_button_rgb1;
             } else {
-               button_rgb = new Color(31,30,31).getRGB();
+               button_rgb = ColorUtil.color_button_rgb3;
             }
             break;
+
          case 5: //n+
             if (this.mod.isEnabled()) {
                button_rgb = this.c2;
             } else if (this.mod.canBeEnabled()) {
                button_rgb = Color.lightGray.getRGB();
             } else {
-               button_rgb = new Color(209, 102, 102).getRGB();
+               button_rgb = ColorUtil.color_button_rgb2;
             }
             break;
+
          case 4: //b+
             if (this.mod.isEnabled()) {
                button_rgb = this.c3;
             } else if (this.mod.canBeEnabled()) {
                button_rgb = Color.lightGray.getRGB();
             } else {
-               button_rgb = new Color(102, 102, 102).getRGB();
+               button_rgb = ColorUtil.color_button_rgb1;
             }
             break;
+
          case 3: //b3
             if (this.mod.isEnabled()) {
                button_rgb = this.c1;
             } else if (this.mod.canBeEnabled()) {
                button_rgb = Color.lightGray.getRGB();
             } else {
-               button_rgb = new Color(102, 102, 102).getRGB();
+               button_rgb = ColorUtil.color_button_rgb1;
             }
             break;
+
          default:
             if (this.mod.canBeEnabled()) {
                button_rgb = Color.lightGray.getRGB();
             } else {
-               button_rgb = new Color(102, 102, 102).getRGB();
+               button_rgb = ColorUtil.color_button_rgb1;
             }
             break;
       }
-      Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(this.mod.getName(), (float)(this.category.getX() + this.category.getWidth() / 2 - Minecraft.getMinecraft().fontRendererObj.getStringWidth(this.mod.getName()) / 2), (float)(this.category.getY() + this.o + 4), button_rgb);
+
+      int costumFontOffset = 3;
+      if (ModSettings.text_underline.isToggled()) {
+         if (ModSettings.costumFont.isToggled()) {
+            FontUtils.comfortaUnderline(this.mod.getName(), (this.category.getX() + this.category.getWidth() / 2 - Minecraft.getMinecraft().fontRendererObj.getStringWidth(this.mod.getName()) / 2 + costumFontOffset),
+                    (this.category.getY() + this.o + 4), ModSettings.text_underline_off.getValueToInt(), button_rgb);
+         } else {
+            FontUtils.drawStringWithShadowWithUnderline(this.mod.getName(), (this.category.getX() + this.category.getWidth() / 2 -
+                    Minecraft.getMinecraft().fontRendererObj.getStringWidth(this.mod.getName()) / 2), (this.category.getY() + this.o + 4), ModSettings.text_underline_off.getValueToInt(), button_rgb);
+         }
+      } else {
+         if (ModSettings.costumFont.isToggled()) {
+            FontUtils.comfortaa(this.mod.getName(), (this.category.getX() + this.category.getWidth() / 2 - Minecraft.getMinecraft().fontRendererObj.getStringWidth(this.mod.getName()) / 2 + costumFontOffset),
+                    (this.category.getY() + this.o + 4), button_rgb);
+         } else {
+            Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(this.mod.getName(), (float) (this.category.getX() + this.category.getWidth() / 2 -
+                    Minecraft.getMinecraft().fontRendererObj.getStringWidth(this.mod.getName()) / 2), (float) (this.category.getY() + this.o + 4), button_rgb);
+         }
+      }
+
       GL11.glPopMatrix();
       if (this.po && !this.settings.isEmpty()) {
          for (Component c : this.settings) {
@@ -238,7 +273,7 @@ public class ModuleComponent implements Component {
       }
 
       for (Component c : this.settings) {
-         if(c.getY() > getY())
+         if (c.getY() > getY())
             c.mouseDown(x, y, b);
       }
    }

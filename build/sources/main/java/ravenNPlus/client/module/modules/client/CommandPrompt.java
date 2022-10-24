@@ -1,27 +1,24 @@
 package ravenNPlus.client.module.modules.client;
 
 import com.google.gson.JsonObject;
-import ravenNPlus.client.clickgui.RavenNPlus.ClickGui;
+import ravenNPlus.client.utils.Timer;
 import ravenNPlus.client.main.Client;
 import ravenNPlus.client.module.Module;
 import ravenNPlus.client.module.setting.Setting;
+import ravenNPlus.client.clickgui.RavenNPlus.ClickGui;
 import ravenNPlus.client.module.setting.impl.SliderSetting;
-import ravenNPlus.client.module.setting.impl.TickSetting;
-import ravenNPlus.client.utils.Timer;
-import ravenNPlus.client.utils.Utils;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class CommandPrompt extends Module {
+
    public static boolean visible = false, b = false;
    public static Timer animation;
-   public static TickSetting animate;
    public static SliderSetting opacity;
 
    public CommandPrompt() {
       super("Command Prompt", ModuleCategory.client, "Command Manager");
       withEnabled(true);
-
       this.addSetting(opacity = new SliderSetting("CommandPromt background opacity", 60, 0, 255, 1));
    }
 
@@ -34,8 +31,8 @@ public class CommandPrompt extends Module {
    }
 
    @SubscribeEvent
-   public void tick(TickEvent.PlayerTickEvent e){
-      if(Utils.Player.isPlayerInGame() && enabled && mc.currentScreen instanceof ClickGui && Client.clickGui.commandPrompt.hidden())
+   public void tick(TickEvent.PlayerTickEvent e) {
+      if (this.inGame() && enabled && mc.currentScreen instanceof ClickGui && Client.clickGui.commandPrompt.hidden())
          Client.clickGui.commandPrompt.show();
    }
 
@@ -47,7 +44,7 @@ public class CommandPrompt extends Module {
    }
 
    @Override
-   public void applyConfigFromJson(JsonObject data){
+   public void applyConfigFromJson(JsonObject data) {
       try {
          this.keycode = data.get("keycode").getAsInt();
          // no need to set this to disabled
@@ -59,14 +56,16 @@ public class CommandPrompt extends Module {
                );
             }
          }
-      } catch (NullPointerException ignored){ }
+      } catch (NullPointerException ignored) {
+      }
    }
 
    @Override
    public void resetToDefaults() {
       this.keycode = defualtKeyCode;
-      for(Setting setting : this.settings){
+      for (Setting setting : this.settings) {
          setting.resetToDefaults();
       }
    }
+
 }

@@ -7,7 +7,6 @@ import ravenNPlus.client.module.modules.combat.Reach;
 import ravenNPlus.client.module.modules.movement.KeepSprint;
 import ravenNPlus.client.module.modules.movement.NoSlow;
 import ravenNPlus.client.module.modules.other.NameHider;
-import ravenNPlus.client.module.modules.other.StringEncrypt;
 import ravenNPlus.client.module.modules.player.SafeWalk;
 import ravenNPlus.client.module.modules.render.AntiShuffle;
 import net.minecraft.client.Minecraft;
@@ -21,22 +20,12 @@ public class ASMEventHandler {
 
    /**
     * called when Minecraft format text
-    * ASM Modules : NameHider, AntiShuffle, StringEncrypt
+    * ASM Modules : NameHider, AntiShuffle
     */
    public static String getUnformattedTextForChat(String s) {
       Module nameHider = Client.moduleManager.getModuleByClazz(NameHider.class);
       if (nameHider != null && nameHider.isEnabled()) {
          s = NameHider.getUnformattedTextForChat(s);
-      }
-
-      Module antiShuffle = Client.moduleManager.getModuleByClazz(StringEncrypt.class);
-      if (antiShuffle != null && antiShuffle.isEnabled()) {
-         s = AntiShuffle.getUnformattedTextForChat(s);
-      }
-
-      Module stringEncrypt = Client.moduleManager.getModuleByClazz(StringEncrypt.class);
-      if (stringEncrypt != null && stringEncrypt.isEnabled()) {
-         s = StringEncrypt.getUnformattedTextForChat(s);
       }
 
       return s;
@@ -68,10 +57,9 @@ public class ASMEventHandler {
       }
    }
 
-   /*public String getModName()
-   {
+   public String getModName() {
       return "lunarclient:db2533c";
-   }*/
+   }
 
    /**
     * called when a player is using an item (aka right-click)

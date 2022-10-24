@@ -23,7 +23,7 @@ public class TransformerFontRenderer implements Transformer {
 
             m = var3.next();
             n = this.mapMethodName(classNode, m);
-         } while(!n.equalsIgnoreCase("renderStringAtPos") && !n.equalsIgnoreCase("func_78255_a") && !n.equalsIgnoreCase("getStringWidth") && !n.equalsIgnoreCase("func_78256_a"));
+         } while(!n.equalsIgnoreCase("renderStringAtPos") && !n.equalsIgnoreCase("func_78255_a") && !n.equalsIgnoreCase("getStringWidth") && !n.equalsIgnoreCase("getStringWidth"));
 
          m.instructions.insertBefore(m.instructions.getFirst(), this.getEventInsn());
       }

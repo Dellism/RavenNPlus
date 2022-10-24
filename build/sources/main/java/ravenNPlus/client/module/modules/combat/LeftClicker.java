@@ -34,7 +34,7 @@ public class LeftClicker extends Module {
     public static TickSetting breakBlocks;
     public static DoubleSliderSetting leftCPS;
     public static TickSetting inventoryFill, hitSelect;
-    public static ComboSetting clickStyle, clickTimings;
+    public static ModeSetting clickStyle, clickTimings;
     private long lastClick, leftHold;
     private long leftDownTime, leftUpTime, leftk, leftl;
     private double leftm;
@@ -49,15 +49,15 @@ public class LeftClicker extends Module {
 
     public LeftClicker() {
         super("Left Clicker", ModuleCategory.combat, "Automatically Left clicks | best with delay remover");
-        this.addSetting(leftCPS = new DoubleSliderSetting("Left CPS", 9, 13, 1, 60, 0.5));
+        this.addSetting(leftCPS = new DoubleSliderSetting("Left CPS", 9, 13, 1, 60, 1));
         this.addSetting(jitterLeft = new SliderSetting("Jitter left", 0.0D, 0.0D, 3.0D, 0.1D));
         this.addSetting(hitSelect = new TickSetting("HitSelect", false));
         this.addSetting(hitSelectTick = new SliderSetting("HitSelect HurtTick", 7, 1, 10, 1));
         this.addSetting(inventoryFill = new TickSetting("Inventory fill", false));
         this.addSetting(weaponOnly = new TickSetting("Weapon only", false));
         this.addSetting(breakBlocks = new TickSetting("Break blocks", false));
-        this.addSetting(clickTimings = new ComboSetting("Click event", RightClicker.ClickEvent.Render));
-        this.addSetting(clickStyle = new ComboSetting("Click Style", RightClicker.ClickStyle.Raven));
+        this.addSetting(clickTimings = new ModeSetting("Click event", RightClicker.ClickEvent.Render));
+        this.addSetting(clickStyle = new ModeSetting("Click Style", RightClicker.ClickStyle.Raven));
 
         try {
             this.playerMouseInput = ReflectionHelper.findMethod(
@@ -125,9 +125,9 @@ public class LeftClicker extends Module {
             }
         }
 
-        if(clickStyle.getMode() == RightClicker.ClickStyle.Raven){
+        if(clickStyle.getMode() == RightClicker.ClickStyle.Raven) {
             ravenClick();
-        } else if (clickStyle.getMode() == RightClicker.ClickStyle.SKid){
+        } else if (clickStyle.getMode() == RightClicker.ClickStyle.SKid) {
             skidClick(ev, null);
         }
     }
@@ -142,16 +142,16 @@ public class LeftClicker extends Module {
         if(clickTimings.getMode() != RightClicker.ClickEvent.Tick)
             return;
 
-        if(clickStyle.getMode() == RightClicker.ClickStyle.Raven){
+        if(clickStyle.getMode() == RightClicker.ClickStyle.Raven) {
             ravenClick();
         }
-        else if (clickStyle.getMode() == RightClicker.ClickStyle.SKid){
+        else if (clickStyle.getMode() == RightClicker.ClickStyle.SKid) {
             skidClick(null, ev);
         }
     }
 
     private void skidClick(TickEvent.RenderTickEvent er, TickEvent.PlayerTickEvent e) {
-        if (!Utils.Player.isPlayerInGame())
+        if (!this.inGame())
             return;
 
         double speedLeft1 = 1.0 / io.netty.util.internal.ThreadLocalRandom.current().nextDouble(leftCPS.getInputMin() - 0.2D, leftCPS.getInputMax());
@@ -161,7 +161,7 @@ public class LeftClicker extends Module {
         // return;
         //}
         Mouse.poll();
-        if(mc.currentScreen != null || !mc.inGameHasFocus) {
+        if(mc.currentScreen != null || !this.inFocus()) {
             doInventoryClick();
             return;
         }
@@ -194,7 +194,7 @@ public class LeftClicker extends Module {
             double speedLeft = 1.0 / ThreadLocalRandom.current().nextDouble(leftCPS.getInputMin() - 0.2, leftCPS.getInputMax());
             if (System.currentTimeMillis() - lastClick > speedLeft * 1000) {
                 lastClick = System.currentTimeMillis();
-                if (leftHold < lastClick){
+                if (leftHold < lastClick) {
                     leftHold = lastClick;
                 }
                 int key = mc.gameSettings.keyBindAttack.getKeyCode();
@@ -210,7 +210,7 @@ public class LeftClicker extends Module {
 
     private void ravenClick() {
 
-        if(mc.currentScreen != null || !mc.inGameHasFocus) {
+        if(mc.currentScreen != null || !this.inFocus()) {
             doInventoryClick();
             return;
         }
@@ -333,7 +333,7 @@ public class LeftClicker extends Module {
         return false;
     }
 
-    public void doInventoryClick(){
+    public void doInventoryClick() {
         if (inventoryFill.isToggled() && (mc.currentScreen instanceof GuiInventory || mc.currentScreen instanceof GuiChest)) {
             if (!Mouse.isButtonDown(0) || !Keyboard.isKeyDown(54) && !Keyboard.isKeyDown(42)) {
                 this.leftDownTime = 0L;

@@ -24,22 +24,22 @@ public class Discord extends Command {
         }
 
         for (String argument : args) {
-            if(argument.equalsIgnoreCase("copy")){
+            if(argument.equalsIgnoreCase("copy")) {
                 if (!copied) {
                     Utils.Client.copyToClipboard(Client.discord);
                     copied = true;
                     CommandPrompt.print("Copied " + Client.discord + " to clipboard!");
                 }
             }
-            else if(argument.equalsIgnoreCase("open")){
+            else if(argument.equalsIgnoreCase("open")) {
                 if (!opened) {
                     Utils.Client.openWebpage(Client.discord);
                     opened = true;
                     CommandPrompt.print("Opened invite link!");
                 }
             }
-            else if(argument.equalsIgnoreCase("print")){
-                if (!showed){
+            else if(argument.equalsIgnoreCase("print")) {
+                if (!showed) {
                     CommandPrompt.print(Client.discord);
                     showed = true;
                 }

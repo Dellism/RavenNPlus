@@ -19,7 +19,7 @@ public class DelayTimer {
         this.prevTime = System.currentTimeMillis();
     }
 
-    public long getPassed(){
+    public long getPassed() {
         return System.currentTimeMillis() - this.prevTime;
     }
 

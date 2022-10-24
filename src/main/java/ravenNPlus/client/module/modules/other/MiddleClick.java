@@ -1,23 +1,23 @@
 package ravenNPlus.client.module.modules.other;
 
-import ravenNPlus.client.module.Module;
-import ravenNPlus.client.module.modules.combat.AimAssist;
-import ravenNPlus.client.module.setting.impl.ComboSetting;
-import ravenNPlus.client.module.setting.impl.TickSetting;
 import ravenNPlus.client.utils.Utils;
+import ravenNPlus.client.module.Module;
+import ravenNPlus.client.module.setting.impl.TickSetting;
+import ravenNPlus.client.module.setting.impl.ModeSetting;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemEnderPearl;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.item.ItemEnderPearl;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.lwjgl.input.Mouse;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.awt.*;
+import java.util.Arrays;
 import java.awt.event.InputEvent;
 
-import static ravenNPlus.client.module.modules.other.MiddleClick.Action.*;
+import org.lwjgl.input.Mouse;
 
 public class MiddleClick extends Module {
-    public static ComboSetting actionSetting;
+
+    public static ModeSetting mode;
     public static TickSetting showHelp;
     int prevSlot;
     public static boolean a;
@@ -26,9 +26,9 @@ public class MiddleClick extends Module {
     private int pearlEvent;
 
     public MiddleClick() {
-        super("Middleclick", ModuleCategory.other, "");
+        super("MiddleClick", ModuleCategory.other, "Hover over a player and MiddleClick");
         this.addSetting(showHelp = new TickSetting("Show friend help in chat", true));
-        this.addSetting(actionSetting = new ComboSetting("On click", ThrowPearl));
+        this.addSetting(mode = new ModeSetting("On click", modes.ThrowPearl));
     }
 
     @Override
@@ -38,21 +38,22 @@ public class MiddleClick extends Module {
         } catch (AWTException var2) {
             this.disable();
         }
+
         hasClicked = false;
         pearlEvent = 4;
     }
 
     @SubscribeEvent
     public void onTick(TickEvent.PlayerTickEvent e) {
-        if(!Utils.Player.isPlayerInGame()) return;
+        if (!this.inGame()) return;
 
-        if(pearlEvent < 4){
-            if(pearlEvent==3) mc.thePlayer.inventory.currentItem = prevSlot;
+        if (pearlEvent < 4) {
+            if (pearlEvent == 3) mc.thePlayer.inventory.currentItem = prevSlot;
             pearlEvent++;
         }
 
-        if(Mouse.isButtonDown(2) && !hasClicked) {
-            if (ThrowPearl.equals(actionSetting.getMode())) {
+        if (Mouse.isButtonDown(2) && !hasClicked) {
+            if (modes.ThrowPearl.equals(mode.getMode())) {
                 for (int slot = 0; slot <= 8; slot++) {
                     ItemStack itemInSlot = mc.thePlayer.inventory.getStackInSlot(slot);
                     if (itemInSlot != null && itemInSlot.getItem() instanceof ItemEnderPearl) {
@@ -65,28 +66,30 @@ public class MiddleClick extends Module {
                         return;
                     }
                 }
-            } else if (AddFriend.equals(actionSetting.getMode())) {
+            } else if (modes.AddFriend.equals(mode.getMode())) {
                 addFriend();
                 if (showHelp.isToggled()) showHelpMessage();
-            } else if (RemoveFriend.equals(actionSetting.getMode())) {
+            } else if (modes.RemoveFriend.equals(mode.getMode())) {
                 removeFriend();
                 if (showHelp.isToggled()) showHelpMessage();
+            } else if (modes.Insult.equals(mode.getMode())) {
+                insult();
             }
             hasClicked = true;
-        } else if(!Mouse.isButtonDown(2) && hasClicked) {
+        } else if (!Mouse.isButtonDown(2) && hasClicked) {
             hasClicked = false;
         }
     }
 
     private void showHelpMessage() {
-        if(showHelp.isToggled()) {
-            Utils.Player.sendMessageToSelf("Run 'help friends' in CommandLine to find out how to add, remove and view friends.");
+        if (showHelp.isToggled()) {
+            Utils.Player.sendMessageToSelf("Run 'help friends' in CommandLine to find out how to add, remove, insult and view friends.");
         }
     }
 
     private void removeFriend() {
         Entity player = mc.objectMouseOver.entityHit;
-        if(player == null) {
+        if (player == null) {
             Utils.Player.sendMessageToSelf("Please aim at a player/entity when removing them.");
         } else {
             if (Utils.FriendUtils.removeFriend(player)) {
@@ -100,20 +103,32 @@ public class MiddleClick extends Module {
 
     private void addFriend() {
         Entity player = mc.objectMouseOver.entityHit;
-        if(player == null) {
+        if (player == null) {
             Utils.Player.sendMessageToSelf("Please aim at a player/entity when adding them.");
-        }
-        else {
+        } else {
             Utils.FriendUtils.addFriend(player);
             Utils.Player.sendMessageToSelf("Successfully added " + player.getName() + " to friends list.");
             Utils.Player.sendMessageToSelf("You have " + Utils.FriendUtils.getFriendCount() + " Friends");
         }
     }
 
-    public enum Action {
+    private void insult() {
+        Entity player = mc.objectMouseOver.entityHit;
+        if (player == null) {
+            Utils.Player.sendMessageToSelf("Please aim at a player/entity when insult them.");
+        } else {
+            String[] x = new String[]{"Haha", "Noob", "L", "U are bad", player.getName() + " you are bad", player.getName() + " L",
+                    player.ignoreFrustumCheck ? player.getName() + "is a Noob" : player.getName() + "is a God"};
+
+            mc.thePlayer.sendChatMessage(Arrays.stream(x).findAny().get());
+        }
+    }
+
+    public enum modes {
         ThrowPearl,
         AddFriend,
-        RemoveFriend
+        RemoveFriend,
+        Insult
     }
 
 }
