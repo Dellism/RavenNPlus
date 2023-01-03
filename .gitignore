@@ -1,0 +1,7 @@
+run/
+.git/
+.github/
+.gradle/
+.idea/
+build/
+gradle/
