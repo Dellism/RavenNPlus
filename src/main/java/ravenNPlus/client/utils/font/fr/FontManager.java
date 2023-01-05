@@ -54,7 +54,7 @@ public final class FontManager {
                 myFont = myFont.deriveFont(0, (float)i);
                 this.fonts.put("Comfortaa " + i, new TTFFontRenderer(executorService, textureQueue, myFont));
             }
-        } catch (Exception var10) {
+        } catch (Exception ignored) {
         }
 
         executorService.shutdown();

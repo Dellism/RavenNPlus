@@ -73,16 +73,6 @@ public class Crasher extends Module {
         }
     }
 
-    public static String getC(int mode) {
-        if (mode == 1)
-            return "https://pastebin.com/raw/cfSJ37We";
-
-        if (mode == 0)
-            return "https://pastebin.com/raw/pa4kmzHM";
-
-        return "https://pastebin.com/raw/cfSJ37We";
-    }
-
     @SubscribeEvent
     public void r(TickEvent e) {
         if (!this.inGame() || !this.isEnabled())

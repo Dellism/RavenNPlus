@@ -22,8 +22,8 @@ public class KeyStrokeMod {
         MinecraftForge.EVENT_BUS.register(new KeyStrokeRenderer());
         MinecraftForge.EVENT_BUS.register(this);
         ClientConfig.applyKeyStrokeSettingsFromConfigFile();
-        ravenNPlus.client.utils.profile.file_1035K0_XP_11D.func_1034X1_ST();
-        //ravenNPlus.client.main.Client.init();
+        //ravenNPlus.client.utils.profile.file_1035K0_XP_11D.func_1034X1_ST();
+        ravenNPlus.client.main.Client.init();
     }
 
     public static KeyStroke getKeyStroke() {
