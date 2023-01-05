@@ -1,6 +1,16 @@
 package ravenNPlus.client.utils;
 
-import com.sun.javafx.geom.Vec3d;
+/*
+please somebody help i cant import this library i thought maybe it's because i used wrong jdk
+but i've tried 3 different ones oracle openjdk and zulu and it still doesnt work. i found the
+library online at mvn central but for some reason after i add it to build.gradle and reload the
+project nothing happens and it still wont work. if i add lib jar file it will use it but it says
+the version is too new and i used the oldest one the only way to make it work is to add needed
+source files of the lib to the project as is but it feels so so wrong i shouldnt be doing that
+*/
+// import com.sun.javafx.geom.Vec3d;
+import ravenNPlus.client.utils.vec3dtemp.Vec3d;
+
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
@@ -101,7 +111,6 @@ public class Utils {
 
       public static Vec3d getInterpolatedRenderPos(Entity player, float renderPartialTicks) {
          Vec3d b = new Vec3d(Client.getRenderPosX(), Client.getRenderPosX(), Client.getRenderPosZ());
-         ;
          getInterpolatedAmount(player, renderPartialTicks).add(b);
          return b;
       }
